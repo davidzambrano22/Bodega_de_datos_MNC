@@ -1,0 +1,15 @@
+# macos files in any folder
+.DS_Store
+
+# rsconnect folder
+rsconnect/
+
+# environment variables
+.env
+
+
+# Sesitive data
+data/input
+
+# Useless data
+docs/
