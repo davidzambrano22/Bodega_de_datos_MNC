@@ -418,7 +418,12 @@ shinyServer(function(input, output, session) {
 
         output$survey_table <- renderReactable(
             datos %>%
-            select(input$survey_variables) %>%
+            select("Seleccione el área de cualificación para la cual esta realizando la entrevista.",
+                   c(input$survey_variables_1,
+                   input$survey_variables_2, 
+                   input$survey_variables_3,
+                   input$survey_variables_4)
+                   ) %>%
             reactable(
                 filterable = TRUE, minRows = 10
             )

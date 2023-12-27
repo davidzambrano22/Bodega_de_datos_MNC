@@ -233,56 +233,99 @@ tab_survey <- tabItem(
     fluidRow(
         column(3,
             h3("Variables a mostrar"),
-            # Reactable with the catalog table
-            # make a checkboxGroupInput with the names of the variables present in the dataframe datos
-            # "_id"                   "formhub/uuid"          "start"                
-            # "today"                 "end"                   "intro/cons_1"         
-            # cap_B/cant"            "Cargos_criticos_count" "Cargos_criticos"      
-            # "cap_C/C1"              "cap_C/C2"              "cap_C/C3"             
-            # "cap_C/C4"              "__version__"           "meta/instanceID"      
-            # "_xform_id_string"      "_uuid"                 "_attachments"         
-            # "_status"               "_geolocation"          "_submission_time"     
-            # "_tags"                 "_notes"                "_validation_status"   
-            # "_submitted_by"         "cap_A/a2.1"            "cap_A/a2.2"           
-            # "cap_A/a2.2.1"          "cap_A/a2.4"            "cap_A/a1.2"           
-            # "cap_A/a1.4"            "cap_A/a1.ub"           "cap_A/a1.5"           
-            # "cap_A/a2.3"            "cap_A/a1.4a"           "cap_B/Cargos_cant"    
-            # "Misionales/B21"        "Misionales/B21S1A"     "cap_C/C3S1"           
-            # "cap_d/d2"              "cap_d/d3"              "cap_d/d4"             
-            # "cap_d/d5"              "cap_d/d6"              "cap_d/d7"             
-            # "cap_d/d71"             "intro/area"            "cap_d/d51"            
-            # "cap_d/d61"             "Misionales/B21S1B"     "cap_e/e1"             
-            # "cap_A/a2.2.1_other"    "cap_A/a1.4_other"      "Misionales/B21S1C"    
-            # "cap_C/C3_other"       
-
-            checkboxGroupInput(
-                "survey_variables", "Variables",
+            selectInput(
+              "survey_sections", "Secciones",
+              c(
+                "Información general",
+                "Otros cargos",
+                "Estrategias desarrolladas por la empresa para el cierre de brechas",
+                "Habilidades Socioemocionales"
+              )
+            ),
+            conditionalPanel(
+              condition="input.survey_sections == 'Información general'",
+              checkboxGroupInput(
+                "survey_variables_1", "Variables",
                 choices = c(
-                    "NIT" = "NIT",
-                    "Razón social" = "Razón social",
-                    "Actividad económica" = "Actividad económica  principal de la empresa",
-                    "Departamento" = "Departamento",
-                    "Tamaño empresa" = "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?",
-                    "¿Cuántos cargos en su empresa u organización considera que son de difícil consecución?" = "¿Cuántos cargos en su empresa u organización considera que son de difícil consecución?",
-                    "Cargo misional 1" = "Cargo misional 1:",
-                    "Cargo misional 2" = "Cargo misional 2:",
-                    "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?" = "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
-                    "Adicional a los cargos mencionados anteriormente... ¿Considera que existen otros cargos misionales dentro de su empresa u organización?" = "Adicional a los cargos mencionados anteriormente... ¿Considera que existen otros cargos misionales dentro de su empresa u organización?",
-                    "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?" = "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
-                    "Motivos de no cobertura de vacantes" = "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)",
-                    "Misión de la empresa / habilidad socioemocional" = "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?"
-                ),
-                selected = c(
-                  "NIT",
-                  "Razón social",
-                  "Actividad económica  principal de la empresa",
-                  "Departamento",
-                  "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?",
-                  "¿Cuántos cargos en su empresa u organización considera que son de difícil consecución?",
-                  "Cargo misional 1:",
-                  "Cargo misional 2:"
-                )
+                  "Actividad económica  principal de la empresa" = "Actividad económica  principal de la empresa",
+                  "Departamento" = "Departamento",
+                  "Tamaño empresa" = "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?"
+                ))
+            ),
+            conditionalPanel(
+              condition="input.survey_sections == 'Otros cargos'",
+              checkboxGroupInput(
+                "survey_variables_2", "Variables",
+                choices = c(
+                  "¿Cuáles cargos misionales?" = "¿Cuáles cargos misionales?",
+                  "Cargo misional 1" = "Cargo misional 1:",
+                  "Cargo misional 2" = "Cargo misional 2:",
+                  "Cargo misional 3" = "Cargo misional 3:",
+                  "Cargo misional 4" = "Cargo misional 4:",
+                  "Cargo misional 5" = "Cargo misional 5:",
+                  "Cargo misional 6" = "Cargo misional 6:",
+                  "Cargo misional 7" = "Cargo misional 7:",
+                  "Cargo misional 8" = "Cargo misional 8:",
+                  "Cargo misional 9" = "Cargo misional 9:",
+                  "Cargo misional 10" = "Cargo misional 10:"
+                  ))
+            ),
+            conditionalPanel(
+              condition="input.survey_sections == 'Estrategias desarrolladas por la empresa para el cierre de brechas'",
+              checkboxGroupInput(
+                "survey_variables_3", "Variables",
+                choices = c(
+                  "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?" = "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
+                  "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?" = "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
+                  "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:" = "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:",
+                  "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)" = "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)"
+                ))
+            ),
+            conditionalPanel(
+              condition="input.survey_sections == 'Habilidades Socioemocionales'",
+              checkboxGroupInput(
+                "survey_variables_4", "Variables",
+                choices = c(
+                  "Se entiende como habilidades socioemocionales  “el proceso a través del cual se adquieren y aplican efectivamente los conocimientos, actitudes y habilidades necesarias para comprender y manejar las emociones," = "Se entiende como habilidades socioemocionales  “el proceso a través del cual se adquieren y aplican efectivamente los conocimientos, actitudes y habilidades necesarias para comprender y manejar las emociones,",
+                  "¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?" = "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?",
+                  "¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?" = "2. ¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?",
+                  "¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?" = "3. ¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?",
+                  "De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?" = "4. De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?",
+                  "¿Cuáles?" = "¿Cuáles?...95",
+                  "¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?" = "5. ¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?",
+                  "¿Cuáles?" = "¿Cuáles?...97",
+                  "En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?" = "6.  En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?",
+                  "¿Cuáles?" = "¿Cuáles?...99"
+                  ))
             )
+            # checkboxGroupInput(
+            #     "survey_variables", "Variables",
+            #     choices = c(
+            #         "NIT" = "NIT",
+            #         "Razón social" = "Razón social",
+            #         "Actividad económica" = "Actividad económica  principal de la empresa",
+            #         "Departamento" = "Departamento",
+            #         "Tamaño empresa" = "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?",
+            #         "¿Cuántos cargos en su empresa u organización considera que son de difícil consecución?" = "¿Cuántos cargos en su empresa u organización considera que son de difícil consecución?",
+            #         "Cargo misional 1" = "Cargo misional 1:",
+            #         "Cargo misional 2" = "Cargo misional 2:",
+            #         "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?" = "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
+            #         "Adicional a los cargos mencionados anteriormente... ¿Considera que existen otros cargos misionales dentro de su empresa u organización?" = "Adicional a los cargos mencionados anteriormente... ¿Considera que existen otros cargos misionales dentro de su empresa u organización?",
+            #         "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?" = "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
+            #         "Motivos de no cobertura de vacantes" = "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)",
+            #         "Misión de la empresa / habilidad socioemocional" = "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?"
+            #     ),
+            #     selected = c(
+            #       "NIT",
+            #       "Razón social",
+            #       "Actividad económica  principal de la empresa",
+            #       "Departamento",
+            #       "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?",
+            #       "¿Cuántos cargos en su empresa u organización considera que son de difícil consecución?",
+            #       "Cargo misional 1:",
+            #       "Cargo misional 2:"
+            #     )
+            # )
         ),
         column(9,
                reactableOutput("survey_table")
