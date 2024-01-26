@@ -1,12 +1,11 @@
 dashboard_sidebar <- dashboardSidebar(
     sidebarMenu(
+        id = "tabs",
         menuItem("Inicio",
             tabName = "home", icon = icon("home")),
-        menuItem("Catálogo",
+        menuItem("Áreas de Cualificación",
             tabName = "catalogo", icon = icon("book")),
-        menuItem("Carga de archivos",
-            tabName = "carga", icon = icon("upload")),
-        menuItem("Consulta de datos",
+        menuItem("Catálogo de datos",
             icon = icon("bar-chart"), startExpanded = TRUE,
                 menuSubItem(
                     "Descriptivos por área",

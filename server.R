@@ -5,6 +5,7 @@ library(shinydashboard)
 library(stringi)
 library(reactable)
 library(jsonlite)
+library(readxl)
 
 # load the kobo.R file
 source("kobo.R")
@@ -13,6 +14,11 @@ source("kobo.R")
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 
 areas_cualificacion <- dbReadTable(con, "areas_cualificacion")
+
+
+# Abrir base de datos consolidada
+main_bases <- readxl::read_xls("data/input/bases/BaseFinal.xls") %>% as.tibble()
+
 
 shinyServer(function(input, output, session) {
 
@@ -428,16 +434,107 @@ shinyServer(function(input, output, session) {
                 filterable = TRUE, minRows = 10
             )
         )
-})
+        
 
-# 
-# "NIT", "Departamento", "Razón social", "Actividad económica  principal de la empresa",
-# "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?",
-# "¿Cuántos cargos en su empresa u organización considera que son de difícil consecución?",
-# "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
-# "Cargo misional 1:",
-# "Cargo misional 2:",
-# "Adicional a los cargos mencionados anteriormente... ¿Considera que existen otros cargos misionales dentro de su empresa u organización?",
-# "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
-# "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)",
-# "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?"
+# Images for Home page ----------------------------------------------------
+
+        
+        output$img_fases <- renderImage({
+          path_to_png <- "www/images/ruta_diagrama_1.png"
+          list(
+            src = path_to_png,
+            width = "100%",
+            height = "100%",
+            alt = "Chart")
+        }, deleteFile = F)
+        
+        output$img_fases_descripcion <- renderImage({
+          path_to_png <- "www/images/ruta_descripcion_2.png"
+          list(
+            src = path_to_png,
+            width = "100%",
+            height = "100%",
+            alt = "Chart")
+        }, deleteFile = F)
+        
+
+# Switch tabs using images in Catalogo tab --------------------------------
+
+        observeEvent(input$artes_button, {
+          updateTabItems(session, "tabs", selected = "consulta")
+        })
+        
+        observeEvent(input$fisicas_button, {
+          updateTabItems(session, "tabs", selected = "consulta")
+        })
+        
+        observeEvent(input$agropecuarias_button, {
+          updateTabItems(session, "tabs", selected = "consulta")
+        })
+        
+        observeEvent(input$alimentos_button, {
+          updateTabItems(session, "tabs", selected = "consulta")
+        })
+        
+        observeEvent(input$conservacion_button, {
+          updateTabItems(session, "tabs", selected = "consulta")
+        })
+        
+
+# Behavior of DESCRIPTIVOS POR ÁREA ---------------------------------------
+        
+        output$example_table <- renderReactable(
+          datos %>%
+            select("Seleccione el área de cualificación para la cual esta realizando la entrevista.",
+                   c(input$area_cualificacion)
+            ) %>%
+            reactable(
+              filterable = TRUE, minRows = 10
+            )
+        )
+        
+        observeEvent(input$clear_area, {
+          updateSelectizeInput(session, "area_cualificacion", selected = character(0))
+        })
+       
+        observeEvent(input$clear_CUOC, {
+          updateSelectizeInput(session, "denominacion_cuoc", selected = character(0))
+        })
+        
+        observeEvent(input$clear_CINE, {
+          updateSelectizeInput(session, "cine", selected = character(0))
+        })
+        
+        observeEvent(input$clear_CIIU, {
+          updateSelectizeInput(session, "ciiu", selected = character(0))
+        })
+        
+        observeEvent(input$clear_caracterizacion, {
+          updateSelectizeInput(session, "caract_sector", selected = character(0))
+        })
+        
+        observeEvent(input$clear_brechas, {
+          updateSelectizeInput(session, "brechas_hum", selected = character(0))
+        })
+        
+        observeEvent(input$clear_analisis, {
+          updateSelectizeInput(session, "analisis_funcional", selected = character(0))
+        })
+        
+        observeEvent(input$clear_estructura, {
+          updateSelectizeInput(session, "estructura_cualificacion", selected = character(0))
+        })
+        
+        output$main_base <- renderReactable(
+          main_bases %>%
+            select("Codigo Área"
+                   # c(input$area_cualificacion,
+                   #   input$denominacion_cuoc, 
+                   #   input$cine,
+                   #   input$ciiu)
+            ) %>%
+            reactable(
+              filterable = TRUE, minRows = 10
+            )
+        )
+})

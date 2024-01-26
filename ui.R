@@ -2,6 +2,8 @@ library(RSQLite)
 library(tidyverse)
 library(shiny)
 library(shinydashboard)
+library(plotly)
+library(shinyjs)
 library(stringi)
 library(reactable)
 library(jsonlite)
@@ -18,7 +20,6 @@ ui <- shinyUI(
             tabItems(
                 tab_home,
                 tab_catalogo,
-                tab_carga,
                 tab_consulta,
                 tab_infogeneral,
                 tab_survey

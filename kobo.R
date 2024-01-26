@@ -16,13 +16,13 @@ data <- httr::content(response, as = "raw", encoding = "UTF-8")
 path.to.xlsx.file <- "data/input/Encuesta_identificacion_breachas_kobotoolbox.xlsx"
 writeBin(data, path.to.xlsx.file)
 
-# Read the xlsx file 
+# Read the xlsx file (sheet 1)
 datos <- readxl::read_xlsx(path.to.xlsx.file, sheet = 1)
-datos_cargos <- readxl::read_xlsx(path.to.xlsx.file, sheet = 2)
-names(datos)
 
 
-
+# # Read the xlsx file (sheet 2)
+# datos_cargos <- readxl::read_xlsx(path.to.xlsx.file, sheet = 2)
+# names(datos_cargos)
 
 
 

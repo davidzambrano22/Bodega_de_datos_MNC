@@ -1,4 +1,4 @@
 dashboard_header <- dashboardHeader(
-    title = "MNC Colombia -  Sistema de Gestión de Datos",
+    title = "Sistema de Gestión de Datos para el MNC Colombia",
     titleWidth = 450
 )
