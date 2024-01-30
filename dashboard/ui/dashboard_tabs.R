@@ -33,26 +33,43 @@ tab_home <- tabItem(
         status = "primary",
         width = 12,
         HTML("<p style='font-size: 18px;'>
-           <span style='color: black; font-size: 20px;'> MNC: </span>
+           <span style='color: black; font-size: 18px;'> <b>MNC:</b> </span>
            Es un componente del Sistema Nacional de Cualificaciones (SNC) y se define como el instrumento que permite estructurar y clasificar las Cualificaciones en un esquema de ocho (8) niveles ordenados y expresados en términos de Conocimientos, Destrezas y Actitudes, aplicables en contextos de estudio, trabajo o en ambos, de acuerdo con la secuencialidad y complejidad de los aprendizajes que logran las personas en las diferentes Vías de Cualificación.
            </p>
            
            <p style='font-size: 18px;'>
-           <span style='color: black; font-size: 20px;'> Nivel de Cualificación: </span>
+           <span style='color: black; font-size: 18px;'> <b>Nivel de Cualificación:</b> </span>
            Establece el grado de complejidad, amplitud y profundidad de los Resultados de Aprendizaje, ordenados secuencialmente en términos de Conocimientos, Destrezas y Actitudes, lo que permite clasificar las Cualificaciones en el Marco Nacional de Cualificaciones (MNC).
            </p>
            
            <p style='font-size: 18px;'>
-           <span style='color: black; font-size: 20px;'> Cualificación: </span>
+           <span style='color: black; font-size: 18px;'> <b>Cualificación:</b> </span>
            Es el reconocimiento formal que se otorga a una persona por parte de una institución autorizada después de un proceso de evaluación que evidencia el logro de los Resultados de Aprendizaje definidos en la Estructura de la Cualificación y vinculados a un nivel del Marco Nacional de Cualificaciones (MNC). Las Cualificaciones se reconocen mediante los títulos o certificados que se obtienen a través de las diferentes Vías de Cualificación de acuerdo con las normas y lineamientos del Sistema Nacional de Cualificaciones.
            </p>
            
            <p style='font-size: 18px;'>
-           <span style='color: black; font-size: 20px;'> Estructura de cualificación: </span>
+           <span style='color: black; font-size: 18px;'> <b>Estructura de cualificación:</b> </span>
            Es un documento técnico que hace parte de los Catálogos Sectoriales de Cualificaciones y contiene las Competencias y Resultados de Aprendizaje que debe alcanzar una persona para el reconocimiento de la Cualificación asociada a un nivel del Marco Nacional de Cualificaciones (MNC). La Estructura de Cualificación sirve como referente para el diseño curricular y el reconocimiento de los Aprendizajes Previos.
            </p>
            "
-        )
+        ), 
+              HTML("<p style='font-size: 18px; align: center;'>
+                      Para conocer más sobre el MNC, haga click en el siguiente botón:
+                    </p>"
+                   ),
+              column(2, offset = 5,
+                        actionButton("more_info",
+                                     HTML("<div style = 'font-size: 18px; color: #007bff;'>
+                                          Más información
+                                          <div style = 'font-size: 18px; color: #007bff;'>
+                                          <i class='fas fa-hand-point-up'></i>
+                                          <div>
+                                          "
+                                          ),
+                                     onclick = "window.open('https://especiales.colombiaaprende.edu.co/mnc/catalogo.html', target = '_blank')"
+                                     )
+                    )
+              
       )
     ),
     div(style = "height: 20px;"),
@@ -90,7 +107,6 @@ tab_home <- tabItem(
 
 
 # TAB CATÁLOGO ------------------------------------------------------------
-
 tab_catalogo <- tabItem(
     tabName = "catalogo",
     fluidRow(
@@ -109,57 +125,48 @@ tab_catalogo <- tabItem(
     div(style = "height: 40px;"),
     
     fluidRow(
-      column(1, 
+      column(6, 
              actionButton("artes_button",
                           img(id = "alimentos_button",
                               src = "images/artes.png")
-             )
+             ),
+             h3("Artes visuales, Plásticas, y del Patrimonio Cultural (AVPP)")
       ),
-      column(4, offset = 1,
-      h3("Artes visuales, Plásticas, y del Patrimonio Cultural (AVPP)")
-    ),
-      column(1,
+      column(6,
         actionButton("conservacion_button",
                      img(id = "conservacion_button",
                          src = "images/ambiental.png")
+        ),
+        h3("Conservación, Protección y Saneamiento Ambiental (CPSA)")
         )
-    ),
-    column(4, offset = 1,
-           h3("Conservación, Protección y Saneamiento Ambiental (CPSA)")
-    )
     ),
     div(style = "height: 20px;"),
     
     
     fluidRow(
-      column(1, 
+      column(6, 
              actionButton("fisicas_button",
                           img(id = "alimentos_button",
                               src = "images/fisicas.png")
-             )
-      ),
-      column(4, offset = 1,
+             ),
              h3("Actividades físicas, Deportivas y Recreativas (AFIR)")
       ),
-      column(1, 
+      column(6, 
              actionButton("alimentos_button",
                           img(id = "alimentos_button",
                               src = "images/alimentos.png")
+             ),
+             h3("Elaboración y Transformación de Alimentos (ETAL)")
              )
       ),
-      column(3, offset = 1,
-             h3("Elaboración y Transformación de Alimentos (ETAL)")
-      )),
-    div(style = "height: 40px;"),
+    div(style = "height: 20px;"),
     
     fluidRow(
-      column(1, 
+      column(6, 
              actionButton("agropecuarias_button",
                           img(id = "alimentos_button",
                               src = "images/agropecuarias.png")
-             )
-      ),
-      column(4, offset = 1,
+             ),
              h3("Agropecuario, Silvicultura, Pesca, Acuicultura y Veterinaria (AGVE)")
       )),
     div(style = "height: 100px;"),
@@ -191,7 +198,7 @@ tab_consulta <- tabItem(
     tabName = "consulta",
     fluidRow(
         box(
-            title = "Consulta de datos",
+            title = "Descriptivas por área del MNC",
             status = "primary",
             solidHeader = TRUE,
             collapsible = TRUE,
@@ -257,7 +264,7 @@ tab_infogeneral <- tabItem(
     tabName = "infogeneral",
     fluidRow(
         box(
-            title = "Bases de datos de áreas",
+            title = "Catálogo de datos",
             status = "primary",
             solidHeader = TRUE,
             collapsible = TRUE,
@@ -272,8 +279,8 @@ tab_infogeneral <- tabItem(
              h4("Áreas de Cualificación"),
              selectizeInput("area_cualificacion", "Seleccione", 
                             choices = c(
-                                        "Codigo Área" = "Codigo Área",
-                                        "Nombre Cualificación" = "Nombre Cualificación"
+                                        "Codigo Área" = "Código_área",
+                                        "Nombre área cualificación" = "Nombre área cualificación"
                                         ),
                             multiple = TRUE,
                             options = list(plugins = list('remove_button'), persist = FALSE)
@@ -284,8 +291,7 @@ tab_infogeneral <- tabItem(
       column(2,
              h4("Denominación CUOC"),
              selectizeInput("denominacion_cuoc", "Seleccione", 
-                            choices = c("Código de Área" = "Código_área",
-                                        "Nombre área cualificación" = "Nombre área cualificación",
+                            choices = c(
                                         "Código Grandes Grupos" = "Código Grandes Grupos",
                                         "Grandes Grupos" = "Grandes Grupos",
                                         "Código Subgrupos principales" = "Código Subgrupos principales",
@@ -297,7 +303,15 @@ tab_infogeneral <- tabItem(
                                         "Código Ocupación" = "Código Ocupación",
                                         "Ocupación" = "Ocupación",
                                         "Código denominaciones" = "Código denominaciones",
-                                        "Denominacion" = "Denominacion"
+                                        "Denominacion" = "Denominacion",
+                                        "Código CIUO 08 A.C." = "Código CIUO 08 A.C.",
+                                        "Nombre Ocupación Afín" = "Nombre Ocupación Afín",
+                                        "Nombre Destreza" = "Nombre Destreza", 
+                                        "Nombre Conocimiento" = "Nombre Conocimiento",
+                                        "Nivel Competencia" = "Nivel Competencia",
+                                        "Descripción Ocupación" = "Descripción Ocupación",
+                                        "Consecutivo Función" = "Consecutivo Función",
+                                        "Redacción Función" = "Redacción Función"
                             ),
                             multiple = TRUE,
                             options = list(plugins = list('remove_button'), persist = FALSE)
@@ -308,10 +322,8 @@ tab_infogeneral <- tabItem(
              h4("CINE"),
              selectizeInput("cine", "Seleccione", 
                             choices = c(
-                                        "Código_área",
-                                        "Nombre área cualificación",
-                                        "Código CINE-2011 AC",
-                                        "Campos Detallado"
+                                        "Código CINE-2011 AC" = "Código CINE-2011 AC",
+                                        "Campos Detallado" = "Campos Detallado"
                             ),
                             multiple = TRUE,
                             options = list(plugins = list('remove_button'), persist = FALSE)
@@ -322,13 +334,11 @@ tab_infogeneral <- tabItem(
              h4("CIIU"),
              selectizeInput("ciiu", "Seleccione", 
                             choices = c(
-                                        "Sección",
-                                        "División",
-                                        "Grupo",
-                                        "Código_ciiu",
-                                        "Descripción",
-                                        "Código_área",
-                                        "Nombre área cualificación"
+                                        "Sección" = "Sección",
+                                        "División" = "División",
+                                        "Grupo" = "Grupo",
+                                        "Código_ciiu" = "Código_ciiu",
+                                        "Descripción" = "Descripción"
                                         ),
                             multiple = TRUE,
                             options = list(plugins = list('remove_button'), persist = FALSE)
@@ -342,14 +352,12 @@ tab_infogeneral <- tabItem(
         column(2, offset = 2,
                h4("Caracterización Sector"),
                selectizeInput("caract_sector", "Seleccione", 
-                              choices = c("Código CiiU",
-                                          "Código Área",
-                                          "Entorno Socioeconómico",
-                                          "Entorno Tecnológico",
-                                          "Entorno Organizacional",
-                                          "Entorno Ambiental",
-                                          "Entorno Normativo",
-                                          "Proyección Internacional"),
+                              choices = c(
+                                "Tasadecre2022" = "Tasa crecimiento 2022",
+                                "Valoragregado2022" = "Valor agregado 2022",
+                                "OcuCIIU2022" = "Ocupados CIIU 2022",
+                                "OcuTotal2022" = "Ocupados Total 2022"
+                              ),
                               multiple = TRUE,
                               options = list(plugins = list('remove_button'), persist = FALSE)
                ),
@@ -404,7 +412,10 @@ tab_infogeneral <- tabItem(
         )
     ),
     column(2, offset = 5,
-           actionButton("download_button", "Descargar Tabla")
+           downloadButton("download_csv", "Descargar Tabla")
+    ),
+    column(12,
+           reactableOutput("main_databases")
     )
     )
 )
@@ -415,84 +426,89 @@ tab_survey <- tabItem(
     tabName = "survey",
     fluidRow(
         box(
-            title = "Encuesta",
+            title = "Encuesta de demanda laboral",
             status = "primary",
             solidHeader = TRUE,
             collapsible = TRUE,
             width = 12,
-            "En esta sección podrá ver los resultados de la Encuesta
-            de Demanda Laboral."
+            "En esta sección encontrará la encuesta de demanda laboral realizada a las empresas en el marco de las entrevistas semiestructuradas."
         )
     ),
     fluidRow(
-        column(3,
-            h3("Variables a mostrar"),
-            selectInput(
-              "survey_sections", "Secciones",
-              c(
-                "Información general",
-                "Otros cargos",
-                "Estrategias desarrolladas por la empresa para el cierre de brechas",
-                "Habilidades Socioemocionales"
-              )
-            ),
-            conditionalPanel(
-              condition="input.survey_sections == 'Información general'",
-              checkboxGroupInput(
-                "survey_variables_1", "Variables",
-                choices = c(
-                  "Actividad económica  principal de la empresa" = "Actividad económica  principal de la empresa",
-                  "Departamento" = "Departamento",
-                  "Tamaño empresa" = "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?"
-                ))
-            ),
-            conditionalPanel(
-              condition="input.survey_sections == 'Otros cargos'",
-              checkboxGroupInput(
-                "survey_variables_2", "Variables",
-                choices = c(
-                  "¿Cuáles cargos misionales?" = "¿Cuáles cargos misionales?",
-                  "Cargo misional 1" = "Cargo misional 1:",
-                  "Cargo misional 2" = "Cargo misional 2:",
-                  "Cargo misional 3" = "Cargo misional 3:",
-                  "Cargo misional 4" = "Cargo misional 4:",
-                  "Cargo misional 5" = "Cargo misional 5:",
-                  "Cargo misional 6" = "Cargo misional 6:",
-                  "Cargo misional 7" = "Cargo misional 7:",
-                  "Cargo misional 8" = "Cargo misional 8:",
-                  "Cargo misional 9" = "Cargo misional 9:",
-                  "Cargo misional 10" = "Cargo misional 10:"
-                  ))
-            ),
-            conditionalPanel(
-              condition="input.survey_sections == 'Estrategias desarrolladas por la empresa para el cierre de brechas'",
-              checkboxGroupInput(
-                "survey_variables_3", "Variables",
-                choices = c(
-                  "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?" = "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
-                  "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?" = "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
-                  "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:" = "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:",
-                  "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)" = "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)"
-                ))
-            ),
-            conditionalPanel(
-              condition="input.survey_sections == 'Habilidades Socioemocionales'",
-              checkboxGroupInput(
-                "survey_variables_4", "Variables",
-                choices = c(
-                  "¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?" = "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?",
-                  "¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?" = "2. ¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?",
-                  "¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?" = "3. ¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?",
-                  "De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?" = "4. De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?",
-                  "¿Cuáles?" = "¿Cuáles?...95",
-                  "¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?" = "5. ¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?",
-                  "¿Cuáles?" = "¿Cuáles?...97",
-                  "En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?" = "6.  En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?",
-                  "¿Cuáles?" = "¿Cuáles?...99"
-                  ))
-            )
-        ),
-        column(9,
+      box(width = 12,
+          column(2, offset = 2,
+                 h4("Información General"),
+                 selectizeInput("survey_variables_1", "Seleccione", 
+                                choices =  c(
+                                  "Actividad económica  principal de la empresa" = "Actividad económica  principal de la empresa",
+                                  "Departamento" = "Departamento",
+                                  "Tamaño empresa" = "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?"
+                                ),
+                                multiple = TRUE,
+                                options = list(plugins = list('remove_button'), persist = FALSE)
+                 ),
+                 actionButton("clear_infoGeneral", "Limpiar Filtros")
+          ),
+          
+          column(2,
+                 h4("Otros Cargos"),
+                 selectizeInput("survey_variables_2", "Seleccione", 
+                                choices = c(
+                                  "¿Cuáles cargos misionales?" = "¿Cuáles cargos misionales?",
+                                  "Cargo misional 1" = "Cargo misional 1:",
+                                  "Cargo misional 2" = "Cargo misional 2:",
+                                  "Cargo misional 3" = "Cargo misional 3:",
+                                  "Cargo misional 4" = "Cargo misional 4:",
+                                  "Cargo misional 5" = "Cargo misional 5:",
+                                  "Cargo misional 6" = "Cargo misional 6:",
+                                  "Cargo misional 7" = "Cargo misional 7:",
+                                  "Cargo misional 8" = "Cargo misional 8:",
+                                  "Cargo misional 9" = "Cargo misional 9:",
+                                  "Cargo misional 10" = "Cargo misional 10:"
+                                ),
+                                multiple = TRUE,
+                                options = list(plugins = list('remove_button'), persist = FALSE)
+                 ),
+                 actionButton("clear_otrosCargos", "Limpiar Filtros")
+          ),
+          column(2,
+                 h4("Estrategias desarrolladas para el cierre de brechas"),
+                 selectizeInput("survey_variables_3", "Seleccione", 
+                                choices = c(
+                                  "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?" = "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
+                                  "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?" = "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
+                                  "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:" = "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:",
+                                  "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)" = "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)"
+                                ),
+                                multiple = TRUE,
+                                options = list(plugins = list('remove_button'), persist = FALSE)
+                 ),
+                 actionButton("clear_estrategias", "Limpiar Filtros")
+          ),
+          column(2,
+                 h4("Habilidades Socioemocionales"),
+                 selectizeInput("survey_variables_4", "Seleccione", 
+                                choices = c(
+                                  "¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?" = "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?",
+                                  "¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?" = "2. ¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?",
+                                  "¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?" = "3. ¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?",
+                                  "De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?" = "4. De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?",
+                                  "¿Cuáles?" = "¿Cuáles?...95",
+                                  "¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?" = "5. ¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?",
+                                  "¿Cuáles?" = "¿Cuáles?...97",
+                                  "En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?" = "6.  En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?",
+                                  "¿Cuáles?" = "¿Cuáles?...99"
+                                ),
+                                multiple = TRUE,
+                                options = list(plugins = list('remove_button'), persist = FALSE)
+                 ),
+                 actionButton("clear_habilidades", "Limpiar Filtros")
+          )
+      ),
+      column(2, offset = 5,
+             downloadButton("download_survey_csv", "Descargar Tabla")
+      ),
+        column(12,
                reactableOutput("survey_table")
         )
         )

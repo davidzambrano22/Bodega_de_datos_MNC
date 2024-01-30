@@ -5,17 +5,20 @@ dashboard_sidebar <- dashboardSidebar(
             tabName = "home", icon = icon("home")),
         menuItem("Áreas de Cualificación",
             tabName = "catalogo", icon = icon("book")),
-        menuItem("Catálogo de datos",
-            icon = icon("bar-chart"), startExpanded = TRUE,
+        menuItem("Consulta de información",
+            icon = icon("bar-chart"), startExpanded = FALSE,
                 menuSubItem(
-                    "Descriptivos por área",
+                    "Catálogo de datos",
                     tabName = "infogeneral"),
                 menuSubItem(
-                    "Bases de datos de áreas",
+                    "Descriptivos por área del MNC",
                     tabName = "consulta")
         ),
-        menuItem("Encuesta",
-            tabName = "survey", icon = icon("question-circle")
+        menuItem("Encuestas",
+            icon = icon("question-circle"), startExpanded = FALSE,
+            menuSubItem(
+              "Encuesta de demanda laboral",
+              tabName = "survey")
         )
     )
 )

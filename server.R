@@ -2,6 +2,7 @@ library(RSQLite)
 library(tidyverse)
 library(shiny)
 library(shinydashboard)
+library(shinyjs)
 library(stringi)
 library(reactable)
 library(jsonlite)
@@ -17,91 +18,18 @@ areas_cualificacion <- dbReadTable(con, "areas_cualificacion")
 
 
 # Abrir base de datos consolidada
-main_bases <- readxl::read_xls("data/input/bases/BaseFinal.xls") %>% as.tibble()
+main_bases <- readxl::read_xls("data/input/bases/BaseFinal.xls", guess_max = 2021) %>% 
+  slice(c(2021:5000)) %>% as.tibble() 
+  
 
+dim(main_bases)
+
+main_bases$`Tasa crecimiento 2022` <- as.double(main_bases$`Tasa crecimiento 2022`)
+main_bases$`Valor agregado 2022` <- as.double(main_bases$`Valor agregado 2022`)
+main_bases$`Ocupados CIIU 2022` <- as.double(main_bases$`Ocupados CIIU 2022`)
+main_bases$`Ocupados Total 2022` <- as.double(main_bases$`Ocupados Total 2022`)
 
 shinyServer(function(input, output, session) {
-
-        # ValueBoxOutput to show number of uploaded files, data volume,
-        # first upload date, last upload date
-        output$num_files <- renderValueBox({
-            valueBox(
-                value = length(list.files("data/input/")),
-                subtitle = "Número de archivos cargados",
-                icon = icon("upload")
-            )
-        })
-
-        output$data_volume <- renderValueBox({
-            valueBox(
-                value = paste(round(sum(file.info(
-                    list.files("data/input/",
-                    all.files = TRUE,
-                    recursive = TRUE,
-                    full.names = TRUE))$size) / 1000000, 1), "MB"),
-                subtitle = "Volumen de datos cargados",
-                icon = icon("database")
-            )
-        })
-
-        output$first_upload_date <- renderValueBox({
-            valueBox(
-                value = Sys.Date(), # TOFIX: make this the first upload datetime
-                subtitle = "Fecha de la primera carga",
-                icon = icon("calendar")
-            )
-        })
-
-        output$last_upload_date <- renderValueBox({
-            valueBox(
-                value = Sys.Date(), # TOFIX: make this the last upload datetime
-                subtitle = "Fecha de la última carga",
-                icon = icon("calendar")
-            )
-        })
-
-        output$file_catalog <- renderReactable(
-            file.info(
-                    list.files("data/input/",
-                    all.files = TRUE,
-                    recursive = TRUE,
-                    full.names = TRUE),
-                    extra_cols = FALSE
-            ) %>%
-            as_tibble(rownames = NA) %>%
-            rownames_to_column("filename") %>%
-            select(filename, size, ctime) %>%
-            mutate(
-                extension = stri_extract_last_regex(filename, "\\.\\w+$")
-            ) %>%
-            reactable(
-                columns = list(
-                    filename = colDef(
-                        name = "Nombre del archivo (click para descargar)",
-                        cell = function(value) gsub(
-                            "../data/input//", " ", value, fixed = TRUE),
-                        minWidth = 250,
-                    ),
-                    size = colDef(
-                        name = "Tamaño (MB)",
-                        align = "center",
-                        cell = function(value) {
-                            paste0(
-                            round(value / 1000000, 1))
-                        },
-                        maxWidth = 100
-                    ),
-                    ctime = colDef(
-                        name = "Fecha de carga"
-                    ),
-                    extension = colDef(
-                        name = "Extensión"
-                    )
-                ),
-                bordered = TRUE,
-                highlight = TRUE
-            )
-        )
 
         output$areas_catalog <- renderReactable(
             areas_cualificacion %>%
@@ -422,6 +350,17 @@ shinyServer(function(input, output, session) {
             )
         )
 
+# HOME --------------------------------------------------------------------
+
+# observeEvent(input$more_info {
+#   runjs('$("#col_aprende").attr("href", "https://www.example.com");')
+#   # Trigger a click on the hidden link
+#   runjs('$("#col_aprende")[0].click();')
+# })
+        
+# SURVEY ENCUESTA ---------------------------------------------------------
+
+
         output$survey_table <- renderReactable(
             datos %>%
             select("Seleccione el área de cualificación para la cual esta realizando la entrevista.",
@@ -435,6 +374,35 @@ shinyServer(function(input, output, session) {
             )
         )
         
+        observeEvent(input$clear_infoGeneral, {
+          updateSelectizeInput(session, "survey_variables_1", selected = character(0))
+        })
+        
+        observeEvent(input$clear_otrosCargos, {
+          updateSelectizeInput(session, "survey_variables_2", selected = character(0))
+        })
+        
+        observeEvent(input$clear_estrategias, {
+          updateSelectizeInput(session, "survey_variables_3", selected = character(0))
+        })
+        
+        observeEvent(input$clear_habilidades, {
+          updateSelectizeInput(session, "survey_variables_4", selected = character(0))
+        })
+        
+        # Descargar tabla
+        output$download_survey_csv <- downloadHandler(
+          filename = function(){"encuesta_filtrada.csv"},
+          content = function(file){
+            write.csv(datos %>% select(
+                                      "Seleccione el área de cualificación para la cual esta realizando la entrevista.",
+                                      c(input$survey_variables_1,
+                                        input$survey_variables_2, 
+                                        input$survey_variables_3,
+                                        input$survey_variables_4)
+            ), file, row.names = FALSE, fileEncoding = "UTF-8")
+          }
+        )
 
 # Images for Home page ----------------------------------------------------
 
@@ -461,37 +429,61 @@ shinyServer(function(input, output, session) {
 # Switch tabs using images in Catalogo tab --------------------------------
 
         observeEvent(input$artes_button, {
-          updateTabItems(session, "tabs", selected = "consulta")
+          updateTabItems(session, "tabs", selected = "infogeneral")
         })
         
         observeEvent(input$fisicas_button, {
-          updateTabItems(session, "tabs", selected = "consulta")
+          updateTabItems(session, "tabs", selected = "infogeneral")
         })
         
         observeEvent(input$agropecuarias_button, {
-          updateTabItems(session, "tabs", selected = "consulta")
+          updateTabItems(session, "tabs", selected = "infogeneral")
         })
         
         observeEvent(input$alimentos_button, {
-          updateTabItems(session, "tabs", selected = "consulta")
+          updateTabItems(session, "tabs", selected = "infogeneral")
         })
         
         observeEvent(input$conservacion_button, {
-          updateTabItems(session, "tabs", selected = "consulta")
+          updateTabItems(session, "tabs", selected = "infogeneral")
         })
         
 
 # Behavior of DESCRIPTIVOS POR ÁREA ---------------------------------------
         
-        output$example_table <- renderReactable(
-          datos %>%
-            select("Seleccione el área de cualificación para la cual esta realizando la entrevista.",
-                   c(input$area_cualificacion)
-            ) %>%
+        # Render table
+        output$main_databases <- renderReactable(
+          main_bases %>%
+            select(
+                   c(
+                     input$area_cualificacion,
+                     input$denominacion_cuoc,
+                     input$cine,
+                     input$ciiu,
+                     input$caract_sector
+                   )
+            ) %>% distinct() %>%
             reactable(
               filterable = TRUE, minRows = 10
             )
         )
+        
+        # Download table
+        output$download_csv <- downloadHandler(
+          filename = function(){"datos_consolidados.csv"},
+          content = function(file){
+            write.csv(main_bases %>% select("Ocupación",
+                                            c(
+                                              input$area_cualificacion,
+                                              input$denominacion_cuoc,
+                                              input$cine,
+                                              input$ciiu
+                                            )
+              
+            ), file, row.names = FALSE, fileEncoding = "UTF-8")
+          }
+        )
+        
         
         observeEvent(input$clear_area, {
           updateSelectizeInput(session, "area_cualificacion", selected = character(0))
@@ -524,17 +516,5 @@ shinyServer(function(input, output, session) {
         observeEvent(input$clear_estructura, {
           updateSelectizeInput(session, "estructura_cualificacion", selected = character(0))
         })
-        
-        output$main_base <- renderReactable(
-          main_bases %>%
-            select("Codigo Área"
-                   # c(input$area_cualificacion,
-                   #   input$denominacion_cuoc, 
-                   #   input$cine,
-                   #   input$ciiu)
-            ) %>%
-            reactable(
-              filterable = TRUE, minRows = 10
-            )
-        )
+
 })
