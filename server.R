@@ -10,24 +10,25 @@ library(readxl)
 
 # load the kobo.R file
 source("kobo.R")
+# source("data/scripts/excel_reader.R")
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 
+# Read tables from database
 areas_cualificacion <- dbReadTable(con, "areas_cualificacion")
 
+# 
+final_table_query <- "
+    
+
+"
+dbExecute(con, )
 
 # Abrir base de datos consolidada
 main_bases <- readxl::read_xls("data/input/bases/BaseFinal.xls", guess_max = 2021) %>% 
   slice(c(2021:5000)) %>% as.tibble() 
-  
 
-dim(main_bases)
-
-main_bases$`Tasa crecimiento 2022` <- as.double(main_bases$`Tasa crecimiento 2022`)
-main_bases$`Valor agregado 2022` <- as.double(main_bases$`Valor agregado 2022`)
-main_bases$`Ocupados CIIU 2022` <- as.double(main_bases$`Ocupados CIIU 2022`)
-main_bases$`Ocupados Total 2022` <- as.double(main_bases$`Ocupados Total 2022`)
 
 shinyServer(function(input, output, session) {
 
@@ -350,14 +351,6 @@ shinyServer(function(input, output, session) {
             )
         )
 
-# HOME --------------------------------------------------------------------
-
-# observeEvent(input$more_info {
-#   runjs('$("#col_aprende").attr("href", "https://www.example.com");')
-#   # Trigger a click on the hidden link
-#   runjs('$("#col_aprende")[0].click();')
-# })
-        
 # SURVEY ENCUESTA ---------------------------------------------------------
 
 
@@ -390,7 +383,7 @@ shinyServer(function(input, output, session) {
           updateSelectizeInput(session, "survey_variables_4", selected = character(0))
         })
         
-        # Descargar tabla
+        # Download button of survey table
         output$download_survey_csv <- downloadHandler(
           filename = function(){"encuesta_filtrada.csv"},
           content = function(file){
@@ -404,27 +397,6 @@ shinyServer(function(input, output, session) {
           }
         )
 
-# Images for Home page ----------------------------------------------------
-
-        
-        output$img_fases <- renderImage({
-          path_to_png <- "www/images/ruta_diagrama_1.png"
-          list(
-            src = path_to_png,
-            width = "100%",
-            height = "100%",
-            alt = "Chart")
-        }, deleteFile = F)
-        
-        output$img_fases_descripcion <- renderImage({
-          path_to_png <- "www/images/ruta_descripcion_2.png"
-          list(
-            src = path_to_png,
-            width = "100%",
-            height = "100%",
-            alt = "Chart")
-        }, deleteFile = F)
-        
 
 # Switch tabs using images in Catalogo tab --------------------------------
 

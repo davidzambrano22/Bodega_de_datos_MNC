@@ -6,6 +6,28 @@ library(stringi)
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 
+
+# Read updated tables -----------------------------------------------------
+
+# Read and write CIIU table to database
+CIUU_table <- read_xls("data/input/bases/CIIU.xls") %>% as_tibble() 
+dbWriteTable(con, "CIIU", CIUU_table, overwrite = FALSE, append = TRUE)
+
+# Read and write CINE table to database
+CINE_table <- read_xls("data/input/bases/CINE.xls") %>% as_tibble() 
+dbWriteTable(con, "CINE", CINE_table, overwrite = FALSE, append = TRUE)
+
+# Read and write CINE table to database
+CUOC_table <- read_xls("data/input/bases/CUOC.xls") %>% as_tibble() 
+dbWriteTable(con, "CUOC", CUOC_table, overwrite = FALSE, append = TRUE)
+
+# Read and write CINE table to database
+CUOC_table <- read_xls("data/input/bases/CUOC.xls") %>% as_tibble() 
+dbWriteTable(con, "CUOC", CUOC_table, overwrite = FALSE, append = TRUE)
+
+
+
+
 # read the file data/20230704 BD Áreas de Cualificación CUOC_CIIU_CINE.xlsx
 # read the sheet called Areas_Cualificacion
 areas_cualificacion <- read_excel(

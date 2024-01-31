@@ -1,9 +1,16 @@
+
+# TABS --------------------------------------------------------------------
 tab_home <- tabItem(
     tabName = "home",
    
     fluidRow(
-      column(width = 6,  img(src = "https://upload.wikimedia.org/wikipedia/commons/3/30/LOGO_PLAN_DE_DESARROLLO_COLOMBIA_POTENCIA_DE_LA_VIDA_2022-2026.png", width = 225, height = 100)),
-      column(width = 6,  align = "right", img(src = "https://www.mineducacion.gov.co/1780/channels-977_logo.png", width = 280, height = 100))
+      column(width = 3,  img(src = "https://upload.wikimedia.org/wikipedia/commons/3/30/LOGO_PLAN_DE_DESARROLLO_COLOMBIA_POTENCIA_DE_LA_VIDA_2022-2026.png",
+                             width = "100%", style = "max-width: 100%; height: auto;")
+             ),
+      column(width = 3, offset = 6,
+             img(src = "https://www.mineducacion.gov.co/1780/channels-977_logo.png", 
+                                              width = "100%", style = "max-width: 100%; height: auto;")
+             )
     ),
     div(style = "height: 20px;"),
     
@@ -60,10 +67,7 @@ tab_home <- tabItem(
               column(2, offset = 5,
                         actionButton("more_info",
                                      HTML("<div style = 'font-size: 18px; color: #007bff;'>
-                                          Más información
-                                          <div style = 'font-size: 18px; color: #007bff;'>
-                                          <i class='fas fa-hand-point-up'></i>
-                                          <div>
+                                          Más información <i class='fas fa-mouse-pointer fa-1x' style = 'color: grey;'></i>
                                           "
                                           ),
                                      onclick = "window.open('https://especiales.colombiaaprende.edu.co/mnc/catalogo.html', target = '_blank')"
@@ -75,33 +79,85 @@ tab_home <- tabItem(
     div(style = "height: 20px;"),
     
     fluidRow(
-      column(width = 12,
              box(
                title = "Ruta metodológica para el diseño de las cualificaciones",
                align="center",
                status = "primary",
                solidHeader = TRUE,
-               collapsible = F,
+               collapsible = TRUE,
                width = 12,
-               column(6, offset = 1,
-                      imageOutput("img_fases", width = 1350, height = 370)),
-               box(
-                 title = tags$b("Fases de la metodología"),
-                 collapsible = TRUE,
-                 width = 12,
-                 column(6, offset = 1,
-                        imageOutput("img_fases_descripcion", width = 1350, height = 260)),
-                 style = "font-size: 18px;"
+               column(12,
+                      img(src = "images/ruta_diagrama_1.png", width = "100%", style = "max-width: 100%; height: auto;")
+                      ),
+                       fluidRow(
+                       column(3, 
+                              img(src = "images/yellow.png"),
+                              HTML("<p style='font-size: 18px; text-align: left;'>
+                                    <b>F1:</b> Delimitación del (los) sector(es) objeto de estudio
+                                    asociado(s) al área de cualificación.
+                                    </p>
+                                    <p style='font-size: 18px; text-align: left;'>
+                                    <b>F2:</b> Identificación de características del sector asociado
+                                    de cualificación.
+                                    </p>"
+                                   )
+                              ),
+                       column(3, 
+                              img(src = "images/red.png"),
+                              HTML("<p style='font-size: 18px; text-align: left;'>
+                                    <b>F3:</b> Identificación de brechas de capital humano.
+                                   </p>
+                                   <ul>
+                                    <li> <p style='font-size: 18px; text-align: left;'> Análisis de prospectiva laboral</li></p>
+                                    <li> <p style='font-size: 18px; text-align: left;'> Análisis de demanda laboral</li></p>
+                                    <li> <p style='font-size: 18px;text-align: left;'> Análisis de oferta educativa</li></p>
+                                    <li> <p style='font-size: 18px;text-align: left;'> Análisis de brechas de capital Humano</li></p>
+                                   </ul>")
+                              ),
+                       column(3,
+                              img(src = "images/green.png"),
+                              HTML("
+                                    <p style='font-size: 18px; text-align: left;'>
+                                    <b>F4:</b> Análisis ocupacional
+                                    </p>
+                                    <ul>
+                                    <li> <p style='font-size: 18px; text-align: left;'> Elaboración de la Matriz de Análisis Ocupacional y Organizacional</li></p>
+                                    </ul>
+                                    <p style='font-size: 18px; text-align: left;'>
+                                    <b>F2:</b> Análisis funcional
+                                    </p>
+                                   ")
+                       ),
+                       column(3,
+                              img(src = "images/blue.png"),
+                              HTML("<p>
+                                   <p style='font-size: 18px; text-align: left;'>
+                                    <b>F6:</b> Identificación y perfil de competencias.
+                                    </p>
+                                    <p style='font-size: 18px; text-align: left;'>
+                                    <b>F2:</b> Verificación de la Identificación y perfil de competencias.
+                                    </p>
+                                    <p style='font-size: 18px; text-align: left;'>
+                                    <b>F2:</b> Referentes para la educación y formación y Paŕametros de calidad.
+                                    </p>
+                                    <p style='font-size: 18px;text-align: left;'>
+                                    <b>F2:</b> Verificación de Referentes y parámetros de calidad.
+                                    </p>
+                                    <p style='font-size: 18px;text-align: left;'>
+                                    <b>F2:</b> Incorporación de las cualificaciones en el <b>CNC</b>.
+                                    </p>
+                                   ")
+                       )
+                   )
              )
-             )
-    )),
+             ),
     div(style = "height: 20px;"),
 
     
     fluidRow(
-      column(width = 9,  img(src = "images/logo_3.png", width = 225, height = 90)),
-      column(width = 1,  align = "right", img(src = "images/logo_4.png", width = 60, height = 100)),
-      column(width = 2,  align = "right", img(src = "images/logo_5.png", width = 230, height = 100))
+      column(width = 3,  img(src = "images/logos/logo_MNC.png", width = "85%", style = "max-width: 100%; height: auto;")),
+      column(width = 1, offset = 5, align = "right", img(src = "images/logos/logo_PNUD.png", width = "70%", style = "max-width: 70%; height: auto;")),
+      column(width = 3,  align = "right", img(src = "images/logos/logo_corona.png", width = "85%", style = "max-width: 100%; height: auto;"))
     )
 )
 
@@ -204,7 +260,8 @@ tab_consulta <- tabItem(
             collapsible = TRUE,
             width = 12,
             "En esta sección podrá consultar los datos de la 
-            Sistema de Gestión de datos del MNC Colombia."
+            Sistema de Gestión de datos del MNC Colombia.",
+            style = "font-size: 18px;"
         )
     ),
     fluidRow(
@@ -270,7 +327,8 @@ tab_infogeneral <- tabItem(
             collapsible = TRUE,
             width = 12,
             "En esta sección podrá consultar las bases de datos de 
-            áreas del Sistema de Gestión de datos del MNC Colombia."
+            áreas del Sistema de Gestión de datos del MNC Colombia.",
+            style = "font-size: 18px;"
         )
     ),
     fluidRow(
@@ -304,7 +362,8 @@ tab_infogeneral <- tabItem(
                                         "Ocupación" = "Ocupación",
                                         "Código denominaciones" = "Código denominaciones",
                                         "Denominacion" = "Denominacion",
-                                        "Código CIUO 08 A.C." = "Código CIUO 08 A.C.",
+                                        "Código CIUO 08 A.C." = "Código \nCIUO 08 A.C.",
+                                        "Código CNO" = "Código \nCNO",
                                         "Nombre Ocupación Afín" = "Nombre Ocupación Afín",
                                         "Nombre Destreza" = "Nombre Destreza", 
                                         "Nombre Conocimiento" = "Nombre Conocimiento",
@@ -431,7 +490,8 @@ tab_survey <- tabItem(
             solidHeader = TRUE,
             collapsible = TRUE,
             width = 12,
-            "En esta sección encontrará la encuesta de demanda laboral realizada a las empresas en el marco de las entrevistas semiestructuradas."
+            "En esta sección encontrará la encuesta de demanda laboral realizada a las empresas en el marco de las entrevistas semiestructuradas.",
+            style = "font-size: 18px;"
         )
     ),
     fluidRow(
