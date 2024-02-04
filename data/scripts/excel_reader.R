@@ -7,24 +7,27 @@ library(stringi)
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 
 
-# Read updated tables -----------------------------------------------------
-
-# Read and write CIIU table to database
-CIUU_table <- read_xls("data/input/bases/CIIU.xls") %>% as_tibble() 
-dbWriteTable(con, "CIIU", CIUU_table, overwrite = FALSE, append = TRUE)
-
-# Read and write CINE table to database
-CINE_table <- read_xls("data/input/bases/CINE.xls") %>% as_tibble() 
-dbWriteTable(con, "CINE", CINE_table, overwrite = FALSE, append = TRUE)
-
-# Read and write CINE table to database
-CUOC_table <- read_xls("data/input/bases/CUOC.xls") %>% as_tibble() 
-dbWriteTable(con, "CUOC", CUOC_table, overwrite = FALSE, append = TRUE)
-
-# Read and write CINE table to database
-CUOC_table <- read_xls("data/input/bases/CUOC.xls") %>% as_tibble() 
-dbWriteTable(con, "CUOC", CUOC_table, overwrite = FALSE, append = TRUE)
-
+# # Read updated tables -----------------------------------------------------
+# 
+# # Read and write CIIU table to database
+# ciiu_table <- read_xls("data/input/bases/Sector.xls") %>% as_tibble()
+# dbWriteTable(con, "CIIU", ciiu_table , overwrite = FALSE, append = TRUE)
+# 
+# # Read and write CINE table to database
+# cine_table <- read_xls("data/input/bases/CINE.xls") %>% as_tibble()
+# dbWriteTable(con, "CINE", cine_table, overwrite = FALSE, append = TRUE)
+# 
+# # Read and write CUOC table to database
+# cuoc_table <- read_xls("data/input/bases/CUOC.xls") %>% as_tibble()
+# dbWriteTable(con, "CUOC", cuoc_table , overwrite = FALSE, append = TRUE)
+# 
+# # Read and write AREAS table to database
+# areas_table <- read_xls("data/input/bases/AreasCualificacion.xls") %>% as_tibble()
+# dbWriteTable(con, "areas_table", areas_table, overwrite = FALSE, append = TRUE)
+# 
+# # Read and write CARACTERIZACIÓN table to database
+# caract_table <- read_xls("data/input/bases/CARACTERIZACION.xls") %>% as_tibble()
+# dbWriteTable(con, "Caract_table", caract_table, overwrite = FALSE, append = TRUE)
 
 
 

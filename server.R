@@ -18,12 +18,48 @@ con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 # Read tables from database
 areas_cualificacion <- dbReadTable(con, "areas_cualificacion")
 
-# 
-final_table_query <- "
-    
+CUOC_table <- dbGetQuery(con, "SELECT * FROM CUOC") %>% as_tibble()
+CIIU_table <- dbGetQuery(con, "SELECT * FROM CIIU") %>% as_tibble()
+CINE_table <- dbGetQuery(con, "SELECT * FROM CINE") %>% as_tibble()
+caract_table <- dbGetQuery(con, "SELECT * FROM Caract_table") %>% as_tibble()
 
-"
-dbExecute(con, )
+grouped_db <- CIIU_table %>% left_join(CUOC_table, by = "Código_área", keep = F) %>%
+  left_join(CINE_table, by = "Código_área", keep = F) %>%
+  left_join(caract_table, by = "Código_área", keep = F)
+  # select(-matches("Nombre área cualificación"))
+
+
+
+
+# # Make query to get final joined database to show
+# final_table_query <- "
+#     SELECT 
+#       Sección,
+#       División,
+#       Grupo,
+#       Código_ciiu,
+#       Descripción,
+#       CIIU.Código_área,
+#       CIIU.\"Nombre área cualificación\",
+#       \"Código CINE-2011 AC\",
+#       \"Campos Detallado\",
+#       \"Grandes Grupos\",
+#       \"Código Subgrupos principales\",
+#       \"Subgrupos principales\",
+#       \"Código subgrupos\",
+#       Subgrupos,
+#       \"Códigos Grupos primarios\",
+#       \"Grupos primarios\",
+#       \"Código Ocupación\",
+#       Ocupación,
+#       \"Código denominaciones\",
+#       Denominacion
+#     FROM CIIU
+#     LEFT JOIN CINE ON CIIU.Código_área = CINE.Código_área
+#     LEFT JOIN CUOC ON CIIU.Código_área = CUOC.Código_área;
+# "
+
+# final_table_object <- dbGetQuery(con, final_table_query) %>% as.tibble()
 
 # Abrir base de datos consolidada
 main_bases <- readxl::read_xls("data/input/bases/BaseFinal.xls", guess_max = 2021) %>% 

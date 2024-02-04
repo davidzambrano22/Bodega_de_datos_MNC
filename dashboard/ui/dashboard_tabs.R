@@ -4,12 +4,13 @@ tab_home <- tabItem(
     tabName = "home",
    
     fluidRow(
-      column(width = 3,  img(src = "https://upload.wikimedia.org/wikipedia/commons/3/30/LOGO_PLAN_DE_DESARROLLO_COLOMBIA_POTENCIA_DE_LA_VIDA_2022-2026.png",
-                             width = "100%", style = "max-width: 100%; height: auto;")
+      column(width = 3,  offset = 1,
+             img(src = "https://upload.wikimedia.org/wikipedia/commons/3/30/LOGO_PLAN_DE_DESARROLLO_COLOMBIA_POTENCIA_DE_LA_VIDA_2022-2026.png",
+                             width = "90%", style = "max-width: 100%; height: auto;")
              ),
-      column(width = 3, offset = 6,
+      column(width = 3, offset = 4,
              img(src = "https://www.mineducacion.gov.co/1780/channels-977_logo.png", 
-                                              width = "100%", style = "max-width: 100%; height: auto;")
+                width = "90%", style = "max-width: 100%; height: auto;")
              )
     ),
     div(style = "height: 20px;"),
@@ -155,9 +156,12 @@ tab_home <- tabItem(
 
     
     fluidRow(
-      column(width = 3,  img(src = "images/logos/logo_MNC.png", width = "85%", style = "max-width: 100%; height: auto;")),
-      column(width = 1, offset = 5, align = "right", img(src = "images/logos/logo_PNUD.png", width = "70%", style = "max-width: 70%; height: auto;")),
-      column(width = 3,  align = "right", img(src = "images/logos/logo_corona.png", width = "85%", style = "max-width: 100%; height: auto;"))
+      column(width = 3,  img(src = "images/logos/logo_MNC.png", #class = "img-responsive",
+                             width = "85%", style = "max-width: 100%; height: auto;")),
+      column(width = 1, offset = 5, align = "right", img(src = "images/logos/logo_PNUD.png", #class = "img-responsive",
+                                                         width = "70%", style = "max-width: 200px; height: auto;")),
+      column(width = 3,  align = "right", img(src = "images/logos/logo_corona.png", #class = "img-responsive",
+                                              width = "85%", style = "max-width: 100%; height: auto;"))
     )
 )
 

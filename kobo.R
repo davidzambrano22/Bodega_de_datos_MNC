@@ -3,7 +3,11 @@ library(jsonlite)
 library(tidyverse)
 
 # REQUEST TO xlsx table -------------------------------------------------
-url.xslx <- 'https://eu.kobotoolbox.org/private-media/maria_jaramillo/exports/Identificaci%C3%B3n_de_brechas_de_talento_humano_-_all_versions_-_labels_-_2023-12-18-19-30-33.xlsx'
+url.xslx <- 'https://eu.kobotoolbox.org/private-media/maria_jaramillo/exports/Identificaci%C3%B3n_de_brechas_de_talento_humano_-_all_versions_-_labels_-_2024-02-01-22-34-04.xlsx'
+
+
+
+
 token_brechas <- ("0ec70f3fc55780976cd45766fa6914d8cefbbbcc")
 headers <- c(Authorization = paste("token", token_brechas))
 
