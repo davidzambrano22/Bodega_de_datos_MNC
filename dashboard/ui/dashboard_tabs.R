@@ -321,6 +321,9 @@ tab_consulta <- tabItem(
     )
 )
 
+
+# TAB INFO GENERAL --------------------------------------------------------
+
 tab_infogeneral <- tabItem(
     tabName = "infogeneral",
     fluidRow(
@@ -332,154 +335,239 @@ tab_infogeneral <- tabItem(
             width = 12,
             "En esta sección podrá consultar las bases de datos de 
             áreas del Sistema de Gestión de datos del MNC Colombia.",
-            style = "font-size: 18px;"
+            style = "font-size: 16px;"
         )
     ),
     fluidRow(
-      box(width = 12,
-      column(2, offset = 2,
-             h4("Áreas de Cualificación"),
-             selectizeInput("area_cualificacion", "Seleccione", 
+          column(2,
+                 box(title = "Bases principales",
+                   width = 12,
+                   solidHeader = TRUE,
+                   status = "warning",
+            selectInput("select_main_base", "Seleccione Base",
+                        choices = c(
+                          "Areas de Cualificación",
+                          "Denominación CUOC",
+                          "CINE",
+                          "CIIU"
+                        )
+            ),
+            conditionalPanel(
+              condition = "input.select_main_base == 'Areas de Cualificación'",
+              selectizeInput("area_cualificacion", "Variables Área de cualificación", 
+                             choices = c(
+                               "Codigo Área" = "Código_área",
+                               "Nombre área cualificación" = "Nombre área cualificación"
+                             ),
+                             selected = c(
+                               "Código_área",
+                               "Nombre área cualificación"
+                             ),
+                             multiple = TRUE,
+                             options = list(plugins = list('remove_button'), persist = FALSE)
+              )
+            ),
+            conditionalPanel(
+              condition = "input.select_main_base == 'Denominación CUOC'",
+              selectizeInput("denominacion_cuoc", "Variables denominación CUOC", 
+                             choices = c(
+                               "Código Grandes Grupos" = "Código Grandes Grupos",
+                               "Grandes Grupos" = "Grandes Grupos",
+                               "Código Subgrupos principales" = "Código Subgrupos principales",
+                               "Subgrupos principales" = "Subgrupos principales",
+                               "Código subgrupos" = "Código subgrupos",
+                               "Subgrupos" = "Subgrupos",
+                               "Códigos Grupos primarios" = "Códigos Grupos primarios",
+                               "Grupos primarios" = "Grupos primarios",
+                               "Código Ocupación" = "Código Ocupación",
+                               "Ocupación" = "Ocupación",
+                               "Código denominaciones" = "Código denominaciones",
+                               "Denominacion" = "Denominacion",
+                               "Código CIUO 08 A.C." = "Código \nCIUO 08 A.C.",
+                               "Código CNO" = "Código \nCNO",
+                               "Nombre Ocupación Afín" = "Nombre Ocupación Afín",
+                               "Nombre Destreza" = "Nombre Destreza", 
+                               "Nombre Conocimiento" = "Nombre Conocimiento",
+                               "Nivel Competencia" = "Nivel Competencia",
+                               "Descripción Ocupación" = "Descripción Ocupación",
+                               "Consecutivo Función" = "Consecutivo Función",
+                               "Redacción Función" = "Redacción Función"
+                             ),
+                             multiple = TRUE,
+                             selected = c(
+                               "Código_área",
+                               "Nombre área cualificación"
+                             ),
+                             options = list(plugins = list('remove_button'), persist = FALSE)
+              )
+            ),
+            conditionalPanel(
+              condition = "input.select_main_base == 'CINE'",
+              selectizeInput("cine", "Variables CINE", 
+                             choices = c(
+                               "Código CINE-2011 AC" = "Código CINE-2011 AC",
+                               "Campos Detallado" = "Campos Detallado"
+                             ),
+                             multiple = TRUE,
+                             options = list(plugins = list('remove_button'), persist = FALSE)
+              )
+            ),
+            conditionalPanel(
+              condition = "input.select_main_base == 'CIIU'",
+              selectizeInput("ciiu", "Variables CIIU", 
+                             choices = c(
+                               "Sección" = "Sección",
+                               "División" = "División",
+                               "Grupo" = "Grupo",
+                               "Código_ciiu" = "Código_ciiu",
+                               "Descripción" = "Descripción"
+                             ),
+                             multiple = TRUE,
+                             options = list(plugins = list('remove_button'), persist = FALSE)
+              )
+            )
+          ),
+          box(title = "Bases secundarias",
+              width = 12,
+              solidHeader = TRUE,
+              status = "warning",
+              selectInput("select_secondary_base", "Seleccione Base",
+                          choices = c(
+                            "Caracterización Sector",
+                            "Brechas Capital Humano",
+                            "Análisis Funcional",
+                            "Estructura de la Cualificación"
+                          ),
+                          selected = NULL,
+                          multiple = FALSE
+              ),
+              conditionalPanel(
+                condition = "input.select_secondary_base == 'Caracterización Sector'",
+                selectizeInput("caract_sector", "Variables Caracterización Sector", 
+                               choices = c(
+                                 "Tasa de crecimiento 2022" = "Tasa crecimiento 2022",
+                                 "Valor agregado 2022" = "Valor agregado 2022",
+                                 "Ocu CIIU 2022" = "Ocupados CIIU 2022",
+                                 "Ocu Total 2022" = "Ocupados Total 2022"
+                               ),                               
+                               multiple = TRUE,
+                               options = list(plugins = list('remove_button'), persist = FALSE)
+                               ),
+                radioButtons(
+                  "select_sex_caract", "Sexo",
+                  choices = c("Masculino",
+                              "Femenino"
+                  ),
+                  inline = TRUE
+                  ),
+                selectInput("select_dept_brechas", "Departamento",
                             choices = c(
-                                        "Codigo Área" = "Código_área",
-                                        "Nombre área cualificación" = "Nombre área cualificación"
-                                        ),
-                            multiple = TRUE,
-                            options = list(plugins = list('remove_button'), persist = FALSE)
-             ),
-             actionButton("clear_area", "Limpiar Filtros")
-      ),
-      
-      column(2,
-             h4("Denominación CUOC"),
-             selectizeInput("denominacion_cuoc", "Seleccione", 
+                              "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
+                              "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
+                              "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
+                              "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
+                              "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
+                              "Valle del Cauca", "Vaupés", "Vichada"
+                            ),
+                            multiple = FALSE,
+                            selected = "Bogotá D.C.",
+                            width = '120px'
+                            ),
+                selectInput("select_year_caract", "Año",
+                            choices = 2015: 2024,
+                            multiple = FALSE,
+                            selected = 2023,
+                            width = '120px'
+                            )
+                ),
+              conditionalPanel(
+                condition = "input.select_secondary_base == 'Brechas Capital Humano'",
+                selectizeInput("brechas_hum", "Variables Brechas Capital Humano", 
+                               choices = c(
+                                 "Código Ocupación",
+                                 "Oferta Educativa",
+                                 "Demanda Laboral",
+                                 "Prospectiva"
+                               ),                               
+                               multiple = TRUE,
+                               options = list(plugins = list('remove_button'), persist = FALSE)
+                ),
+                radioButtons(
+                  "select_sex_caract", "Sexo",
+                  choices = c("Masculino",
+                              "Femenino"
+                  ),
+                  inline = TRUE
+                ),
+                selectInput("select_dept_brechas", "Departamento",
                             choices = c(
-                                        "Código Grandes Grupos" = "Código Grandes Grupos",
-                                        "Grandes Grupos" = "Grandes Grupos",
-                                        "Código Subgrupos principales" = "Código Subgrupos principales",
-                                        "Subgrupos principales" = "Subgrupos principales",
-                                        "Código subgrupos" = "Código subgrupos",
-                                        "Subgrupos" = "Subgrupos",
-                                        "Códigos Grupos primarios" = "Códigos Grupos primarios",
-                                        "Grupos primarios" = "Grupos primarios",
-                                        "Código Ocupación" = "Código Ocupación",
-                                        "Ocupación" = "Ocupación",
-                                        "Código denominaciones" = "Código denominaciones",
-                                        "Denominacion" = "Denominacion",
-                                        "Código CIUO 08 A.C." = "Código \nCIUO 08 A.C.",
-                                        "Código CNO" = "Código \nCNO",
-                                        "Nombre Ocupación Afín" = "Nombre Ocupación Afín",
-                                        "Nombre Destreza" = "Nombre Destreza", 
-                                        "Nombre Conocimiento" = "Nombre Conocimiento",
-                                        "Nivel Competencia" = "Nivel Competencia",
-                                        "Descripción Ocupación" = "Descripción Ocupación",
-                                        "Consecutivo Función" = "Consecutivo Función",
-                                        "Redacción Función" = "Redacción Función"
+                              "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
+                              "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
+                              "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
+                              "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
+                              "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
+                              "Valle del Cauca", "Vaupés", "Vichada"
                             ),
-                            multiple = TRUE,
-                            options = list(plugins = list('remove_button'), persist = FALSE)
-             ),
-             actionButton("clear_CUOC", "Limpiar Filtros")
-      ),
-      column(2,
-             h4("CINE"),
-             selectizeInput("cine", "Seleccione", 
-                            choices = c(
-                                        "Código CINE-2011 AC" = "Código CINE-2011 AC",
-                                        "Campos Detallado" = "Campos Detallado"
-                            ),
-                            multiple = TRUE,
-                            options = list(plugins = list('remove_button'), persist = FALSE)
-                            ),
-             actionButton("clear_CINE", "Limpiar Filtros")
-      ),
-      column(2,
-             h4("CIIU"),
-             selectizeInput("ciiu", "Seleccione", 
-                            choices = c(
-                                        "Sección" = "Sección",
-                                        "División" = "División",
-                                        "Grupo" = "Grupo",
-                                        "Código_ciiu" = "Código_ciiu",
-                                        "Descripción" = "Descripción"
-                                        ),
-                            multiple = TRUE,
-                            options = list(plugins = list('remove_button'), persist = FALSE)
-                            ),
-             actionButton("clear_CIIU", "Limpiar Filtros")
-             )
-    ),
-    
-    box(
-        width = 12,
-        column(2, offset = 2,
-               h4("Caracterización Sector"),
-               selectizeInput("caract_sector", "Seleccione", 
-                              choices = c(
-                                "Tasadecre2022" = "Tasa crecimiento 2022",
-                                "Valoragregado2022" = "Valor agregado 2022",
-                                "OcuCIIU2022" = "Ocupados CIIU 2022",
-                                "OcuTotal2022" = "Ocupados Total 2022"
-                              ),
-                              multiple = TRUE,
-                              options = list(plugins = list('remove_button'), persist = FALSE)
-               ),
-               actionButton("clear_caracterizacion", "Limpiar Filtros")
-        ),
-        
-        column(2,
-               h4("Brechas Capital Humano"),
-               selectizeInput("brechas_hum", "Seleccione", 
-                              choices = c("Código Ocupación",
-                                          "Oferta Educativa",
-                                          "Demanda Laboral",
-                                          "Prospectiva"),
-                              multiple = TRUE,
-                              options = list(plugins = list('remove_button'), persist = FALSE)
-               ),
-               actionButton("clear_brechas", "Limpiar Filtros")
-        ),
-        column(2,
-               h4("Análisis Funcional"),
-               selectizeInput("analisis_funcional", "Seleccione", 
-                              choices = c("Código Ocupación",
-                                          "Perfiles",
-                                          "Funciones",
-                                          "Competencias"
-                              ),
-                              multiple = TRUE,
-                              options = list(plugins = list('remove_button'), persist = FALSE)
-               ),
-               actionButton("clear_analisis", "Limpiar Filtros")
-        ),
-        column(2,
-               h4("Estructura de la Cualificación"),
-               selectizeInput("estructura_cualificacion", "Seleccione", 
-                              choices = c("Competencia general",
-                                          "Competencias específicas",
-                                          "Contexto competencia",
-                                          "Criterio desempeño",
-                                          "Competencias básicas",
-                                          "Competencias transversales",
-                                          "Resultado de aprendizaje",
-                                          "Criterios de evaluación",
-                                          "Competencias tecnico-profesionales",
-                                          "Competencias pedagóicas",
-                                          "Ambientes de formación",
-                                          "Requisitos de ingreso",
-                                          "Profesión regulada"),
-                              multiple = TRUE,
-                              options = list(plugins = list('remove_button'), persist = FALSE)
-               ),
-               actionButton("clear_estructura", "Limpiar Filtros")
-        )
-    ),
-    column(2, offset = 5,
-           downloadButton("download_csv", "Descargar Tabla")
-    ),
-    column(12,
-           reactableOutput("main_databases")
-    )
+                            multiple = FALSE,
+                            selected = "Bogotá D.C.",
+                            width = '120px'
+                ),
+                selectInput("select_year_caract", "Año",
+                            choices = 2015: 2024,
+                            multiple = FALSE,
+                            selected = 2023,
+                            width = '120px'
+                )
+              ),
+              conditionalPanel(
+                condition = "input.select_secondary_base == 'Análisis Funcional'",
+                selectizeInput("analisis_funcional", "Variables Análisis Funcional", 
+                               choices = c(
+                                 "Código Ocupación",
+                                 "Perfiles",
+                                 "Funciones",
+                                 "Competencias"
+                               ),                               
+                               multiple = TRUE,
+                               options = list(plugins = list('remove_button'), persist = FALSE)
+                )
+              ),
+              conditionalPanel(
+                condition = "input.select_secondary_base == 'Estructura de la Cualificación'",
+                selectizeInput("estructura_cualificacion", "Variables Estructura de la Cualificación", 
+                               choices = c(
+                                 "Competencia general",
+                                 "Competencias específicas",
+                                 "Contexto competencia",
+                                 "Criterio desempeño",
+                                 "Competencias básicas",
+                                 "Competencias transversales",
+                                 "Resultado de aprendizaje",
+                                 "Criterios de evaluación",
+                                 "Competencias tecnico-profesionales",
+                                 "Competencias pedagóicas",
+                                 "Ambientes de formación",
+                                 "Requisitos de ingreso",
+                                 "Profesión regulada"
+                               ),                               
+                               multiple = TRUE,
+                               options = list(plugins = list('remove_button'), persist = FALSE)
+                )
+              )
+              ),box(width = 9,
+                 actionButton("clear_bases", "Limpiar Filtros", icon = icon("eraser"),
+                              style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
+                              )
+              )
+          ),
+          column(10,
+                 reactableOutput("main_databases")
+          ),
+          column(4, offset = 4,
+                 downloadButton("download_csv", "Descargar Tabla",
+                                style="color: #fff; background-color: #008000; border-color: #2e6da4")
+                 )
+          
     )
 )
 
@@ -570,7 +658,8 @@ tab_survey <- tabItem(
           )
       ),
       column(2, offset = 5,
-             downloadButton("download_survey_csv", "Descargar Tabla")
+             downloadButton("download_survey_csv", "Descargar Tabla",
+                            style="color: #fff; background-color: #dc3545; border-color: #2e6da4")
       ),
         column(12,
                reactableOutput("survey_table")

@@ -18,15 +18,14 @@ con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 # Read tables from database
 areas_cualificacion <- dbReadTable(con, "areas_cualificacion")
 
-CUOC_table <- dbGetQuery(con, "SELECT * FROM CUOC") %>% as_tibble()
-CIIU_table <- dbGetQuery(con, "SELECT * FROM CIIU") %>% as_tibble()
-CINE_table <- dbGetQuery(con, "SELECT * FROM CINE") %>% as_tibble()
-caract_table <- dbGetQuery(con, "SELECT * FROM Caract_table") %>% as_tibble()
-
-grouped_db <- CIIU_table %>% left_join(CUOC_table, by = "Código_área", keep = F) %>%
-  left_join(CINE_table, by = "Código_área", keep = F) %>%
-  left_join(caract_table, by = "Código_área", keep = F)
-  # select(-matches("Nombre área cualificación"))
+# CUOC_table <- dbGetQuery(con, "SELECT * FROM CUOC") %>% as_tibble()
+# CIIU_table <- dbGetQuery(con, "SELECT * FROM CIIU") %>% as_tibble()
+# CINE_table <- dbGetQuery(con, "SELECT * FROM CINE") %>% as_tibble()
+# caract_table <- dbGetQuery(con, "SELECT * FROM Caract_table") %>% as_tibble()
+# 
+# grouped_db <- CUOC_table %>% left_join(CIIU_table, by = c("Código_área"), keep = F) #%>%
+  # left_join(CINE_table, by = c("Código_área", "Nombre área cualificación"), keep = F) #%>%
+  # left_join(caract_table, by = c("Código_área", "Nombre área cualificación"), keep = F)
 
 
 
@@ -493,35 +492,59 @@ shinyServer(function(input, output, session) {
         )
         
         
-        observeEvent(input$clear_area, {
+        observeEvent(input$clear_bases, {
           updateSelectizeInput(session, "area_cualificacion", selected = character(0))
         })
        
-        observeEvent(input$clear_CUOC, {
+        observeEvent(input$clear_bases, {
           updateSelectizeInput(session, "denominacion_cuoc", selected = character(0))
         })
         
-        observeEvent(input$clear_CINE, {
+        observeEvent(input$clear_bases, {
           updateSelectizeInput(session, "cine", selected = character(0))
         })
         
-        observeEvent(input$clear_CIIU, {
+        observeEvent(input$clear_bases, {
           updateSelectizeInput(session, "ciiu", selected = character(0))
         })
         
-        observeEvent(input$clear_caracterizacion, {
-          updateSelectizeInput(session, "caract_sector", selected = character(0))
+        observeEvent(input$clear_bases, {
+          updateSelectizeInput(session, c("caract_sector"), selected = character(0))
         })
         
-        observeEvent(input$clear_brechas, {
-          updateSelectizeInput(session, "brechas_hum", selected = character(0))
+        observeEvent(input$clear_bases, {
+          updateSelectizeInput(session, c("select_sex_caract"), selected = character(0))
         })
         
-        observeEvent(input$clear_analisis, {
+        observeEvent(input$clear_bases, {
+          updateSelectizeInput(session, c("select_dept_caract"), selected = character(0))
+        })
+        
+        observeEvent(input$clear_bases, {
+          updateSelectizeInput(session, c("select_year_caract"), selected = character(0))
+        })
+        
+        observeEvent(input$clear_bases, {
+          updateSelectizeInput(session, c("brechas_hum"), selected = character(0))
+        })
+        
+        observeEvent(input$clear_bases, {
+          updateSelectizeInput(session, c("select_sex_brechas"), selected = character(0))
+        })
+        
+        observeEvent(input$clear_bases, {
+          updateSelectizeInput(session, c("select_dept_brechas"), selected = character(0))
+        })
+        
+        observeEvent(input$clear_bases, {
+          updateSelectizeInput(session, c("select_year_brechas"), selected = character(0))
+        })
+        
+        observeEvent(input$clear_bases, {
           updateSelectizeInput(session, "analisis_funcional", selected = character(0))
         })
         
-        observeEvent(input$clear_estructura, {
+        observeEvent(input$clear_bases, {
           updateSelectizeInput(session, "estructura_cualificacion", selected = character(0))
         })
 
