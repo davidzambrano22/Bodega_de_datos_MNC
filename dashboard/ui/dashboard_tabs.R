@@ -2,7 +2,10 @@
 # TABS --------------------------------------------------------------------
 tab_home <- tabItem(
     tabName = "home",
-   
+    class = "tab_home",
+    tags$style('.tab_home {
+                             background-color: #ffffff;
+              }'),
     fluidRow(
       column(width = 3,  offset = 1,
              img(src = "https://upload.wikimedia.org/wikipedia/commons/3/30/LOGO_PLAN_DE_DESARROLLO_COLOMBIA_POTENCIA_DE_LA_VIDA_2022-2026.png",
@@ -16,47 +19,79 @@ tab_home <- tabItem(
     div(style = "height: 20px;"),
     
     fluidRow(
-             box(
-               title = "Sistema de Gestión de Datos para el Marco Nacional de Cualificaciones",
-               solidHeader = TRUE,
-               collapsible = TRUE,
-               status = "primary",
-               width = 12,
-               "Es una herramienta diseñada para almacenar y gestionar la información relacionada con las cualificaciones. 
-               Permite la visualización y almacenamiento de datos provenientes de las distintas fases del proceso, incluyendo la caracterización,
-               análisis de brechas de capital humano, análisis funcional y las cualificaciones. Garantiza la carga estructurada de los datos,
-               su seguridad e integridad, al mismo tiempo que permite al usuario  realizar búsquedas filtradas que le brinden información
-               específica de manera eficiente.  
-               ",
-               style = "font-size: 18px;"  # Adjust the font size as needed
-             )
+      column(8, offset = 2,
+             tags$h1("Sistema de gestión de datos del MNC",
+                     style = "font-size: 70px; text-align: center; font-weight: bold; color: #4682B4;"
+             ),
+             tags$hr(style = "border-top: 2px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #666666; width: 50%;"),
+             tags$p("Es una herramienta diseñada para almacenar y gestionar la información relacionada con las cualificaciones. 
+             Permite la visualización y almacenamiento de datos provenientes de las distintas fases del proceso, incluyendo la caracterización,
+             análisis de brechas de capital humano, análisis funcional y las cualificaciones. Garantiza la carga estructurada de los datos,
+             su seguridad e integridad, al mismo tiempo que permite al usuario  realizar búsquedas filtradas que le brinden información
+             específica de manera eficiente.",
+                    style = "font-size: 20px; text-align: justify;"
+                      )
+      )
     ),
-    div(style = "height: 20px;"),
+    div(style = "height: 20px; color: #4682B4;"),
     
     fluidRow(
-      box(
-        title = "¿Qué debemos saber sobre el MNC?",
-        solidHeader = TRUE,
-        collapsible = TRUE,
-        status = "primary",
-        width = 12,
-        HTML("<p style='font-size: 18px;'>
+      column(8, offset = 2,
+      tags$h1("¿Cómo navegar en el sistema?",
+              style = "font-size: 70px; text-align: center; font-weight: bold; color: #4682B4;"
+              ),
+      tags$hr(style = "border-top: 2px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #666666; width: 50%;"),
+      tags$p("La herramienta cuenta con tres secciones de consulta a través de las cuales
+              se puede obtener información detallada para las diferentes áreas de cualificación.",
+             style = "text-align: justify; font-size: 20px;"
+             )
+      )
+    ),
+    fluidRow(
+      column(12, tags$div(style = "height: 20px;")), # Empty space with 20px height
+    ),
+    
+    fluidRow(
+      column(4,
+             box(width = 12,
+                 title = span(tagList(icon("book"), "Áreas de Cualificación")),
+             )
+      ),
+      column(4,
+             box(width = 12,
+                 title = span(tagList(icon("bar-chart"), "Consulta de información")),
+             )
+      ),
+      column(4,
+             box(width = 12,
+                 title = span(tagList(icon("question-circle"), "Encuesta")),
+             )
+      )
+    ),
+    
+    fluidRow(
+      column(8, offset = 2,
+             tags$h1("¿Qué debemos saber sobre el MNC?",
+                     style = "font-size: 70px; text-align: center; font-weight: bold; color: #4682B4;"
+             ),
+             tags$hr(style = "border-top: 2px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #666666; width: 50%;"),
+        HTML("<p style='font-size: 20px;  text-align: justify;'>
            <span style='color: black; font-size: 18px;'> <b>MNC:</b> </span>
            Es un componente del Sistema Nacional de Cualificaciones (SNC) y se define como el instrumento que permite estructurar y clasificar las Cualificaciones en un esquema de ocho (8) niveles ordenados y expresados en términos de Conocimientos, Destrezas y Actitudes, aplicables en contextos de estudio, trabajo o en ambos, de acuerdo con la secuencialidad y complejidad de los aprendizajes que logran las personas en las diferentes Vías de Cualificación.
            </p>
            
-           <p style='font-size: 18px;'>
+           <p style='font-size: 20px;  text-align: justify;'>
            <span style='color: black; font-size: 18px;'> <b>Nivel de Cualificación:</b> </span>
            Establece el grado de complejidad, amplitud y profundidad de los Resultados de Aprendizaje, ordenados secuencialmente en términos de Conocimientos, Destrezas y Actitudes, lo que permite clasificar las Cualificaciones en el Marco Nacional de Cualificaciones (MNC).
            </p>
            
-           <p style='font-size: 18px;'>
+           <p style='font-size: 20px;  text-align: justify;'>
            <span style='color: black; font-size: 18px;'> <b>Cualificación:</b> </span>
            Es el reconocimiento formal que se otorga a una persona por parte de una institución autorizada después de un proceso de evaluación que evidencia el logro de los Resultados de Aprendizaje definidos en la Estructura de la Cualificación y vinculados a un nivel del Marco Nacional de Cualificaciones (MNC). Las Cualificaciones se reconocen mediante los títulos o certificados que se obtienen a través de las diferentes Vías de Cualificación de acuerdo con las normas y lineamientos del Sistema Nacional de Cualificaciones.
            </p>
            
-           <p style='font-size: 18px;'>
-           <span style='color: black; font-size: 18px;'> <b>Estructura de cualificación:</b> </span>
+           <p style='font-size: 20px;  text-align: justify;'>
+           <span style='color: black; font-size: 18px; text-align: justify;'> <b>Estructura de cualificación:</b> </span>
            Es un documento técnico que hace parte de los Catálogos Sectoriales de Cualificaciones y contiene las Competencias y Resultados de Aprendizaje que debe alcanzar una persona para el reconocimiento de la Cualificación asociada a un nivel del Marco Nacional de Cualificaciones (MNC). La Estructura de Cualificación sirve como referente para el diseño curricular y el reconocimiento de los Aprendizajes Previos.
            </p>
            "
@@ -346,8 +381,8 @@ tab_infogeneral <- tabItem(
                    status = "warning",
             selectInput("select_main_base", "Seleccione Base",
                         choices = c(
-                          "Areas de Cualificación",
                           "Denominación CUOC",
+                          "Areas de Cualificación",
                           "CINE",
                           "CIIU"
                         )
@@ -433,10 +468,10 @@ tab_infogeneral <- tabItem(
               status = "warning",
               selectInput("select_secondary_base", "Seleccione Base",
                           choices = c(
-                            "Caracterización Sector",
-                            "Brechas Capital Humano",
                             "Análisis Funcional",
-                            "Estructura de la Cualificación"
+                            "Estructura de la Cualificación",
+                            "Caracterización Sector",
+                            "Brechas Capital Humano"
                           ),
                           selected = NULL,
                           multiple = FALSE
@@ -552,25 +587,45 @@ tab_infogeneral <- tabItem(
                                ),                               
                                multiple = TRUE,
                                options = list(plugins = list('remove_button'), persist = FALSE)
+                               )
+                )
+              ),
+          div(class = "fluidrow_clear",
+              fluidRow(
+                  column(2, offset = 2,
+                    actionButton("clear_bases", "Limpiar Filtros", icon = icon("eraser"),
+                                 style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
+                                 )
+                    )
+                  )
+              ),
+          div(class = "fluidrow_clear",
+              fluidRow(
+                column(2, offset = 2,
+                       actionButton("clear_bases", "Limpiar Filtros", icon = icon("eraser"),
+                                    style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
+                                    )
+                       )
                 )
               )
-              ),box(width = 9,
-                 actionButton("clear_bases", "Limpiar Filtros", icon = icon("eraser"),
-                              style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
-                              )
-              )
           ),
-          column(10,
+          column(10, 
                  reactableOutput("main_databases")
-          ),
-          column(4, offset = 4,
-                 downloadButton("download_csv", "Descargar Tabla",
-                                style="color: #fff; background-color: #008000; border-color: #2e6da4")
-                 )
+          )
           
+    ),
+    fluidRow(
+      column(2, offset = 6,
+              downloadButton("download_csv", "Descargar Tabla",
+                             style="color: #fff; background-color: #008000; border-color: #2e6da4"
+              )
+      )
+      
     )
 )
 
+
+# SURVEY TAB --------------------------------------------------------------
 
 
 tab_survey <- tabItem(

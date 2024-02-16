@@ -471,7 +471,9 @@ shinyServer(function(input, output, session) {
                    )
             ) %>% distinct() %>%
             reactable(
-              filterable = TRUE, minRows = 10
+              filterable = TRUE,
+              minRows = 10,
+              defaultPageSize = 15 # Fijar el número máximo de filas que se muestran a 15
             )
         )
         
