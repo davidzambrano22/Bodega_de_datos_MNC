@@ -14,7 +14,7 @@ dashboard_sidebar <- dashboardSidebar(
                     "Descriptivos por área del MNC",
                     tabName = "consulta")
         ),
-        menuItem("Encuestas",
+        menuItem("Información Encuestas",
             icon = icon("question-circle"), startExpanded = FALSE,
             menuSubItem(
               "Encuesta de demanda laboral",

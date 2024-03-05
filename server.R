@@ -392,43 +392,43 @@ shinyServer(function(input, output, session) {
         output$survey_table <- renderReactable(
             datos %>%
             select("Seleccione el área de cualificación para la cual esta realizando la entrevista.",
-                   c(input$survey_variables_1,
-                   input$survey_variables_2, 
-                   input$survey_variables_3,
-                   input$survey_variables_4)
+                   c(input$info_general,
+                   input$otros_cargos, 
+                   input$estrategias_cierre,
+                   input$habilidades_socio)
                    ) %>%
             reactable(
                 filterable = TRUE, minRows = 10
             )
         )
         
-        observeEvent(input$clear_infoGeneral, {
-          updateSelectizeInput(session, "survey_variables_1", selected = character(0))
+        observeEvent(input$clear_survey, {
+          updateSelectizeInput(session, "info_general", selected = character(0))
         })
         
-        observeEvent(input$clear_otrosCargos, {
-          updateSelectizeInput(session, "survey_variables_2", selected = character(0))
+        observeEvent(input$clear_survey, {
+          updateSelectizeInput(session, "otros_cargos", selected = character(0))
         })
         
-        observeEvent(input$clear_estrategias, {
-          updateSelectizeInput(session, "survey_variables_3", selected = character(0))
+        observeEvent(input$clear_survey, {
+          updateSelectizeInput(session, "estrategias_cierre", selected = character(0))
         })
         
-        observeEvent(input$clear_habilidades, {
-          updateSelectizeInput(session, "survey_variables_4", selected = character(0))
+        observeEvent(input$clear_survey, {
+          updateSelectizeInput(session, "habilidades_socio", selected = character(0))
         })
         
         # Download button of survey table
-        output$download_survey_csv <- downloadHandler(
+        output$download_survey <- downloadHandler(
           filename = function(){"encuesta_filtrada.csv"},
           content = function(file){
-            write.csv(datos %>% select(
+            write.csv2(datos %>% select(
                                       "Seleccione el área de cualificación para la cual esta realizando la entrevista.",
-                                      c(input$survey_variables_1,
-                                        input$survey_variables_2, 
-                                        input$survey_variables_3,
-                                        input$survey_variables_4)
-            ), file, row.names = FALSE, fileEncoding = "UTF-8")
+                                      c(input$info_general,
+                                        input$otros_cargos, 
+                                        input$estrategias_cierre,
+                                        input$habilidades_socio)
+            ), file, row.names = T, fileEncoding = "ASCII")
           }
         )
 
@@ -481,7 +481,7 @@ shinyServer(function(input, output, session) {
         output$download_csv <- downloadHandler(
           filename = function(){"datos_consolidados.csv"},
           content = function(file){
-            write.csv(main_bases %>% select("Ocupación",
+            write.csv2(main_bases %>% select("Ocupación",
                                             c(
                                               input$area_cualificacion,
                                               input$denominacion_cuoc,
@@ -489,7 +489,7 @@ shinyServer(function(input, output, session) {
                                               input$ciiu
                                             )
               
-            ), file, row.names = FALSE, fileEncoding = "UTF-8")
+            ), file, row.names = T, fileEncoding = "ASCII")
           }
         )
         

@@ -6,30 +6,31 @@ tab_home <- tabItem(
     tags$style('.tab_home {
                              background-color: #ffffff;
               }'),
+    div(style = "height: 20px;"),
     fluidRow(
       column(width = 3,  offset = 1,
              img(src = "https://upload.wikimedia.org/wikipedia/commons/3/30/LOGO_PLAN_DE_DESARROLLO_COLOMBIA_POTENCIA_DE_LA_VIDA_2022-2026.png",
-                             width = "90%", style = "max-width: 100%; height: auto;")
+                             width = "75%", style = "max-width: 100%; height: auto;")
              ),
-      column(width = 3, offset = 4,
+      column(width = 3, offset = 5,
              img(src = "https://www.mineducacion.gov.co/1780/channels-977_logo.png", 
-                width = "90%", style = "max-width: 100%; height: auto;")
+                width = "75%", style = "max-width: 100%; height: auto;")
              )
     ),
-    div(style = "height: 20px;"),
+    div(style = "height: 60px;"),
     
     fluidRow(
       column(8, offset = 2,
              tags$h1("Sistema de gestión de datos del MNC",
-                     style = "font-size: 70px; text-align: center; font-weight: bold; color: #4682B4;"
+                     style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
              ),
-             tags$hr(style = "border-top: 2px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #666666; width: 50%;"),
+             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
              tags$p("Es una herramienta diseñada para almacenar y gestionar la información relacionada con las cualificaciones. 
              Permite la visualización y almacenamiento de datos provenientes de las distintas fases del proceso, incluyendo la caracterización,
              análisis de brechas de capital humano, análisis funcional y las cualificaciones. Garantiza la carga estructurada de los datos,
              su seguridad e integridad, al mismo tiempo que permite al usuario  realizar búsquedas filtradas que le brinden información
              específica de manera eficiente.",
-                    style = "font-size: 20px; text-align: justify;"
+                    style = "font-size: 22px; text-align: justify;"
                       )
       )
     ),
@@ -38,12 +39,12 @@ tab_home <- tabItem(
     fluidRow(
       column(8, offset = 2,
       tags$h1("¿Cómo navegar en el sistema?",
-              style = "font-size: 70px; text-align: center; font-weight: bold; color: #4682B4;"
+              style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
               ),
-      tags$hr(style = "border-top: 2px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #666666; width: 50%;"),
+      tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
       tags$p("La herramienta cuenta con tres secciones de consulta a través de las cuales
-              se puede obtener información detallada para las diferentes áreas de cualificación.",
-             style = "text-align: justify; font-size: 20px;"
+              se puede obtener información detallada para las diferentes áreas de cualificación:",
+             style = "text-align: justify; font-size: 22px;"
              )
       )
     ),
@@ -52,19 +53,54 @@ tab_home <- tabItem(
     ),
     
     fluidRow(
-      column(4,
-             box(width = 12,
-                 title = span(tagList(icon("book"), "Áreas de Cualificación")),
+      column(8, offset = 2,
+             box(width = 12, align = "justify",
+                 title = span(tagList(icon("book"),
+                                      "Áreas de Cualificación"),
+                              style = "font-size: 22px;"
+                 ),
+                 status = "primary",
+                 solidHeader = TRUE,
+                 tags$p(
+                   "En este lugar se muestran las áreas de cualificación desarrolladas, con acceso a toda la información disponible para su consulta.",
+                   style = "font-size: 22px; tex-align: center;"
+                 )
              )
-      ),
-      column(4,
-             box(width = 12,
-                 title = span(tagList(icon("bar-chart"), "Consulta de información")),
+      )
+    ),
+    
+    fluidRow(
+      column(8, offset = 2,
+             box(width = 12, align = "justify",
+                 title = span(tagList(icon("bar-chart"),
+                                      "Consulta de información"),
+                              style = "font-size: 22px;"
+                 ),
+                 status = "primary",
+                 solidHeader = TRUE,
+                 tags$p(
+                   "Mediante esta sección, el usuario tendrá acceso al catálogo de datos y a la información descriptiva de las áreas. En el catálogo, se podrá filtrar y descargar
+                   los datos de las distintas etapas del MNC en diversos niveles de desagregación. En el área descriptiva, se proporciona información
+                   estadística únicamente a nivel de área de cualificación.",
+                   style = "font-size: 22px; tex-align: center;"
+                 )
              )
-      ),
-      column(4,
-             box(width = 12,
-                 title = span(tagList(icon("question-circle"), "Encuesta")),
+      )
+    ),
+    fluidRow(
+      column(8, offset = 2,
+             box(width = 12, align = "justify",
+                 title = span(tagList(icon("question-circle"),
+                                      "Información encuestas"),
+                              style = "font-size: 22px;"
+                 ),
+                 status = "primary",
+                 solidHeader = TRUE,
+                 tags$p(
+                   "Aquí se puede encontrar información recopilada a través de las encuestas y entrevistas realizadas a empresas e instituciones de educación superior
+                   y para el trabajo.",
+                   style = "font-size: 22px; tex-align: center;"
+                 )
              )
       )
     ),
@@ -72,131 +108,132 @@ tab_home <- tabItem(
     fluidRow(
       column(8, offset = 2,
              tags$h1("¿Qué debemos saber sobre el MNC?",
-                     style = "font-size: 70px; text-align: center; font-weight: bold; color: #4682B4;"
+                     style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
              ),
-             tags$hr(style = "border-top: 2px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #666666; width: 50%;"),
-        HTML("<p style='font-size: 20px;  text-align: justify;'>
-           <span style='color: black; font-size: 18px;'> <b>MNC:</b> </span>
+             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;")
+      )
+      ),
+      div(style = "height: 20px;"),
+             
+     fluidRow(
+       column(8, offset = 2,
+        HTML("<p style='font-size: 22px;  text-align: justify;'>
+           <span style='color: black; font-size: 22px;'> <b>MNC:</b> </span>
            Es un componente del Sistema Nacional de Cualificaciones (SNC) y se define como el instrumento que permite estructurar y clasificar las Cualificaciones en un esquema de ocho (8) niveles ordenados y expresados en términos de Conocimientos, Destrezas y Actitudes, aplicables en contextos de estudio, trabajo o en ambos, de acuerdo con la secuencialidad y complejidad de los aprendizajes que logran las personas en las diferentes Vías de Cualificación.
            </p>
            
-           <p style='font-size: 20px;  text-align: justify;'>
-           <span style='color: black; font-size: 18px;'> <b>Nivel de Cualificación:</b> </span>
+           <p style='font-size: 22px;  text-align: justify;'>
+           <span style='color: black; font-size: 22px;'> <b>Nivel de Cualificación:</b> </span>
            Establece el grado de complejidad, amplitud y profundidad de los Resultados de Aprendizaje, ordenados secuencialmente en términos de Conocimientos, Destrezas y Actitudes, lo que permite clasificar las Cualificaciones en el Marco Nacional de Cualificaciones (MNC).
            </p>
            
-           <p style='font-size: 20px;  text-align: justify;'>
-           <span style='color: black; font-size: 18px;'> <b>Cualificación:</b> </span>
+           <p style='font-size: 22px;  text-align: justify;'>
+           <span style='color: black; font-size: 22px;'> <b>Cualificación:</b> </span>
            Es el reconocimiento formal que se otorga a una persona por parte de una institución autorizada después de un proceso de evaluación que evidencia el logro de los Resultados de Aprendizaje definidos en la Estructura de la Cualificación y vinculados a un nivel del Marco Nacional de Cualificaciones (MNC). Las Cualificaciones se reconocen mediante los títulos o certificados que se obtienen a través de las diferentes Vías de Cualificación de acuerdo con las normas y lineamientos del Sistema Nacional de Cualificaciones.
            </p>
            
-           <p style='font-size: 20px;  text-align: justify;'>
-           <span style='color: black; font-size: 18px; text-align: justify;'> <b>Estructura de cualificación:</b> </span>
+           <p style='font-size: 22px;  text-align: justify;'>
+           <span style='color: black; font-size: 22px; text-align: justify;'> <b>Estructura de cualificación:</b> </span>
            Es un documento técnico que hace parte de los Catálogos Sectoriales de Cualificaciones y contiene las Competencias y Resultados de Aprendizaje que debe alcanzar una persona para el reconocimiento de la Cualificación asociada a un nivel del Marco Nacional de Cualificaciones (MNC). La Estructura de Cualificación sirve como referente para el diseño curricular y el reconocimiento de los Aprendizajes Previos.
            </p>
            "
         ), 
-              HTML("<p style='font-size: 18px; align: center;'>
-                      Para conocer más sobre el MNC, haga click en el siguiente botón:
-                    </p>"
-                   ),
-              column(2, offset = 5,
-                        actionButton("more_info",
-                                     HTML("<div style = 'font-size: 18px; color: #007bff;'>
-                                          Más información <i class='fas fa-mouse-pointer fa-1x' style = 'color: grey;'></i>
-                                          "
-                                          ),
-                                     onclick = "window.open('https://especiales.colombiaaprende.edu.co/mnc/catalogo.html', target = '_blank')"
-                                     )
-                    )
-              
+              HTML("<a href='https://especiales.colombiaaprende.edu.co/mnc/catalogo.html' target='_blank'> 
+                      <p style='font-size: 22px; align: center; color: #4682B4;'>
+                        Más información >
+                      </p>
+                   </a>"
+                   )
       )
+    ),
+    div(style = "height: 20px; color: #4682B4;"),
+    
+    fluidRow(
+      tags$h1("Ruta Metodológica para el Diseño de las Cualificaciones",
+              style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+      ),
+      tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 15%;"),
     ),
     div(style = "height: 20px;"),
     
     fluidRow(
-             box(
-               title = "Ruta metodológica para el diseño de las cualificaciones",
-               align="center",
-               status = "primary",
-               solidHeader = TRUE,
-               collapsible = TRUE,
-               width = 12,
-               column(12,
-                      img(src = "images/ruta_diagrama_1.png", width = "100%", style = "max-width: 100%; height: auto;")
-                      ),
-                       fluidRow(
-                       column(3, 
-                              img(src = "images/yellow.png"),
-                              HTML("<p style='font-size: 18px; text-align: left;'>
-                                    <b>F1:</b> Delimitación del (los) sector(es) objeto de estudio
-                                    asociado(s) al área de cualificación.
-                                    </p>
-                                    <p style='font-size: 18px; text-align: left;'>
-                                    <b>F2:</b> Identificación de características del sector asociado
-                                    de cualificación.
-                                    </p>"
-                                   )
-                              ),
-                       column(3, 
-                              img(src = "images/red.png"),
-                              HTML("<p style='font-size: 18px; text-align: left;'>
-                                    <b>F3:</b> Identificación de brechas de capital humano.
-                                   </p>
-                                   <ul>
-                                    <li> <p style='font-size: 18px; text-align: left;'> Análisis de prospectiva laboral</li></p>
-                                    <li> <p style='font-size: 18px; text-align: left;'> Análisis de demanda laboral</li></p>
-                                    <li> <p style='font-size: 18px;text-align: left;'> Análisis de oferta educativa</li></p>
-                                    <li> <p style='font-size: 18px;text-align: left;'> Análisis de brechas de capital Humano</li></p>
-                                   </ul>")
-                              ),
-                       column(3,
-                              img(src = "images/green.png"),
-                              HTML("
-                                    <p style='font-size: 18px; text-align: left;'>
-                                    <b>F4:</b> Análisis ocupacional
-                                    </p>
-                                    <ul>
-                                    <li> <p style='font-size: 18px; text-align: left;'> Elaboración de la Matriz de Análisis Ocupacional y Organizacional</li></p>
-                                    </ul>
-                                    <p style='font-size: 18px; text-align: left;'>
-                                    <b>F2:</b> Análisis funcional
-                                    </p>
-                                   ")
-                       ),
-                       column(3,
-                              img(src = "images/blue.png"),
-                              HTML("<p>
-                                   <p style='font-size: 18px; text-align: left;'>
-                                    <b>F6:</b> Identificación y perfil de competencias.
-                                    </p>
-                                    <p style='font-size: 18px; text-align: left;'>
-                                    <b>F2:</b> Verificación de la Identificación y perfil de competencias.
-                                    </p>
-                                    <p style='font-size: 18px; text-align: left;'>
-                                    <b>F2:</b> Referentes para la educación y formación y Paŕametros de calidad.
-                                    </p>
-                                    <p style='font-size: 18px;text-align: left;'>
-                                    <b>F2:</b> Verificación de Referentes y parámetros de calidad.
-                                    </p>
-                                    <p style='font-size: 18px;text-align: left;'>
-                                    <b>F2:</b> Incorporación de las cualificaciones en el <b>CNC</b>.
-                                    </p>
-                                   ")
-                       )
-                   )
-             )
-             ),
+    column(10, offset =1,
+             column(12,
+                    img(src = "images/ruta_diagrama_1.png", width = "100%", style = "max-width: 100%; height: auto;")
+                    ),
+                     fluidRow(
+                     column(3, 
+                            img(src = "images/yellow.png"),
+                            HTML("<p style='font-size: 22px; text-align: left;'>
+                                  <b>F1:</b> Delimitación del (los) sector(es) objeto de estudio
+                                  asociado(s) al área de cualificación.
+                                  </p>
+                                  <p style='font-size: 22px; text-align: left;'>
+                                  <b>F2:</b> Identificación de características del sector asociado
+                                  de cualificación.
+                                  </p>"
+                                 )
+                            ),
+                     column(3, 
+                            img(src = "images/red.png"),
+                            HTML("<p style='font-size: 22px; text-align: left;'>
+                                  <b>F3:</b> Identificación de brechas de capital humano.
+                                 </p>
+                                 <ul>
+                                  <li> <p style='font-size: 22px; text-align: left;'> Análisis de prospectiva laboral</li></p>
+                                  <li> <p style='font-size: 22px; text-align: left;'> Análisis de demanda laboral</li></p>
+                                  <li> <p style='font-size: 22px;text-align: left;'> Análisis de oferta educativa</li></p>
+                                  <li> <p style='font-size: 22px;text-align: left;'> Análisis de brechas de capital Humano</li></p>
+                                 </ul>")
+                            ),
+                     column(3,
+                            img(src = "images/green.png"),
+                            HTML("
+                                  <p style='font-size: 22px; text-align: left;'>
+                                  <b>F4:</b> Análisis ocupacional
+                                  </p>
+                                  <ul>
+                                  <li> <p style='font-size: 22px; text-align: left;'> Elaboración de la Matriz de Análisis Ocupacional y Organizacional</li></p>
+                                  </ul>
+                                  <p style='font-size: 22px; text-align: left;'>
+                                  <b>F5:</b> Análisis funcional
+                                  </p>
+                                 ")
+                     ),
+                     column(3,
+                            img(src = "images/blue.png"),
+                            HTML("<p>
+                                 <p style='font-size: 22px; text-align: left;'>
+                                  <b>F6:</b> Identificación y perfil de competencias.
+                                  </p>
+                                  <p style='font-size: 22px; text-align: left;'>
+                                  <b>F7:</b> Verificación de la Identificación y perfil de competencias.
+                                  </p>
+                                  <p style='font-size: 22px; text-align: left;'>
+                                  <b>F8:</b> Referentes para la educación y formación y Paŕametros de calidad.
+                                  </p>
+                                  <p style='font-size: 22px;text-align: left;'>
+                                  <b>F9:</b> Verificación de Referentes y parámetros de calidad.
+                                  </p>
+                                  <p style='font-size: 22px;text-align: left;'>
+                                  <b>F10:</b> Incorporación de las cualificaciones en el <b>CNC</b>.
+                                  </p>
+                                 ")
+                     )
+                 )
+             
+  )
+           ),
     div(style = "height: 20px;"),
 
     
     fluidRow(
-      column(width = 3,  img(src = "images/logos/logo_MNC.png", #class = "img-responsive",
-                             width = "85%", style = "max-width: 100%; height: auto;")),
-      column(width = 1, offset = 5, align = "right", img(src = "images/logos/logo_PNUD.png", #class = "img-responsive",
-                                                         width = "70%", style = "max-width: 200px; height: auto;")),
-      column(width = 3,  align = "right", img(src = "images/logos/logo_corona.png", #class = "img-responsive",
-                                              width = "85%", style = "max-width: 100%; height: auto;"))
+      column(width = 3,  offset = 1, img(src = "images/logos/logo_MNC.png", #class = "img-responsive",
+                             width = "75%", style = "max-width: 100%; height: auto;")),
+      column(width = 1, offset = 4, align = "right", img(src = "images/logos/logo_PNUD.png", #class = "img-responsive",
+                                                         width = "75%", style = "max-width: 200px; height: auto;")),
+      column(width = 3,  img(src = "images/logos/logo_corona.png", #class = "img-responsive",
+                                              width = "75%", style = "max-width: 100%; height: auto;"))
     )
 )
 
@@ -204,6 +241,10 @@ tab_home <- tabItem(
 # TAB CATÁLOGO ------------------------------------------------------------
 tab_catalogo <- tabItem(
     tabName = "catalogo",
+    class = "tab_catalogo",
+    tags$style('.tab_catalogo {
+                             background-color: #ffffff;
+              }'),
     fluidRow(
         box(
             title = "Catálogo de las Áreas de Cualificación del MNC",
@@ -289,8 +330,14 @@ tab_catalogo <- tabItem(
     )
 )
 
+# TAB CONSULTA ------------------------------------------------------------
+
 tab_consulta <- tabItem(
     tabName = "consulta",
+    class = "tab_consulta",
+    tags$style('.tab_consulta {
+                             background-color: #ffffff;
+              }'),
     fluidRow(
         box(
             title = "Descriptivas por área del MNC",
@@ -361,6 +408,10 @@ tab_consulta <- tabItem(
 
 tab_infogeneral <- tabItem(
     tabName = "infogeneral",
+    class = "tab_infogeneral",
+    tags$style('.tab_infogeneral {
+                             background-color: #ffffff;
+              }'),
     fluidRow(
         box(
             title = "Catálogo de datos",
@@ -375,21 +426,26 @@ tab_infogeneral <- tabItem(
     ),
     fluidRow(
           column(2,
-                 box(title = "Bases principales",
+                 box(title = "Bases de datos",
                    width = 12,
                    solidHeader = TRUE,
                    status = "warning",
-            selectInput("select_main_base", "Seleccione Base",
+                   selectizeInput("select_main_base", "Seleccione Base",
                         choices = c(
-                          "Denominación CUOC",
                           "Areas de Cualificación",
+                          "Denominación CUOC",
                           "CINE",
-                          "CIIU"
+                          "CIIU",
+                          "Caracterización Sector",
+                          "Análisis Funcional",
+                          "Estructura de la Cualificación",
+                          "Brechas Capital Humano"
                         )
             ),
+            
             conditionalPanel(
               condition = "input.select_main_base == 'Areas de Cualificación'",
-              selectizeInput("area_cualificacion", "Variables Área de cualificación", 
+              checkboxGroupInput("area_cualificacion", "Seleccione Atributos", 
                              choices = c(
                                "Codigo Área" = "Código_área",
                                "Nombre área cualificación" = "Nombre área cualificación"
@@ -397,14 +453,12 @@ tab_infogeneral <- tabItem(
                              selected = c(
                                "Código_área",
                                "Nombre área cualificación"
-                             ),
-                             multiple = TRUE,
-                             options = list(plugins = list('remove_button'), persist = FALSE)
+                             )
               )
             ),
             conditionalPanel(
               condition = "input.select_main_base == 'Denominación CUOC'",
-              selectizeInput("denominacion_cuoc", "Variables denominación CUOC", 
+              checkboxGroupInput("denominacion_cuoc", "Seleccione Atributos", 
                              choices = c(
                                "Código Grandes Grupos" = "Código Grandes Grupos",
                                "Grandes Grupos" = "Grandes Grupos",
@@ -428,177 +482,140 @@ tab_infogeneral <- tabItem(
                                "Consecutivo Función" = "Consecutivo Función",
                                "Redacción Función" = "Redacción Función"
                              ),
-                             multiple = TRUE,
                              selected = c(
                                "Código_área",
                                "Nombre área cualificación"
-                             ),
-                             options = list(plugins = list('remove_button'), persist = FALSE)
+                             )
               )
             ),
             conditionalPanel(
               condition = "input.select_main_base == 'CINE'",
-              selectizeInput("cine", "Variables CINE", 
+              checkboxGroupInput("cine", "Seleccione Atributos", 
                              choices = c(
                                "Código CINE-2011 AC" = "Código CINE-2011 AC",
                                "Campos Detallado" = "Campos Detallado"
-                             ),
-                             multiple = TRUE,
-                             options = list(plugins = list('remove_button'), persist = FALSE)
+                             )
               )
             ),
             conditionalPanel(
               condition = "input.select_main_base == 'CIIU'",
-              selectizeInput("ciiu", "Variables CIIU", 
+              checkboxGroupInput("ciiu", "Seleccione Atributos", 
                              choices = c(
                                "Sección" = "Sección",
                                "División" = "División",
                                "Grupo" = "Grupo",
                                "Código_ciiu" = "Código_ciiu",
                                "Descripción" = "Descripción"
-                             ),
-                             multiple = TRUE,
-                             options = list(plugins = list('remove_button'), persist = FALSE)
+                             )
+              )
+            ),
+            conditionalPanel(
+              condition = "input.select_main_base == 'Caracterización Sector'",
+              checkboxGroupInput("caract_sector", "Variables Caracterización Sector", 
+                             choices = c(
+                               "Tasa de crecimiento 2022" = "Tasa crecimiento 2022",
+                               "Valor agregado 2022" = "Valor agregado 2022",
+                               "Ocu CIIU 2022" = "Ocupados CIIU 2022",
+                               "Ocu Total 2022" = "Ocupados Total 2022"
+                             )
+              ),
+              radioButtons(
+                "select_sex_caract", "Sexo",
+                choices = c("Masculino",
+                            "Femenino"
+                ),
+                inline = TRUE
+              ),
+              selectInput("select_dept_brechas", "Departamento",
+                          choices = c(
+                            "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
+                            "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
+                            "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
+                            "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
+                            "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
+                            "Valle del Cauca", "Vaupés", "Vichada"
+                          ),
+                          multiple = FALSE,
+                          selected = "Bogotá D.C.",
+                          width = '120px'
+              ),
+              selectInput("select_year_caract", "Año",
+                          choices = 2015: 2024,
+                          multiple = FALSE,
+                          selected = 2023,
+                          width = '120px'
+              )
+            ),
+            conditionalPanel(
+              condition = "input.select_main_base == 'Brechas Capital Humano'",
+              checkboxGroupInput("brechas_hum", "Variables Brechas Capital Humano", 
+                             choices = c(
+                               "Código Ocupación",
+                               "Oferta Educativa",
+                               "Demanda Laboral",
+                               "Prospectiva"
+                             )
+              ),
+              radioButtons(
+                "select_sex_caract", "Sexo",
+                choices = c("Masculino",
+                            "Femenino"
+                ),
+                inline = TRUE
+              ),
+              selectInput("select_dept_brechas", "Departamento",
+                          choices = c(
+                            "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
+                            "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
+                            "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
+                            "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
+                            "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
+                            "Valle del Cauca", "Vaupés", "Vichada"
+                          ),
+                          multiple = FALSE,
+                          selected = "Bogotá D.C.",
+                          width = '120px'
+              ),
+              selectInput("select_year_caract", "Año",
+                          choices = 2015: 2024,
+                          multiple = FALSE,
+                          selected = 2023,
+                          width = '120px'
+              )
+            ),
+            conditionalPanel(
+              condition = "input.select_main_base == 'Análisis Funcional'",
+              checkboxGroupInput("analisis_funcional", "Variables Análisis Funcional", 
+                             choices = c(
+                               "Código Ocupación",
+                               "Perfiles",
+                               "Funciones",
+                               "Competencias"
+                             )
+              )
+            ),
+            conditionalPanel(
+              condition = "input.select_main_base == 'Estructura de la Cualificación'",
+              checkboxGroupInput("estructura_cualificacion", "Variables Estructura de la Cualificación", 
+                             choices = c(
+                               "Competencia general",
+                               "Competencias específicas",
+                               "Contexto competencia",
+                               "Criterio desempeño",
+                               "Competencias básicas",
+                               "Competencias transversales",
+                               "Resultado de aprendizaje",
+                               "Criterios de evaluación",
+                               "Competencias tecnico-profesionales",
+                               "Competencias pedagóicas",
+                               "Ambientes de formación",
+                               "Requisitos de ingreso",
+                               "Profesión regulada"
+                             )
               )
             )
+            
           ),
-          box(title = "Bases secundarias",
-              width = 12,
-              solidHeader = TRUE,
-              status = "warning",
-              selectInput("select_secondary_base", "Seleccione Base",
-                          choices = c(
-                            "Análisis Funcional",
-                            "Estructura de la Cualificación",
-                            "Caracterización Sector",
-                            "Brechas Capital Humano"
-                          ),
-                          selected = NULL,
-                          multiple = FALSE
-              ),
-              conditionalPanel(
-                condition = "input.select_secondary_base == 'Caracterización Sector'",
-                selectizeInput("caract_sector", "Variables Caracterización Sector", 
-                               choices = c(
-                                 "Tasa de crecimiento 2022" = "Tasa crecimiento 2022",
-                                 "Valor agregado 2022" = "Valor agregado 2022",
-                                 "Ocu CIIU 2022" = "Ocupados CIIU 2022",
-                                 "Ocu Total 2022" = "Ocupados Total 2022"
-                               ),                               
-                               multiple = TRUE,
-                               options = list(plugins = list('remove_button'), persist = FALSE)
-                               ),
-                radioButtons(
-                  "select_sex_caract", "Sexo",
-                  choices = c("Masculino",
-                              "Femenino"
-                  ),
-                  inline = TRUE
-                  ),
-                selectInput("select_dept_brechas", "Departamento",
-                            choices = c(
-                              "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
-                              "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
-                              "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
-                              "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
-                              "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
-                              "Valle del Cauca", "Vaupés", "Vichada"
-                            ),
-                            multiple = FALSE,
-                            selected = "Bogotá D.C.",
-                            width = '120px'
-                            ),
-                selectInput("select_year_caract", "Año",
-                            choices = 2015: 2024,
-                            multiple = FALSE,
-                            selected = 2023,
-                            width = '120px'
-                            )
-                ),
-              conditionalPanel(
-                condition = "input.select_secondary_base == 'Brechas Capital Humano'",
-                selectizeInput("brechas_hum", "Variables Brechas Capital Humano", 
-                               choices = c(
-                                 "Código Ocupación",
-                                 "Oferta Educativa",
-                                 "Demanda Laboral",
-                                 "Prospectiva"
-                               ),                               
-                               multiple = TRUE,
-                               options = list(plugins = list('remove_button'), persist = FALSE)
-                ),
-                radioButtons(
-                  "select_sex_caract", "Sexo",
-                  choices = c("Masculino",
-                              "Femenino"
-                  ),
-                  inline = TRUE
-                ),
-                selectInput("select_dept_brechas", "Departamento",
-                            choices = c(
-                              "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
-                              "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
-                              "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
-                              "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
-                              "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
-                              "Valle del Cauca", "Vaupés", "Vichada"
-                            ),
-                            multiple = FALSE,
-                            selected = "Bogotá D.C.",
-                            width = '120px'
-                ),
-                selectInput("select_year_caract", "Año",
-                            choices = 2015: 2024,
-                            multiple = FALSE,
-                            selected = 2023,
-                            width = '120px'
-                )
-              ),
-              conditionalPanel(
-                condition = "input.select_secondary_base == 'Análisis Funcional'",
-                selectizeInput("analisis_funcional", "Variables Análisis Funcional", 
-                               choices = c(
-                                 "Código Ocupación",
-                                 "Perfiles",
-                                 "Funciones",
-                                 "Competencias"
-                               ),                               
-                               multiple = TRUE,
-                               options = list(plugins = list('remove_button'), persist = FALSE)
-                )
-              ),
-              conditionalPanel(
-                condition = "input.select_secondary_base == 'Estructura de la Cualificación'",
-                selectizeInput("estructura_cualificacion", "Variables Estructura de la Cualificación", 
-                               choices = c(
-                                 "Competencia general",
-                                 "Competencias específicas",
-                                 "Contexto competencia",
-                                 "Criterio desempeño",
-                                 "Competencias básicas",
-                                 "Competencias transversales",
-                                 "Resultado de aprendizaje",
-                                 "Criterios de evaluación",
-                                 "Competencias tecnico-profesionales",
-                                 "Competencias pedagóicas",
-                                 "Ambientes de formación",
-                                 "Requisitos de ingreso",
-                                 "Profesión regulada"
-                               ),                               
-                               multiple = TRUE,
-                               options = list(plugins = list('remove_button'), persist = FALSE)
-                               )
-                )
-              ),
-          div(class = "fluidrow_clear",
-              fluidRow(
-                  column(2, offset = 2,
-                    actionButton("clear_bases", "Limpiar Filtros", icon = icon("eraser"),
-                                 style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
-                                 )
-                    )
-                  )
-              ),
           div(class = "fluidrow_clear",
               fluidRow(
                 column(2, offset = 2,
@@ -642,84 +659,97 @@ tab_survey <- tabItem(
         )
     ),
     fluidRow(
-      box(width = 12,
-          column(2, offset = 2,
-                 h4("Información General"),
-                 selectizeInput("survey_variables_1", "Seleccione", 
-                                choices =  c(
-                                  "Actividad económica  principal de la empresa" = "Actividad económica  principal de la empresa",
-                                  "Departamento" = "Departamento",
-                                  "Tamaño empresa" = "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?"
-                                ),
-                                multiple = TRUE,
-                                options = list(plugins = list('remove_button'), persist = FALSE)
-                 ),
-                 actionButton("clear_infoGeneral", "Limpiar Filtros")
-          ),
-          
-          column(2,
-                 h4("Otros Cargos"),
-                 selectizeInput("survey_variables_2", "Seleccione", 
+      column(2,
+             box(title = "Atributos de la Encuesta",
+                 width = 12,
+                 solidHeader = TRUE,
+                 status = "warning",
+                 selectizeInput("survey_variables", "Seleccione",
                                 choices = c(
-                                  "¿Cuáles cargos misionales?" = "¿Cuáles cargos misionales?",
-                                  "Cargo misional 1" = "Cargo misional 1:",
-                                  "Cargo misional 2" = "Cargo misional 2:",
-                                  "Cargo misional 3" = "Cargo misional 3:",
-                                  "Cargo misional 4" = "Cargo misional 4:",
-                                  "Cargo misional 5" = "Cargo misional 5:",
-                                  "Cargo misional 6" = "Cargo misional 6:",
-                                  "Cargo misional 7" = "Cargo misional 7:",
-                                  "Cargo misional 8" = "Cargo misional 8:",
-                                  "Cargo misional 9" = "Cargo misional 9:",
-                                  "Cargo misional 10" = "Cargo misional 10:"
-                                ),
-                                multiple = TRUE,
-                                options = list(plugins = list('remove_button'), persist = FALSE)
+                                  "Información General",
+                                  "Otros Cargos",
+                                  "Estrategias desarrolladas para el cierre de brechas",
+                                  "Habilidades socioemocionales"
+                                )
                  ),
-                 actionButton("clear_otrosCargos", "Limpiar Filtros")
-          ),
-          column(2,
-                 h4("Estrategias desarrolladas para el cierre de brechas"),
-                 selectizeInput("survey_variables_3", "Seleccione", 
-                                choices = c(
-                                  "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?" = "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
-                                  "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?" = "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
-                                  "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:" = "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:",
-                                  "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)" = "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)"
-                                ),
-                                multiple = TRUE,
-                                options = list(plugins = list('remove_button'), persist = FALSE)
+                 conditionalPanel(
+                   condition = "input.survey_variables == 'Información General'",
+                   checkboxGroupInput("info_general", "Información General", 
+                                      choices = c(
+                                        "Actividad económica  principal de la empresa" = "Actividad económica  principal de la empresa",
+                                        "Departamento" = "Departamento",
+                                        "Tamaño empresa" = "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?"
+                                      )
+                   )
                  ),
-                 actionButton("clear_estrategias", "Limpiar Filtros")
-          ),
-          column(2,
-                 h4("Habilidades Socioemocionales"),
-                 selectizeInput("survey_variables_4", "Seleccione", 
-                                choices = c(
-                                  "¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?" = "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?",
-                                  "¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?" = "2. ¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?",
-                                  "¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?" = "3. ¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?",
-                                  "De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?" = "4. De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?",
-                                  "¿Cuáles?" = "¿Cuáles?...95",
-                                  "¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?" = "5. ¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?",
-                                  "¿Cuáles?" = "¿Cuáles?...97",
-                                  "En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?" = "6.  En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?",
-                                  "¿Cuáles?" = "¿Cuáles?...99"
-                                ),
-                                multiple = TRUE,
-                                options = list(plugins = list('remove_button'), persist = FALSE)
+                 conditionalPanel(
+                   condition = "input.survey_variables == 'Otros Cargos'",
+                   checkboxGroupInput("otros_cargos", "Otros Cargos", 
+                                      choices = c(
+                                        "¿Cuáles cargos misionales?" = "¿Cuáles cargos misionales?",
+                                        "Cargo misional 1" = "Cargo misional 1:",
+                                        "Cargo misional 2" = "Cargo misional 2:",
+                                        "Cargo misional 3" = "Cargo misional 3:",
+                                        "Cargo misional 4" = "Cargo misional 4:",
+                                        "Cargo misional 5" = "Cargo misional 5:",
+                                        "Cargo misional 6" = "Cargo misional 6:",
+                                        "Cargo misional 7" = "Cargo misional 7:",
+                                        "Cargo misional 8" = "Cargo misional 8:",
+                                        "Cargo misional 9" = "Cargo misional 9:",
+                                        "Cargo misional 10" = "Cargo misional 10:"
+                                      )
+                   )
                  ),
-                 actionButton("clear_habilidades", "Limpiar Filtros")
-          )
-      ),
-      column(2, offset = 5,
-             downloadButton("download_survey_csv", "Descargar Tabla",
-                            style="color: #fff; background-color: #dc3545; border-color: #2e6da4")
-      ),
-        column(12,
-               reactableOutput("survey_table")
+                 conditionalPanel(
+                   condition = "input.survey_variables == 'Estrategias desarrolladas para el cierre de brechas'",
+                   checkboxGroupInput("estrategias_cierre", "Estrategias desarrolladas para el cierre de brechas", 
+                                      choices = c(
+                                        "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?" = "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
+                                        "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?" = "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
+                                        "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:" = "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:",
+                                        "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)" = "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)"
+                                      )
+                   )
+                 ),
+                 conditionalPanel(
+                   condition = "input.survey_variables == 'Habilidades socioemocionales'",
+                   checkboxGroupInput("habilidades_socio", "Habilidades socioemocionales", 
+                                      choices = c(
+                                        "¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?" = "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?",
+                                        "¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?" = "2. ¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?",
+                                        "¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?" = "3. ¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?",
+                                        "De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?" = "4. De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?",
+                                        "¿Cuáles?" = "¿Cuáles?...95",
+                                        "¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?" = "5. ¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?",
+                                        "¿Cuáles?" = "¿Cuáles?...97",
+                                        "En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?" = "6.  En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?",
+                                        "¿Cuáles?" = "¿Cuáles?...99"
+                                        )
+                                      )
+                   )
+                 ),
+             div(class = "fluidrow_clear",
+                 fluidRow(
+                   column(2, offset = 2,
+                          actionButton("clear_survey", "Limpiar Filtros", icon = icon("eraser"),
+                                       style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
+                                       )
+                          )
+                   )
+                 )
+             ),
+      column(
+        10, 
+        reactableOutput("survey_table")
         )
-        )
+      ),
+    fluidRow(
+      column(2, offset = 6,
+             downloadButton("download_survey", "Descargar Tabla",
+                            style="color: #fff; background-color: #008000; border-color: #2e6da4"
+                            )
+             )
+      )
     )
 
 
