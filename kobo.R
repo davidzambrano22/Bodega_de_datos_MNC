@@ -3,7 +3,7 @@ library(jsonlite)
 library(tidyverse)
 
 # REQUEST TO xlsx table -------------------------------------------------
-url.xslx <- 'https://eu.kobotoolbox.org/private-media/maria_jaramillo/exports/Identificaci%C3%B3n_de_brechas_de_talento_humano_-_all_versions_-_labels_-_2024-02-13-13-42-54.xlsx'
+url.xslx <- 'https://eu.kobotoolbox.org/private-media/maria_jaramillo/exports/Identificaci%C3%B3n_de_brechas_de_talento_humano_-_all_versions_-_labels_-_2024-03-15-19-56-21.xlsx'
 
 
 

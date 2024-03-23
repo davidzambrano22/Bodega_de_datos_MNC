@@ -351,19 +351,32 @@ tab_consulta <- tabItem(
         )
     ),
     fluidRow(
-        column(12,
+        column(6,
             h3("Selección de Áreas de cualificación"),
             # Reactable with the catalog table
             reactableOutput("areas_catalog"),
             br(),
             verbatimTextOutput("selected_row_details")
-        )
+            ),
+        column(6,
+               uiOutput("select_area_catalog")
+               ),
+        tags$style(HTML("
+        .selectize-control {
+        width: 400px; /* Adjust the width as needed */
+        }
+                        "))
     ),
     fluidRow(
         column(12,
             h3("Actividades económicas CIIU relacionadas"),
         )
     ),
+    
+    fluidRow(
+      reactableOutput("table_CIIU")
+    ),
+    
     fluidRow(
         column(6,
             # Reactable with the ciiu table

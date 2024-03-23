@@ -10,7 +10,7 @@ library(readxl)
 
 # load the kobo.R file
 source("kobo.R")
-# source("data/scripts/excel_reader.R")
+source("data/scripts/excel_reader.R")
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
@@ -18,51 +18,12 @@ con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 # Read tables from database
 areas_cualificacion <- dbReadTable(con, "areas_cualificacion")
 
-# CUOC_table <- dbGetQuery(con, "SELECT * FROM CUOC") %>% as_tibble()
-# CIIU_table <- dbGetQuery(con, "SELECT * FROM CIIU") %>% as_tibble()
-# CINE_table <- dbGetQuery(con, "SELECT * FROM CINE") %>% as_tibble()
-# caract_table <- dbGetQuery(con, "SELECT * FROM Caract_table") %>% as_tibble()
-# 
-# grouped_db <- CUOC_table %>% left_join(CIIU_table, by = c("Código_área"), keep = F) #%>%
-  # left_join(CINE_table, by = c("Código_área", "Nombre área cualificación"), keep = F) #%>%
-  # left_join(caract_table, by = c("Código_área", "Nombre área cualificación"), keep = F)
-
-
-
-
-# # Make query to get final joined database to show
-# final_table_query <- "
-#     SELECT 
-#       Sección,
-#       División,
-#       Grupo,
-#       Código_ciiu,
-#       Descripción,
-#       CIIU.Código_área,
-#       CIIU.\"Nombre área cualificación\",
-#       \"Código CINE-2011 AC\",
-#       \"Campos Detallado\",
-#       \"Grandes Grupos\",
-#       \"Código Subgrupos principales\",
-#       \"Subgrupos principales\",
-#       \"Código subgrupos\",
-#       Subgrupos,
-#       \"Códigos Grupos primarios\",
-#       \"Grupos primarios\",
-#       \"Código Ocupación\",
-#       Ocupación,
-#       \"Código denominaciones\",
-#       Denominacion
-#     FROM CIIU
-#     LEFT JOIN CINE ON CIIU.Código_área = CINE.Código_área
-#     LEFT JOIN CUOC ON CIIU.Código_área = CUOC.Código_área;
-# "
-
-# final_table_object <- dbGetQuery(con, final_table_query) %>% as.tibble()
 
 # Abrir base de datos consolidada
 main_bases <- readxl::read_xls("data/input/bases/BaseFinal.xls", guess_max = 2021) %>% 
   slice(c(2021:5000)) %>% as.tibble() 
+
+fact_table <- dbReadTable(con, "fact_table")
 
 
 shinyServer(function(input, output, session) {
@@ -92,53 +53,97 @@ shinyServer(function(input, output, session) {
                 showPageSizeOptions = TRUE
             )
         )
+        
+        # Make Selectinput object to show in server.R #Tab_consulta
+        output$select_area_catalog <- renderUI({
+          selectizeInput("select_area_catalog_", "Seleccione Área:",
+                         choices = areas_cualificacion$nombre_area,
+                         multiple = T
+                         )
+        })
+       
 
-        output$tabla_ciiu <- renderReactable({
-            selected <- getReactableState("areas_catalog", "selected")
-            req(selected)
-            ids_selected <- toString(
-                sprintf("'%s'", areas_cualificacion[selected, ]$codigo_area)
-                )
-            sql_template <- "
+####################################### CIIU TABLE ###############################################
+        
+        output$tabla_CIIU <- renderReactable({
+          sql_template <- "
+              SELECT *
+              FROM CIIU
+              WHERE \"Nombre área cualificación\" IN (%s)
+          ;"
+          string_query <- input$select_area_catalog_
+          # print(string_query)
+          quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
+          
+          query_template <- sprintf(sql_template, quoted_query)
+          print(query_template)
+          dbGetQuery(con, query_template) %>% reactable()
+        })
+# ----------------------------------------------------------------------------------------------
+        output$table_ciiu <- renderReactable({
+          selected <- getReactableState("areas_catalog", "selected")
+          req(selected)
+          ids_selected <- toString(
+            sprintf("'%s'", areas_cualificacion[selected, ]$codigo_area)
+          )
+          sql_template <- "
                 SELECT codigo_area, area_cualificacion, clase, descripcion
                 FROM ciiu_actividades_areas
                 WHERE codigo_area IN (%s) AND clase IS NOT NULL
                 ;"
-            sql_query <- sprintf(sql_template, ids_selected)
-            dbGetQuery(
-                con, sql_query) %>%
+          sql_query <- sprintf(sql_template, ids_selected)
+          dbGetQuery(
+            con, sql_query) %>%
             reactable(
-                columns = list(
-                    codigo_area = colDef(
-                        name = "Código de área",
-                        align = "center",
-                        maxWidth = 120,
-                        filterable = TRUE
-                    ),
-                    area_cualificacion = colDef(
-                        name = "Área de cualificación",
-                        filterable = TRUE
-                    ),
-                    clase = colDef(
-                        name = "Clase",
-                        align = "center",
-                        maxWidth = 120,
-                        filterable = TRUE
-                    ),
-                    descripcion = colDef(
-                        name = "Descripción",
-                        filterable = TRUE
-                    )
+              columns = list(
+                codigo_area = colDef(
+                  name = "Código de área",
+                  align = "center",
+                  maxWidth = 120,
+                  filterable = TRUE
                 ),
-                bordered = TRUE,
-                highlight = TRUE,
-                defaultPageSize = 5,
-                rowStyle = list(cursor = "pointer"),
-                pageSizeOptions = c(5, 10, 15),
-                showPageSizeOptions = TRUE
+                area_cualificacion = colDef(
+                  name = "Área de cualificación",
+                  filterable = TRUE
+                ),
+                clase = colDef(
+                  name = "Clase",
+                  align = "center",
+                  maxWidth = 120,
+                  filterable = TRUE
+                ),
+                descripcion = colDef(
+                  name = "Descripción",
+                  filterable = TRUE
+                )
+              ),
+              bordered = TRUE,
+              highlight = TRUE,
+              defaultPageSize = 5,
+              rowStyle = list(cursor = "pointer"),
+              pageSizeOptions = c(5, 10, 15),
+              showPageSizeOptions = TRUE
             )
         })
+        
+########################################## CUOC TABLE #############################################
+        
+        output$table_CIIU <- renderReactable({
+          sql_template <- "
+              SELECT *
+              FROM CIIU
+              WHERE \"Nombre área cualificación\" IN (%s)
+          ;"
+          string_query <- input$select_area_catalog_
+          # print(string_query)
+          quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
+          
+          query_template <- sprintf(sql_template, quoted_query)
+          print(query_template)
+          dbGetQuery(con, query_template) %>% reactable()
+        })
 
+# ----------------------------------------------------------------------------------------------
         output$tabla_cuoc <- renderReactable({
             selected <- getReactableState("areas_catalog", "selected")
             req(selected)
