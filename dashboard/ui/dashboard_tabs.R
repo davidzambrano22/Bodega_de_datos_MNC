@@ -245,20 +245,21 @@ tab_catalogo <- tabItem(
     tags$style('.tab_catalogo {
                              background-color: #ffffff;
               }'),
+    div(style = "height: 20px;"),
     fluidRow(
-        box(
-            title = "Catálogo de las Áreas de Cualificación del MNC",
-            status = "primary",
-            solidHeader = TRUE,
-            collapsible = TRUE,
-            width = 12,
-            "En esta sección podrá consultar información asociada a los catálogos sectoriales de las cualificaciones. 
-            La información presentada corresponde a datos de cada una de las etapas metodológicas del MNC.
-            ",
-            style = "font-size: 18px;"
-        )
+      column(8, offset = 2,
+             tags$h1("Catálogo de las Áreas de Cualificación del MNC",
+                     style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+             ),
+             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
+             tags$p("En esta sección podrá consultar información asociada a los catálogos sectoriales de las cualificaciones. La información presentada corresponde a datos de cada una de las etapas metodológicas del MNC. ",
+                    style = "text-align: center; font-size: 22px;"
+             )
+      )
     ),
-    div(style = "height: 40px;"),
+    div(
+      style = "height: 20px;"
+    ),
     
     fluidRow(
       column(6, 
@@ -333,86 +334,51 @@ tab_catalogo <- tabItem(
 # TAB CONSULTA ------------------------------------------------------------
 
 tab_consulta <- tabItem(
+  div(style = "height: 20px;"),
     tabName = "consulta",
     class = "tab_consulta",
     tags$style('.tab_consulta {
                              background-color: #ffffff;
               }'),
+
+    div(style = "height: 20px;"),
     fluidRow(
-        box(
-            title = "Descriptivas por área del MNC",
-            status = "primary",
-            solidHeader = TRUE,
-            collapsible = TRUE,
-            width = 12,
-            "En esta sección podrá consultar los datos de la 
+      column(8, offset = 2,
+             tags$h1("Descriptivas por área del MNC",
+                     style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+             ),
+             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
+             tags$p("En esta sección podrá consultar los datos de la 
             Sistema de Gestión de datos del MNC Colombia.",
-            style = "font-size: 18px;"
-        )
+                    style = "text-align: center; font-size: 22px;"
+             )
+      )
     ),
+    div(
+      style = "height: 20px;"
+      ),
+  
     fluidRow(
         column(6,
-            h3("Selección de Áreas de cualificación"),
-            # Reactable with the catalog table
-            reactableOutput("areas_catalog"),
-            br(),
-            verbatimTextOutput("selected_row_details")
+               uiOutput("select_area_catalog"),
+               actionButton("clear_areas", "Limpiar Filtros", icon = icon("eraser"),
+                            style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
+                            )
+               )
+    ),
+    fluidRow(
+        column(4,
+              tags$h2("CIIU", style = "text-align: center;"),
+              plotOutput("CIIU_plot")
             ),
-        column(6,
-               uiOutput("select_area_catalog")
+        column(4,
+               tags$h2("CUOC", style = "text-align: center;"),
+               plotOutput("CUOC_plot")   
                ),
-        tags$style(HTML("
-        .selectize-control {
-        width: 400px; /* Adjust the width as needed */
-        }
-                        "))
-    ),
-    fluidRow(
-        column(12,
-            h3("Actividades económicas CIIU relacionadas"),
-        )
-    ),
-    
-    fluidRow(
-      reactableOutput("table_CIIU")
-    ),
-    
-    fluidRow(
-        column(6,
-            # Reactable with the ciiu table
-            reactableOutput("tabla_ciiu")
-        ),
-        column(6,
-            plotOutput("actividades_areas_plot")
-        )
-    ),
-    fluidRow(
-        column(12,
-            h3("Ocupaciones CUOC relacionadas"),
-        )
-    ),
-    fluidRow(
-        column(6,
-            # Reactable with the cuoc table
-            reactableOutput("tabla_cuoc")
-        ),
-        column(6,
-            plotOutput("ocupaciones_areas_plot")
-        )
-    ),
-    fluidRow(
-        column(12,
-            h3("Información CINE relacionada"),
-        )
-    ),
-    fluidRow(
-        column(6,
-            # Reactable with the cine table
-            reactableOutput("tabla_cine")
-        ),
-        column(6,
-            plotOutput("cine_areas_plot")
-        )
+        column(4,
+               tags$h2("CINE", style = "text-align: center;"),
+               plotOutput("CINE_plot") 
+               )
     )
 )
 
@@ -425,18 +391,22 @@ tab_infogeneral <- tabItem(
     tags$style('.tab_infogeneral {
                              background-color: #ffffff;
               }'),
+    
+    div(style = "height: 20px;"),
     fluidRow(
-        box(
-            title = "Catálogo de datos",
-            status = "primary",
-            solidHeader = TRUE,
-            collapsible = TRUE,
-            width = 12,
-            "En esta sección podrá consultar las bases de datos de 
-            áreas del Sistema de Gestión de datos del MNC Colombia.",
-            style = "font-size: 16px;"
-        )
+      column(8, offset = 2,
+             tags$h1("Catálogo de Datos",
+                     style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+             ),
+             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
+             tags$p("En esta sección podrá consultar las bases datos del
+            Sistema de Gestión de datos del MNC Colombia.",
+                    style = "text-align: center; font-size: 22px;"
+             )
+      )
     ),
+    div(style = "height: 40px;"),
+    
     fluidRow(
           column(2,
                  box(title = "Bases de datos",
@@ -485,8 +455,8 @@ tab_infogeneral <- tabItem(
                                "Ocupación" = "Ocupación",
                                "Código denominaciones" = "Código denominaciones",
                                "Denominacion" = "Denominacion",
-                               "Código CIUO 08 A.C." = "Código \nCIUO 08 A.C.",
-                               "Código CNO" = "Código \nCNO",
+                               "Código CIUO 08 A.C." = "Código  CIUO 08 A C ",
+                               "Código CNO" = "Código  CNO",
                                "Nombre Ocupación Afín" = "Nombre Ocupación Afín",
                                "Nombre Destreza" = "Nombre Destreza", 
                                "Nombre Conocimiento" = "Nombre Conocimiento",
@@ -505,7 +475,7 @@ tab_infogeneral <- tabItem(
               condition = "input.select_main_base == 'CINE'",
               checkboxGroupInput("cine", "Seleccione Atributos", 
                              choices = c(
-                               "Código CINE-2011 AC" = "Código CINE-2011 AC",
+                               "Código CINE-2011 AC" = "Código CINE 2011 AC",
                                "Campos Detallado" = "Campos Detallado"
                              )
               )
@@ -660,17 +630,25 @@ tab_infogeneral <- tabItem(
 
 tab_survey <- tabItem(
     tabName = "survey",
+    class = "tab_survey",
+    tags$style('.tab_survey {
+                             background-color: #ffffff;
+              }'),
+    
+    div(style = "height: 20px;"),
     fluidRow(
-        box(
-            title = "Encuesta de demanda laboral",
-            status = "primary",
-            solidHeader = TRUE,
-            collapsible = TRUE,
-            width = 12,
-            "En esta sección encontrará la encuesta de demanda laboral realizada a las empresas en el marco de las entrevistas semiestructuradas.",
-            style = "font-size: 18px;"
-        )
+      column(8, offset = 2,
+             tags$h1("Encuesta de demanda laboral",
+                     style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+             ),
+             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
+             tags$p("En esta sección encontrará la encuesta de demanda laboral realizada a las empresas en el marco de las entrevistas semiestructuradas.",
+                    style = "text-align: center; font-size: 22px;"
+             )
+      )
     ),
+    div(style = "height: 20px;"),
+
     fluidRow(
       column(2,
              box(title = "Atributos de la Encuesta",

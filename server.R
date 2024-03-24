@@ -10,21 +10,21 @@ library(readxl)
 
 # load the kobo.R file
 source("kobo.R")
-source("data/scripts/excel_reader.R")
+# source("data/scripts/excel_reader.R")
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 
-# Read tables from database
+# Read areas table from database
 areas_cualificacion <- dbReadTable(con, "areas_cualificacion")
 
+# Open facts table
+main_bases <- dbReadTable(con, "fact_table")
+colnames(main_bases) <- gsub("\\.", " ", colnames(main_bases))
+print(colnames(main_bases))
 
-# Abrir base de datos consolidada
-main_bases <- readxl::read_xls("data/input/bases/BaseFinal.xls", guess_max = 2021) %>% 
-  slice(c(2021:5000)) %>% as.tibble() 
-
-fact_table <- dbReadTable(con, "fact_table")
-
+  # readxl::read_xls("data/input/bases/BaseFinal.xls", guess_max = 2021) %>% 
+  # slice(c(2021:5000)) %>% as.tibble() 
 
 shinyServer(function(input, output, session) {
 
@@ -55,187 +55,185 @@ shinyServer(function(input, output, session) {
         )
         
         # Make Selectinput object to show in server.R #Tab_consulta
+        
+        # Deploy selectizeinput object
         output$select_area_catalog <- renderUI({
           selectizeInput("select_area_catalog_", "Seleccione Área:",
                          choices = areas_cualificacion$nombre_area,
                          multiple = T
                          )
         })
+        # Observe to event clar button 
+        observeEvent(input$clear_areas, {
+          updateSelectizeInput(session, "select_area_catalog_", selected = character(0))
+        })
        
 
-####################################### CIIU TABLE ###############################################
-        
-        output$tabla_CIIU <- renderReactable({
-          sql_template <- "
-              SELECT *
-              FROM CIIU
-              WHERE \"Nombre área cualificación\" IN (%s)
-          ;"
-          string_query <- input$select_area_catalog_
-          # print(string_query)
-          quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
-          
-          query_template <- sprintf(sql_template, quoted_query)
-          print(query_template)
-          dbGetQuery(con, query_template) %>% reactable()
-        })
-# ----------------------------------------------------------------------------------------------
-        output$table_ciiu <- renderReactable({
-          selected <- getReactableState("areas_catalog", "selected")
-          req(selected)
-          ids_selected <- toString(
-            sprintf("'%s'", areas_cualificacion[selected, ]$codigo_area)
-          )
-          sql_template <- "
-                SELECT codigo_area, area_cualificacion, clase, descripcion
-                FROM ciiu_actividades_areas
-                WHERE codigo_area IN (%s) AND clase IS NOT NULL
-                ;"
-          sql_query <- sprintf(sql_template, ids_selected)
-          dbGetQuery(
-            con, sql_query) %>%
-            reactable(
-              columns = list(
-                codigo_area = colDef(
-                  name = "Código de área",
-                  align = "center",
-                  maxWidth = 120,
-                  filterable = TRUE
-                ),
-                area_cualificacion = colDef(
-                  name = "Área de cualificación",
-                  filterable = TRUE
-                ),
-                clase = colDef(
-                  name = "Clase",
-                  align = "center",
-                  maxWidth = 120,
-                  filterable = TRUE
-                ),
-                descripcion = colDef(
-                  name = "Descripción",
-                  filterable = TRUE
-                )
-              ),
-              bordered = TRUE,
-              highlight = TRUE,
-              defaultPageSize = 5,
-              rowStyle = list(cursor = "pointer"),
-              pageSizeOptions = c(5, 10, 15),
-              showPageSizeOptions = TRUE
-            )
-        })
-        
-########################################## CUOC TABLE #############################################
+####################################### CIIU DATABASE ###############################################
         
         output$table_CIIU <- renderReactable({
           sql_template <- "
-              SELECT *
+              SELECT \"Código_área\" AS \"Código de Área\", COUNT(\"Descripción\") AS \"Actividad Económica\"
               FROM CIIU
-              WHERE \"Nombre área cualificación\" IN (%s)
+              WHERE \"Nombre área cualificación\" IN (%s) AND \"Descripción\" IS NOT NULL
+              GROUP BY \"Código_área\"
           ;"
           string_query <- input$select_area_catalog_
           # print(string_query)
           quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
           
           query_template <- sprintf(sql_template, quoted_query)
-          print(query_template)
           dbGetQuery(con, query_template) %>% reactable()
         })
-
-# ----------------------------------------------------------------------------------------------
-        output$tabla_cuoc <- renderReactable({
-            selected <- getReactableState("areas_catalog", "selected")
-            req(selected)
-            ids_selected <- toString(
-                sprintf("'%s'", areas_cualificacion[selected, ]$codigo_area)
-                )
-            sql_template <- "
-                SELECT codigo_area, area_cualificacion, indice_numerico, denominaciones
-                FROM cuoc_index_2022
-                WHERE codigo_area IN (%s)
-                ;"
-            sql_query <- sprintf(sql_template, ids_selected)
-            dbGetQuery(
-                con, sql_query)  %>%
-            reactable(
-                columns = list(
-                    codigo_area = colDef(
-                        name = "Código de área",
-                        align = "center",
-                        maxWidth = 120,
-                        filterable = TRUE
-                    ),
-                    area_cualificacion = colDef(
-                        name = "Área de cualificación",
-                        filterable = TRUE
-                    ),
-                    indice_numerico = colDef(
-                        name = "Índice numérico",
-                        align = "center",
-                        maxWidth = 120,
-                        filterable = TRUE
-                    ),
-                    denominaciones = colDef(
-                        name = "Denominaciones",
-                        filterable = TRUE
-                    )
-                ),
-                bordered = TRUE,
-                highlight = TRUE,
-                defaultPageSize = 5,
-                rowStyle = list(cursor = "pointer"),
-                pageSizeOptions = c(5, 10, 15),
-                showPageSizeOptions = TRUE
-            )
+        
+        # Deploy CIIU plots -------------------------------------------------------------
+        output$CIIU_plot <- renderPlot({
+          sql_template <- "
+              SELECT \"Código_área\" AS codigo_area, COUNT(\"Descripción\") AS actividad_economica
+              FROM CIIU
+              WHERE \"Nombre área cualificación\" IN (%s) AND \"Descripción\" IS NOT NULL
+              GROUP BY \"Código_área\"
+          ;"
+          string_query <- input$select_area_catalog_
+          quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
+          
+          query_template <- sprintf(sql_template, quoted_query)
+          data <- dbGetQuery(con, query_template)
+          data %>%
+            ggplot() +
+            geom_col(aes(
+              x = codigo_area,
+              y = actividad_economica,
+              fill = codigo_area)) +
+            # put the labels on top of the bars rotate 90 degrees and with the bar color
+            geom_text(aes(
+              x = codigo_area,
+              y = actividad_economica,
+              label = actividad_economica,
+              color = codigo_area),
+              vjust = -0.5,
+              size = 8,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              x = "Área de cualificación",
+              y = "Número de actividades económicas (CIIU)"
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, max(data$actividad_economica) + 10)
+            ) +
+            theme_minimal()
         })
 
-        output$tabla_cine <- renderReactable({
-            selected <- getReactableState("areas_catalog", "selected")
-            req(selected)
-            ids_selected <- toString(
-                sprintf("'%s'", areas_cualificacion[selected, ]$codigo_area)
-                )
-            sql_template <- "
-                SELECT *
-                FROM cine_actividades_areas
-                WHERE codigo_area IN (%s)
-                ;"
-            sql_query <- sprintf(sql_template, ids_selected)
-            dbGetQuery(
-                con, sql_query) %>%
-            reactable(
-                columns = list(
-                    codigo_area = colDef(
-                        name = "Código de área",
-                        align = "center",
-                        maxWidth = 120,
-                        filterable = TRUE
-                    ),
-                    area_cualificacion = colDef(
-                        name = "Área de cualificación",
-                        filterable = TRUE
-                    ),
-                    codigo_cine_2011_ac = colDef(
-                        name = "Código CINE",
-                        align = "center",
-                        maxWidth = 120,
-                        filterable = TRUE
-                    ),
-                    campos_detallado = colDef(
-                        name = "Campos Detallado",
-                        filterable = TRUE
-                    )
-                ),
-                bordered = TRUE,
-                highlight = TRUE,
-                defaultPageSize = 5,
-                rowStyle = list(cursor = "pointer"),
-                pageSizeOptions = c(5, 10, 15),
-                showPageSizeOptions = TRUE
-            )
+########################################## CUOC DATABASE #############################################
+        
+        output$table_CUOC <- renderReactable({
+          sql_template <- "
+              SELECT \"Código_área\" AS codigo_area, COUNT(\"Código\") AS Denominacion
+              FROM CUOC
+              WHERE \"Nombre área cualificación\" IN (%s)
+              GROUP BY \"Código_área\"
+          ;"
+          string_query <- input$select_area_catalog_
+          quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
+          query_template <- sprintf(sql_template, quoted_query)
+          dbGetQuery(con, query_template) %>% reactable()
+        })
+        
+        # Deploy CUOC plots -------------------------------------------------------------
+        output$CUOC_plot <- renderPlot({
+          sql_template <- "
+              SELECT \"Código_área\" AS codigo_area, COUNT(\"Código\") AS denominacion
+              FROM CUOC
+              WHERE \"Nombre área cualificación\" IN (%s)
+              GROUP BY \"Código_área\"
+          ;"
+          string_query <- input$select_area_catalog_
+          quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
+          query_template <- sprintf(sql_template, quoted_query)
+          data <- dbGetQuery(con, query_template)
+          data %>%
+            ggplot() +
+            geom_col(aes(
+              x = codigo_area,
+              y = denominacion,
+              fill = codigo_area)) +
+            # put the labels on top of the bars rotate 90 degrees and with the bar color
+            geom_text(aes(
+              x = codigo_area,
+              y = denominacion,
+              label = denominacion,
+              color = codigo_area),
+              vjust = -0.5,
+              size = 8,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              x = "Área de cualificación",
+              y = "Número de denominaciones (CUOC)"
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, max(data$denominacion) + 100)
+            ) +
+            theme_minimal()
         })
 
+########################################## CINE DATABASE #############################################
+       
+        output$table_CINE <- renderReactable({
+          sql_template <- "
+              SELECT \"Código_área\" AS codigo_area, COUNT(\"Código CINE-2011 AC\") AS campo_detallado
+              FROM CINE
+              WHERE \"Nombre área cualificación\" IN (%s)
+          ;"
+          string_query <- input$select_area_catalog_
+          quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
+          query_template <- sprintf(sql_template, quoted_query)
+          dbGetQuery(con, query_template) %>% reactable()
+        })
+        
+        # Deploy CINE plots -------------------------------------------------------------
+        output$CINE_plot <- renderPlot({
+          sql_template <- "
+              SELECT \"Código_área\" AS codigo_area, COUNT(\"Código CINE-2011 AC\") AS campo_detallado
+              FROM CINE
+              WHERE \"Nombre área cualificación\" IN (%s)
+              GROUP BY codigo_area
+          ;"
+          string_query <- input$select_area_catalog_
+          quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
+          query_template <- sprintf(sql_template, quoted_query)
+          data <- dbGetQuery(con, query_template)
+          data %>%
+            ggplot() +
+            geom_col(aes(
+              x = codigo_area,
+              y = campo_detallado,
+              fill = codigo_area)) +
+            # put the labels on top of the bars rotate 90 degrees and with the bar color
+            geom_text(aes(
+              x = codigo_area,
+              y = campo_detallado,
+              label = campo_detallado,
+              color = codigo_area),
+              vjust = -0.5,
+              size = 8,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              x = "Área de cualificación",
+              y = "Número de campos detallados (CINE)"
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, max(data$campo_detallado) + 3)
+            ) +
+            theme_minimal()
+        })
+        
+#######################################################################################
         output$selected_row_details <- renderText({
             selected <- getReactableState("areas_catalog", "selected")
             req(selected)
@@ -243,126 +241,6 @@ shinyServer(function(input, output, session) {
             areas_cualificacion[selected, ]$codigo_area
         })
 
-        output$actividades_areas_plot <- renderPlot({
-            selected <- getReactableState("areas_catalog", "selected")
-            req(selected)
-            ids_selected <- toString(
-                sprintf("'%s'", areas_cualificacion[selected, ]$codigo_area)
-                )
-            sql_template <- "
-                SELECT codigo_area, COUNT(clase) AS actividades_economicas
-                FROM ciiu_actividades_areas
-                WHERE clase IS NOT NULL AND codigo_area IN (%s)
-                GROUP BY codigo_area;"
-            sql_query <- sprintf(sql_template, ids_selected)
-            data <- dbGetQuery(con, sql_query)
-            data %>%
-                ggplot() +
-                geom_col(aes(
-                    x = codigo_area,
-                    y = actividades_economicas,
-                    fill = codigo_area)) +
-                # put the labels on top of the bars rotate 90 degrees and with the bar color
-                geom_text(aes(
-                    x = codigo_area,
-                    y = actividades_economicas,
-                    label = actividades_economicas,
-                    color = codigo_area),
-                    vjust = -0.5,
-                    size = 8,
-                    fontface = "bold") +
-                labs(
-                    # title = "Número de actividades económicas por área de cualificación",
-                    x = "Área de cualificación",
-                    y = "Número de actividades económicas (CIIU)"
-                ) +
-                # change the y max limit to the highest bar plus 10
-                scale_y_continuous(
-                    limits = c(0, max(data$actividades_economicas) + 10)
-                ) +
-                theme_minimal()
-        })
-
-        output$ocupaciones_areas_plot <- renderPlot({
-            selected <- getReactableState("areas_catalog", "selected")
-            req(selected)
-            ids_selected <- toString(
-                sprintf("'%s'", areas_cualificacion[selected, ]$codigo_area)
-                )
-            sql_template <- "
-                SELECT codigo_area, COUNT(indice_numerico) AS denominaciones
-                FROM cuoc_index_2022
-                WHERE codigo_area IN (%s)
-                GROUP BY codigo_area;"
-            sql_query <- sprintf(sql_template, ids_selected)
-            data <- dbGetQuery(con, sql_query)
-            data %>%
-                ggplot() +
-                geom_col(aes(
-                    x = codigo_area,
-                    y = denominaciones,
-                    fill = codigo_area)) +
-                # put the labels on top of the bars rotate 90 degrees and with the bar color
-                geom_text(aes(
-                    x = codigo_area,
-                    y = denominaciones,
-                    label = denominaciones,
-                    color = codigo_area),
-                    vjust = -0.5,
-                    size = 8,
-                    fontface = "bold") +
-                labs(
-                    # title = "Número de actividades económicas por área de cualificación",
-                    x = "Área de cualificación",
-                    y = "Número de denominaciones (CUOC)"
-                ) +
-                # change the y max limit to the highest bar plus 10
-                scale_y_continuous(
-                    limits = c(0, max(data$denominaciones) + 100)
-                ) +
-                theme_minimal()
-        })
-
-        output$cine_areas_plot <- renderPlot({
-            selected <- getReactableState("areas_catalog", "selected")
-            req(selected)
-            ids_selected <- toString(
-                sprintf("'%s'", areas_cualificacion[selected, ]$codigo_area)
-                )
-            sql_template <- "
-                SELECT 
-                codigo_area, COUNT(codigo_cine_2011_ac) AS campo_detallado
-                FROM cine_actividades_areas
-                WHERE codigo_area IN (%s)
-                GROUP BY codigo_area;"
-            sql_query <- sprintf(sql_template, ids_selected)
-            data <- dbGetQuery(con, sql_query)
-            data %>%
-                ggplot() +
-                geom_col(aes(
-                    x = codigo_area,
-                    y = campo_detallado,
-                    fill = codigo_area)) +
-                # put the labels on top of the bars rotate 90 degrees and with the bar color
-                geom_text(aes(
-                    x = codigo_area,
-                    y = campo_detallado,
-                    label = campo_detallado,
-                    color = codigo_area),
-                    vjust = -0.5,
-                    size = 8,
-                    fontface = "bold") +
-                labs(
-                    # title = "Número de actividades económicas por área de cualificación",
-                    x = "Área de cualificación",
-                    y = "Número de campos detallados (CINE)"
-                ) +
-                # change the y max limit to the highest bar plus 10
-                scale_y_continuous(
-                    limits = c(0, max(data$campo_detallado) + 3)
-                ) +
-                theme_minimal()
-        })
 
         output$joined_table <- renderReactable(
             dbGetQuery(
