@@ -359,7 +359,7 @@ tab_consulta <- tabItem(
       ),
   
     fluidRow(
-        column(6,
+        column(6, offset = 1,
                uiOutput("select_area_catalog"),
                actionButton("clear_areas", "Limpiar Filtros", icon = icon("eraser"),
                             style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
