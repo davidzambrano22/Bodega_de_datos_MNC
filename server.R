@@ -7,10 +7,20 @@ library(stringi)
 library(reactable)
 library(jsonlite)
 library(readxl)
+library(ggthemes) 
+
+# Allow to create world clouds
+library(tm)
+library(wordcloud2)
+library(memoise)
 
 # load the kobo.R file
 source("kobo.R")
-# source("data/scripts/excel_reader.R")
+# Load wordcloud2a script
+source("wordcloud2a.R")
+
+# Load pruebas.xlsx
+datos_pruebas <- read_excel("data/input/prueba.xlsx")
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
@@ -112,7 +122,7 @@ shinyServer(function(input, output, session) {
               label = actividad_economica,
               color = codigo_area),
               vjust = -0.5,
-              size = 8,
+              size = 11,
               fontface = "bold") +
             labs(
               # title = "Número de actividades económicas por área de cualificación",
@@ -123,7 +133,9 @@ shinyServer(function(input, output, session) {
             scale_y_continuous(
               limits = c(0, max(data$actividad_economica) + 10)
             ) +
-            theme_minimal()
+            theme_few() +
+            theme(text = element_text(size = 15)
+            )
         })
 
 ########################################## CUOC DATABASE #############################################
@@ -177,7 +189,9 @@ shinyServer(function(input, output, session) {
             scale_y_continuous(
               limits = c(0, max(data$denominacion) + 100)
             ) +
-            theme_minimal()
+            theme_few() +
+            theme(text = element_text(size = 15)
+            )
         })
 
 ########################################## CINE DATABASE #############################################
@@ -230,10 +244,66 @@ shinyServer(function(input, output, session) {
             scale_y_continuous(
               limits = c(0, max(data$campo_detallado) + 3)
             ) +
-            theme_minimal()
+            theme_few() +
+            theme(text = element_text(size = 15)
+            )
         })
         
-#######################################################################################
+########################################## PLOTS FOR SURVEY #############################################
+        
+        # Deploy selectizeinput object
+        output$select_area_catalog_2 <- renderUI({
+          selectizeInput("select_area_catalog_2", "Seleccione Área:",
+                         choices = areas_cualificacion$nombre_area,
+                         multiple = F
+          )
+        })
+        
+        
+        # Deploy habilidades socioemocionales plots -------------------------------------------------------------
+        output$socioemocionales <- renderPlot({
+          # string_query <- input$select_area_catalog_2
+          # quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
+          datos_pruebas %>%
+            dplyr::select(Habilidad, A) %>%
+            arrange(desc(A)) %>%
+            head(5) %>%
+            ggplot() + 
+            geom_col(
+              aes(x = Habilidad,
+                  y = A,
+                  fill =  Habilidad
+                    )
+            ) +  
+            geom_text(aes(
+              x = Habilidad,
+              y = A,
+              label = A,
+              color = Habilidad),
+              vjust = -0.5,
+              size = 8,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              x = "Acumulado de habilidades",
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, max(datos_pruebas$`A`) + 3)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)
+            )
+        })
+        
+        output$wordcloud_habilidades <- renderWordcloud2({
+          datos_pruebas %>%
+            dplyr::select(Habilidad, A) %>%
+            arrange(desc(A)) %>%
+            wordcloud2a(size = 1, color = "random-dark", rotateRatio = 0)
+        })
+
+#########################################################################################################
         output$selected_row_details <- renderText({
             selected <- getReactableState("areas_catalog", "selected")
             req(selected)

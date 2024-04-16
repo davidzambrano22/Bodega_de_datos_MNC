@@ -359,8 +359,11 @@ tab_consulta <- tabItem(
       ),
   
     fluidRow(
-        column(6, offset = 1,
-               uiOutput("select_area_catalog"),
+        column(2,
+               uiOutput("select_area_catalog")
+               ),
+        column(3,
+               div(style = "height: 24px;"),
                actionButton("clear_areas", "Limpiar Filtros", icon = icon("eraser"),
                             style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
                             )
@@ -379,7 +382,33 @@ tab_consulta <- tabItem(
                tags$h2("CINE", style = "text-align: center;"),
                plotOutput("CINE_plot") 
                )
+    ),
+  div(style = "height: 20px;"),
+  fluidRow(
+    column(8, offset = 2,
+           tags$h1("Habilidades",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
+           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
+           tags$p("En esta sección podrá consultar ...",
+                  style = "text-align: center; font-size: 22px;"
+           )
     )
+  ),
+  fluidRow(
+    column(6,
+           uiOutput("select_area_catalog_2"),
+    )
+  ),
+  fluidRow(
+    column(4, offset = 2,
+           tags$h2("CIIU", style = "text-align: center;"),
+           plotOutput("socioemocionales")
+           ),
+    column(4,
+           wordcloud2Output("wordcloud_habilidades")
+           )
+  )
 )
 
 
