@@ -397,18 +397,80 @@ tab_consulta <- tabItem(
   ),
   fluidRow(
     column(6,
-           uiOutput("select_area_catalog_2"),
+           uiOutput("select_area_catalog_2")
     )
   ),
   fluidRow(
-    column(4, offset = 2,
-           tags$h2("CIIU", style = "text-align: center;"),
+    column(7,
+           tags$h2("Habilidades Socioemocionales", style = "text-align: center;"),
            plotOutput("socioemocionales")
            ),
     column(4,
            wordcloud2Output("wordcloud_habilidades")
            )
+  ),
+  fluidRow(
+    column(7,
+           tags$h2("Conocimientos", style = "text-align: center;"),
+           plotOutput("conocimientos")
+           
+    ), 
+    column(4,
+           wordcloud2Output("wordcloud_conocimientos")
+    )
+  ),
+  fluidRow(
+    column(7,
+           tags$h2("Destrezas", style = "text-align: center;"),
+           plotOutput("destrezas")
+           
+    ), 
+    column(4,
+           wordcloud2Output("wordcloud_destrezas")
+    )
+  ),
+  
+  fluidRow(
+    column(8, offset = 2,
+           tags$h1("Base1 Descriptivas",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
+           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
+           tags$p("En esta sección podrá consultar ...",
+                  style = "text-align: center; font-size: 22px;"
+           )
+    )
+  ),
+  fluidRow(
+    column(2,
+           uiOutput("select_area_catalog_3")
+    ),
+    column(3,
+           div(style = "height: 24px;"),
+           actionButton("clear_areas_3", "Limpiar Filtros", icon = icon("eraser"),
+                        style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
+           )
+    )
+  ),
+  fluidRow(
+    column(10, offset = 1,
+           tags$h2("Área de desempeño", style = "text-align: center;"),
+           plotOutput("descriptivas_area")
+           )
+  ),
+  fluidRow(
+    column(10, offset = 1,
+           tags$h2("Tamaño de la empresa", style = "text-align: center;"),
+           plotOutput("tamano_empresa")
+    )
+  ),
+  fluidRow(
+    column(10, offset = 1,
+           tags$h2("Cargos de difícil consecusión", style = "text-align: center;"),
+           plotOutput("dificil_consecucion")
+    )
   )
+  
 )
 
 

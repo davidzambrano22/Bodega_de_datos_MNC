@@ -14,13 +14,17 @@ library(tm)
 library(wordcloud2)
 library(memoise)
 
+
 # load the kobo.R file
 source("kobo.R")
 # Load wordcloud2a script
 source("wordcloud2a.R")
 
-# Load pruebas.xlsx
-datos_pruebas <- read_excel("data/input/prueba.xlsx")
+# Load base descriptivas
+base_descriptivas = read_excel("data/input/bases/Base1Descriptivas.xls")
+base_socioemocionales = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Socioemocionales")
+base_conocimientos = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Conocimientos")
+base_destrezas = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Destrezas")
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
@@ -249,12 +253,12 @@ shinyServer(function(input, output, session) {
             )
         })
         
-########################################## PLOTS FOR SURVEY #############################################
+########################################## PLOTS FOR DESCRIPTIVAS 2 #############################################
         
         # Deploy selectizeinput object
         output$select_area_catalog_2 <- renderUI({
-          selectizeInput("select_area_catalog_2", "Seleccione Área:",
-                         choices = areas_cualificacion$nombre_area,
+          selectizeInput("select_area_catalog_2", "Seleccione área de cualificación",
+                         choices = names(base_socioemocionales)[2:6],
                          multiple = F
           )
         })
@@ -262,48 +266,254 @@ shinyServer(function(input, output, session) {
         
         # Deploy habilidades socioemocionales plots -------------------------------------------------------------
         output$socioemocionales <- renderPlot({
-          # string_query <- input$select_area_catalog_2
-          # quoted_query <- toString(sapply(string_query, function(x) paste0("'", x, "'")))
-          datos_pruebas %>%
-            dplyr::select(Habilidad, A) %>%
-            arrange(desc(A)) %>%
+          selected_column <- input$select_area_catalog_2
+          base_socioemocionales %>%
+            dplyr::select(`Habilidades Socioemocionales`, selected_column) %>% 
+            arrange(desc(!!sym(selected_column))) %>% 
             head(5) %>%
-            ggplot() + 
+            ggplot() +
             geom_col(
-              aes(x = Habilidad,
-                  y = A,
-                  fill =  Habilidad
+              aes(x = `Habilidades Socioemocionales`,
+                  y = !!sym(selected_column),
+                  fill = `Habilidades Socioemocionales`
                     )
-            ) +  
+            ) +
             geom_text(aes(
-              x = Habilidad,
-              y = A,
-              label = A,
-              color = Habilidad),
+              x = `Habilidades Socioemocionales`,
+              y = !!sym(selected_column),
+              label = !!sym(selected_column),
+              color = `Habilidades Socioemocionales`),
               vjust = -0.5,
               size = 8,
               fontface = "bold") +
             labs(
               # title = "Número de actividades económicas por área de cualificación",
-              x = "Acumulado de habilidades",
+              y = "Acumulado de habilidades socioemocionales",
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
-              limits = c(0, max(datos_pruebas$`A`) + 3)
+              limits = c(0, 34)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)
+            ) +
+            scale_x_discrete(labels = NULL)
+        })
+        
+        output$wordcloud_habilidades <- renderWordcloud2({
+          selected_column <- input$select_area_catalog_2
+          base_socioemocionales %>%
+            dplyr::select(`Habilidades Socioemocionales`, selected_column) %>% 
+            arrange(desc(!!sym(selected_column))) %>% 
+            wordcloud2a(size = 1, color = "random-dark", rotateRatio = 0)
+        })
+        
+        # Deploy conocimientos plots -------------------------------------------------------------
+        output$conocimientos <- renderPlot({
+          selected_column <- input$select_area_catalog_2
+          
+          base_conocimientos %>% group_by(`Código_área`, `Conocimiento`) %>%
+            summarise(total = sum(`Frecuencia`)) %>%
+            filter(`Código_área` %in% selected_column) %>%
+            arrange(desc(`total`)) %>%
+            head(5) %>%
+            ggplot() +
+            geom_col(
+              aes(x = `Conocimiento`,
+                  y = `total`,
+                  fill = `Conocimiento`
+              )
+            ) +
+            # geom_text(aes(
+            #   x = `Conocimiento`,
+            #   y = selected_column,
+            #   label = selected_column,
+            #   color = `Conocimiento`),
+            #   vjust = -0.5,
+            #   size = 8,
+            #   fontface = "bold") +
+            labs(
+              # title = "Acumulado de conocimientos por área de cualificación",
+              caption = NULL,
+              y = "Acumulado de conocimientos",
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 34)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)) +
+            scale_x_discrete(labels = NULL)
+        })
+        
+        output$wordcloud_conocimientos <- renderWordcloud2({
+          selected_column <- input$select_area_catalog_2
+          base_conocimientos %>% group_by(`Código_área`, `Conocimiento`) %>%
+            summarise(total = sum(`Frecuencia`)) %>%
+            filter(`Código_área` %in% selected_column) %>% 
+            as.data.frame() %>% dplyr::select(`Conocimiento`, `total`) %>%
+            wordcloud2a(size = 1, color = "random-dark", rotateRatio = 0)
+        })
+        
+        
+        # Deploy destrezas plots -------------------------------------------------------------
+        output$destrezas <- renderPlot({
+          selected_column <- input$select_area_catalog_2
+          
+          base_destrezas %>% group_by(`Código_área`, `destreza`) %>%
+            summarise(total = sum(`Frecuencia`)) %>%
+            filter(`Código_área` %in% selected_column) %>%
+            arrange(desc(`total`)) %>%
+            head(5) %>%
+            ggplot() +
+            geom_col(
+              aes(x = `destreza`,
+                  y = `total`,
+                  fill = `destreza`
+              )
+            ) +
+            # geom_text(aes(
+            #   x = `Conocimiento`,
+            #   y = selected_column,
+            #   label = selected_column,
+            #   color = `Conocimiento`),
+            #   vjust = -0.5,
+            #   size = 8,
+            #   fontface = "bold") +
+            labs(
+              # title = "Acumulado de conocimientos por área de cualificación",
+              caption = NULL,
+              y = "Acumulado de destrezas",
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 34)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)) +
+            scale_x_discrete(labels = NULL)
+        })
+        
+        output$wordcloud_destrezas <- renderWordcloud2({
+          selected_column <- input$select_area_catalog_2
+          base_destrezas %>% group_by(`Código_área`, `destreza`) %>%
+            summarise(total = sum(`Frecuencia`)) %>%
+            filter(`Código_área` %in% selected_column) %>% 
+            as.data.frame() %>% dplyr::select(`destreza`, `total`) %>%
+            wordcloud2a(size = 1, color = "random-dark", rotateRatio = 0)
+        })
+
+############################################ PLOTS DESCRIPTIVAS ###########################################
+        # Deploy selectizeinput object
+        output$select_area_catalog_3 <- renderUI({
+          selectizeInput("select_area_catalog_3", "Seleccione Área:",
+                         choices = names(table(base_descriptivas$`Código_área`)),
+                         multiple = T
+          )
+        })
+        
+        # Observe to event clear button 
+        observeEvent(input$clear_areas_3, {
+          updateSelectizeInput(session, "select_area_catalog_3", selected = character(0))
+        })
+        
+# -----------------Descriptivas área de desempeño
+        output$descriptivas_area <- renderPlot({
+          base_descriptivas %>% dplyr::select(`Código_área`, `¿Cuál es su área de desempeño?`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3) %>%
+            group_by(`¿Cuál es su área de desempeño?`) %>% count(`¿Cuál es su área de desempeño?`) %>%
+            ggplot() +
+            geom_col(aes(
+              x = `¿Cuál es su área de desempeño?`,
+              y = `n`,
+              fill = `¿Cuál es su área de desempeño?`)) +
+            geom_text(aes(
+              x = `¿Cuál es su área de desempeño?`,
+              y = `n`,
+              label = `n`,
+              color = `¿Cuál es su área de desempeño?`),
+              vjust = -0.5,
+              size = 8,
+              show.legend = FALSE,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              y = "Acumulado de empresas"
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 40)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)
+            ) 
+        })
+
+# -----------------Descriptivas tamaño empresa
+        output$tamano_empresa <- renderPlot({
+          base_descriptivas %>% dplyr::select(`Código_área`, `Tamaño empresa`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3) %>%
+            group_by(`Tamaño empresa`) %>% count(`Tamaño empresa`) %>%
+            ggplot() +
+            geom_col(aes(
+              x = `Tamaño empresa`,
+              y = `n`,
+              fill = `Tamaño empresa`)) +
+            geom_text(aes(
+              x = `Tamaño empresa`,
+              y = `n`,
+              label = `n`,
+              color = `Tamaño empresa`),
+              vjust = -0.5,
+              size = 8,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              y = "Acumulado de empresas"
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 40)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)
+            ) 
+        })
+
+# -----------------Descriptivas Cargos dificil consecusión
+        output$dificil_consecucion <- renderPlot({
+          base_descriptivas %>% dplyr::select(`Código_área`, `Cargos dificil consecusión`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3) %>%
+            group_by(`Cargos dificil consecusión`) %>% count(`Cargos dificil consecusión`) %>%
+            ggplot() +
+            geom_col(aes(
+              x = `Cargos dificil consecusión`,
+              y = `n`,
+             fill = as.character(`Cargos dificil consecusión`))) +
+            geom_text(aes(
+              x = `Cargos dificil consecusión`,
+              y = `n`,
+              label = `n`,
+              color = `Cargos dificil consecusión`),
+              vjust = -0.5,
+              size = 8,
+              show.legend = FALSE,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              y = "Acumulado de empresas",
+              fill = "Cargos de difícil consecución"
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 61)
             ) +
             theme_few() +
             theme(text = element_text(size = 15)
             )
         })
-        
-        output$wordcloud_habilidades <- renderWordcloud2({
-          datos_pruebas %>%
-            dplyr::select(Habilidad, A) %>%
-            arrange(desc(A)) %>%
-            wordcloud2a(size = 1, color = "random-dark", rotateRatio = 0)
-        })
 
-#########################################################################################################
+###########################################################################################################
         output$selected_row_details <- renderText({
             selected <- getReactableState("areas_catalog", "selected")
             req(selected)
