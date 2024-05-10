@@ -340,11 +340,11 @@ tab_consulta <- tabItem(
     tags$style('.tab_consulta {
                              background-color: #ffffff;
               }'),
-
+  
     div(style = "height: 20px;"),
     fluidRow(
       column(8, offset = 2,
-             tags$h1("Descriptivas por área del MNC",
+             tags$h1("Descriptivos por Área del MNC",
                      style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
              ),
              tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
@@ -355,124 +355,183 @@ tab_consulta <- tabItem(
       )
     ),
     div(
-      style = "height: 20px;"
+      style = "height: 40px;"
       ),
-  
-    fluidRow(
-        column(2,
-               uiOutput("select_area_catalog")
-               ),
-        column(3,
-               div(style = "height: 24px;"),
-               actionButton("clear_areas", "Limpiar Filtros", icon = icon("eraser"),
-                            style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
-                            )
-               )
-    ),
-    fluidRow(
-        column(4,
-              tags$h2("CIIU", style = "text-align: center;"),
-              plotOutput("CIIU_plot")
-            ),
-        column(4,
-               tags$h2("CUOC", style = "text-align: center;"),
-               plotOutput("CUOC_plot")   
-               ),
-        column(4,
-               tags$h2("CINE", style = "text-align: center;"),
-               plotOutput("CINE_plot") 
-               )
-    ),
-  div(style = "height: 20px;"),
+# 
+#     fluidRow(
+#       box(width = 12,
+#           fluidRow(
+#             tags$h1("Estadísticas Descriptivas por Área de Cualificación", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+#             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+#             div(style = "height: 30px;")
+#           ),
+#           fluidRow(
+#             column(2,
+#                    uiOutput("select_area_catalog")
+#             ),
+#             column(3,
+#                    div(style = "height: 24px;"),
+#                    actionButton("clear_areas", "Limpiar Filtros", icon = icon("eraser"),
+#                                 style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
+#                    )
+#             )
+#           ),
+#           fluidRow(
+#             column(4,
+#                   tags$h2("Sectores CIIU", style = "text-align: center;"),
+#                   plotOutput("CIIU_plot")
+#                 ),
+#             column(4,
+#                    tags$h2("Denominaciones CUOC", style = "text-align: center;"),
+#                    plotOutput("CUOC_plot")   
+#                    ),
+#             column(4,
+#                    tags$h2("Educación CINE", style = "text-align: center;"),
+#                    plotOutput("CINE_plot") 
+#                    )
+#         )
+#       )
+#     ),
+      # fluidRow(
+      #   box(width = 12,
+      #       fluidRow(
+      #         tags$h1("Estadísticas Descriptivas por Área de Cualificación", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+      #         tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      #         div(style = "height: 30px;")
+      #       ),
+      #       fluidRow(
+      #         column(2,
+      #                uiOutput("select_area_catalog_3")
+      #         ),
+      #         column(3,
+      #                div(style = "height: 24px;"),
+      #                actionButton("clear_areas_3", "Limpiar Filtros", icon = icon("eraser"),
+      #                             style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
+      #                )
+      #         )
+      #       ),
+      #     fluidRow(
+      #       tags$h2("Área de Desempeño", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+      #       tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      #       div(style = "height: 10px;"),
+      #       column(10, offset = 1,
+      #              plotOutput("descriptivas_area")
+      #              )
+      #     ),
+      #     fluidRow(
+      #       tags$h2("Tamaño de la Empresa", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+      #       tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      #       div(style = "height: 10px;"),
+      #       column(10, offset = 1,
+      #              plotOutput("tamano_empresa")
+      #       )
+      #     ),
+      #       div(style = "height: 10px;"),
+      #       fluidRow(
+      #         tags$h2("Cargos Críticos de Difícil Consecución", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+      #         tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      #         div(style = "height: 10px;"),
+      #         column(10, offset = 1,
+      #                plotOutput("dificil_consecucion")
+      #         )
+      #       ),
+      #       fluidRow(
+      #         tags$h2("Departamentos", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+      #         tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      #         div(style = "height: 10px;"),
+      #         column(10, offset = 1,
+      #                plotOutput("departamentos")
+      #         )
+      #       )
+      #       ),
+      #   box(width=12,
+      #       fluidRow(
+      #         tags$h1("Estadísticas Descriptivas por Área de Cualificación", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+      #         tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      #         div(style = "height: 30px;")
+      #       ),
+      #       fluidRow(
+      #         column(2,
+      #                uiOutput("select_area_catalog_5")
+      #         )
+      #       ),
+      #       fluidRow(
+      #         tags$h2("Medios de Búsqueda", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+      #         tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      #         div(style = "height: 10px;"),
+      #         column(10, offset = 1,
+      #                plotOutput("medios")
+      #         )
+      #       ),
+      #       
+      #       div(style = "height: 30px;"),
+      #       fluidRow(
+      #         tags$h2("Motivos de Búsqueda y Consecución de Vacantes", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+      #         tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      #         div(style = "height: 10px;"),
+      #         column(10, offset = 1,
+      #                plotOutput("motivosNovacante")
+      #         )
+      #       )
+      #   )
+      # ),
   fluidRow(
-    column(8, offset = 2,
-           tags$h1("Habilidades",
-                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
-           ),
-           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
-           tags$p("En esta sección podrá consultar ...",
-                  style = "text-align: center; font-size: 22px;"
-           )
-    )
-  ),
-  fluidRow(
-    column(6,
-           uiOutput("select_area_catalog_2")
-    )
-  ),
-  fluidRow(
-    column(7,
-           tags$h2("Habilidades Socioemocionales", style = "text-align: center;"),
-           plotOutput("socioemocionales")
-           ),
-    column(4,
-           wordcloud2Output("wordcloud_habilidades")
-           )
-  ),
-  fluidRow(
-    column(7,
-           tags$h2("Conocimientos", style = "text-align: center;"),
-           plotOutput("conocimientos")
-           
-    ), 
-    column(4,
-           wordcloud2Output("wordcloud_conocimientos")
-    )
-  ),
-  fluidRow(
-    column(7,
-           tags$h2("Destrezas", style = "text-align: center;"),
-           plotOutput("destrezas")
-           
-    ), 
-    column(4,
-           wordcloud2Output("wordcloud_destrezas")
-    )
-  ),
-  
-  fluidRow(
-    column(8, offset = 2,
-           tags$h1("Base1 Descriptivas",
-                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
-           ),
-           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;"),
-           tags$p("En esta sección podrá consultar ...",
-                  style = "text-align: center; font-size: 22px;"
-           )
-    )
-  ),
-  fluidRow(
-    column(2,
-           uiOutput("select_area_catalog_3")
-    ),
-    column(3,
-           div(style = "height: 24px;"),
-           actionButton("clear_areas_3", "Limpiar Filtros", icon = icon("eraser"),
-                        style="color: #fff; background-color: #dc3545; border-color: #2e6da4"
-           )
-    )
-  ),
-  fluidRow(
-    column(10, offset = 1,
-           tags$h2("Área de desempeño", style = "text-align: center;"),
-           plotOutput("descriptivas_area")
-           )
-  ),
-  fluidRow(
-    column(10, offset = 1,
-           tags$h2("Tamaño de la empresa", style = "text-align: center;"),
-           plotOutput("tamano_empresa")
-    )
-  ),
-  fluidRow(
-    column(10, offset = 1,
-           tags$h2("Cargos de difícil consecusión", style = "text-align: center;"),
-           plotOutput("dificil_consecucion")
+    div(style = "height: 30px;"),
+    box(width=12,
+        fluidRow(
+          column(8, offset = 2,
+                 tags$h1("Análisis de Competencias", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+                 tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;")
+          )
+        ),
+        fluidRow(
+          column(6,
+                 uiOutput("select_area_catalog_2")
+          )
+        ),
+        tags$h2("Habilidades Socioemocionales", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+        tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+        div(style = "height: 30px;"),
+        fluidRow(
+          
+          column(7,
+                 plotOutput("socioemocionales")
+                 ),
+          column(4,
+                 wordcloud2Output("wordcloud_habilidades")
+                 )
+        ),
+          
+        div(style = "height: 30px;"),
+        fluidRow(
+          tags$h2("Conocimientos CUOC", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+          tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+          div(style = "height: 10px;"),
+          column(7,
+                 plotOutput("conocimientos")
+                 
+          ), 
+          column(4,
+                 wordcloud2Output("wordcloud_conocimientos")
+          )
+        ),
+        
+        div(style = "height: 30px;"),
+        fluidRow(
+          tags$h2("Destrezas CUOC", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+          tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+          div(style = "height: 10px;"),
+          column(7,
+                 plotOutput("destrezas")
+                 
+          ), 
+          column(4,
+                 wordcloud2Output("wordcloud_destrezas")
+                 )
+      )
     )
   )
-  
 )
-
 
 # TAB INFO GENERAL --------------------------------------------------------
 
@@ -507,9 +566,9 @@ tab_infogeneral <- tabItem(
                    selectizeInput("select_main_base", "Seleccione Base",
                         choices = c(
                           "Areas de Cualificación",
-                          "Denominación CUOC",
-                          "CINE",
-                          "CIIU",
+                          "Ocupaciones CUOC",
+                          "Educación CINE",
+                          "Sectores CIIU",
                           "Caracterización Sector",
                           "Análisis Funcional",
                           "Estructura de la Cualificación",
@@ -522,7 +581,7 @@ tab_infogeneral <- tabItem(
               checkboxGroupInput("area_cualificacion", "Seleccione Atributos", 
                              choices = c(
                                "Codigo Área" = "Código_área",
-                               "Nombre área cualificación" = "Nombre área cualificación"
+                               "Nombre área cualificación" = "Nombreáreacualificación"
                              ),
                              selected = c(
                                "Código_área",
@@ -531,30 +590,30 @@ tab_infogeneral <- tabItem(
               )
             ),
             conditionalPanel(
-              condition = "input.select_main_base == 'Denominación CUOC'",
+              condition = "input.select_main_base == 'Ocupaciones CUOC'",
               checkboxGroupInput("denominacion_cuoc", "Seleccione Atributos", 
                              choices = c(
-                               "Código Grandes Grupos" = "Código Grandes Grupos",
-                               "Grandes Grupos" = "Grandes Grupos",
-                               "Código Subgrupos principales" = "Código Subgrupos principales",
-                               "Subgrupos principales" = "Subgrupos principales",
-                               "Código subgrupos" = "Código subgrupos",
+                               "Código Grandes Grupos" = "CódigoGrandesGrupos",
+                               "Grandes Grupos" = "GrandesGrupos",
+                               "Código Subgrupos principales" = "CódigoSubgruposprincipales",
+                               "Subgrupos principales" = "Subgruposprincipales",
+                               "Código subgrupos" = "Códigosubgrupos",
                                "Subgrupos" = "Subgrupos",
-                               "Códigos Grupos primarios" = "Códigos Grupos primarios",
-                               "Grupos primarios" = "Grupos primarios",
-                               "Código Ocupación" = "Código Ocupación",
+                               "Códigos Grupos primarios" = "CódigosGruposprimarios",
+                               "Grupos primarios" = "Gruposprimarios",
+                               "Código Ocupación" = "CódigoOcupación",
                                "Ocupación" = "Ocupación",
-                               "Código denominaciones" = "Código denominaciones",
+                               "Código denominaciones" = "Códigodenominaciones",
                                "Denominacion" = "Denominacion",
-                               "Código CIUO 08 A.C." = "Código  CIUO 08 A C ",
-                               "Código CNO" = "Código  CNO",
-                               "Nombre Ocupación Afín" = "Nombre Ocupación Afín",
-                               "Nombre Destreza" = "Nombre Destreza", 
-                               "Nombre Conocimiento" = "Nombre Conocimiento",
-                               "Nivel Competencia" = "Nivel Competencia",
-                               "Descripción Ocupación" = "Descripción Ocupación",
-                               "Consecutivo Función" = "Consecutivo Función",
-                               "Redacción Función" = "Redacción Función"
+                               "Código CIUO 08 A.C." = "CódigoCIUO08AC",
+                               "Código CNO" = "CódigoCNO",
+                               "Nombre Ocupación Afín" = "NombreOcupaciónAfín",
+                               "Nombre Destreza" = "NombreDestreza", 
+                               "Nombre Conocimiento" = "NombreConocimiento",
+                               "Nivel Competencia" = "NivelCompetencia",
+                               "Descripción Ocupación" = "DescripciónOcupación",
+                               "Consecutivo Función" = "ConsecutivoFunción",
+                               "Redacción Función" = "RedacciónFunción"
                              ),
                              selected = c(
                                "Código_área",
@@ -563,16 +622,16 @@ tab_infogeneral <- tabItem(
               )
             ),
             conditionalPanel(
-              condition = "input.select_main_base == 'CINE'",
+              condition = "input.select_main_base == 'Educación CINE'",
               checkboxGroupInput("cine", "Seleccione Atributos", 
                              choices = c(
-                               "Código CINE-2011 AC" = "Código CINE 2011 AC",
-                               "Campos Detallado" = "Campos Detallado"
+                               "Código CINE-2011 AC" = "CódigoCINE2011AC",
+                               "Campos Detallado" = "CamposDetallado"
                              )
               )
             ),
             conditionalPanel(
-              condition = "input.select_main_base == 'CIIU'",
+              condition = "input.select_main_base == 'Sectores CIIU'",
               checkboxGroupInput("ciiu", "Seleccione Atributos", 
                              choices = c(
                                "Sección" = "Sección",
@@ -587,75 +646,98 @@ tab_infogeneral <- tabItem(
               condition = "input.select_main_base == 'Caracterización Sector'",
               checkboxGroupInput("caract_sector", "Variables Caracterización Sector", 
                              choices = c(
-                               "Tasa de crecimiento 2022" = "Tasa crecimiento 2022",
-                               "Valor agregado 2022" = "Valor agregado 2022",
-                               "Ocu CIIU 2022" = "Ocupados CIIU 2022",
-                               "Ocu Total 2022" = "Ocupados Total 2022"
+                               "Tasa de crecimiento" = "Tasacrecimiento",
+                               "Valor agregado" = "Valoragregado",
+                               "Ocupados CIIU" = "OcupadosCIIU",
+                               "Ocupados Total" = "OcupadosTotal"
                              )
               ),
-              radioButtons(
-                "select_sex_caract", "Sexo",
-                choices = c("Masculino",
-                            "Femenino"
-                ),
-                inline = TRUE
-              ),
-              selectInput("select_dept_brechas", "Departamento",
-                          choices = c(
-                            "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
-                            "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
-                            "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
-                            "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
-                            "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
-                            "Valle del Cauca", "Vaupés", "Vichada"
-                          ),
-                          multiple = FALSE,
-                          selected = "Bogotá D.C.",
-                          width = '120px'
-              ),
-              selectInput("select_year_caract", "Año",
-                          choices = 2015: 2024,
-                          multiple = FALSE,
-                          selected = 2023,
-                          width = '120px'
-              )
+              # radioButtons(
+              #   "select_sex_caract", "Sexo",
+              #   choices = c("Masculino",
+              #               "Femenino"
+              #   ),
+              #   inline = TRUE
+              # ),
+              # selectInput("select_dept_brechas", "Departamento",
+              #             choices = c(
+              #               "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
+              #               "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
+              #               "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
+              #               "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
+              #               "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
+              #               "Valle del Cauca", "Vaupés", "Vichada"
+              #             ),
+              #             multiple = FALSE,
+              #             selected = "Bogotá D.C.",
+              #             width = '120px'
+              # ),
+              # selectInput("select_year_caract", "Año",
+              #             choices = 2015: 2024,
+              #             multiple = FALSE,
+              #             selected = 2023,
+              #             width = '120px'
+              # )
             ),
             conditionalPanel(
               condition = "input.select_main_base == 'Brechas Capital Humano'",
               checkboxGroupInput("brechas_hum", "Variables Brechas Capital Humano", 
                              choices = c(
-                               "Código Ocupación",
-                               "Oferta Educativa",
-                               "Demanda Laboral",
-                               "Prospectiva"
+                               "Brecha de Cantidad Atracción D" = "BQ__Atraccion_D",
+                               "Brechas de Pertinencia Desarticulación D" = "BP__Desarticulacion_D",
+                               "Brecha de Cantidad Déficit D" = "BQ__DeficitP_D",
+                               "Brecha de Cantidad Atracción Ocu" = "BQ__Atraccion_ocu",
+                               "Brechas de Pertinencia Desarticulación Ocu" = "BP__Desarticulacion_ocu",
+                               "Brecha de Cantidad  Déficit Ocu" = "BQ__DeficitP_ocu",
+                               "Denominación CDC" = "DenominacionCDC",
+                               "Brecha de Calidad de Conocimientos D" = "BC__Conocimientos_D",
+                               "Brecha de Calidad de Destreza D" = "BC__destreza_D",
+                               "Brechas de Pertinencia de Conocimientos D" = "BP__Conocimientos_D",
+                               "Brechas de Pertinencia de Destreza D" = "BP__destreza_D",
+                               "Brecha de Cantidad de Programa D" = "BQ__Programa_D",
+                               "Brecha de Cantidad de Atracción de Vacante D" = "BQ__Atraccion_vacanteD",
+                               "Brechas de Pertinencia de Experiencia en Vacante D" = "BP__Experiencia_vacanteD",
+                               "Brecha de Calidad de Competencia en Vacante D" = "BC__Competencia_vacanteD",
+                               "Brecha de Cantidad de Atracciónde Vacante Ocu" = "BQ__Atraccion_vacante_ocu",
+                               "Brechas de Pertinencia de Experiencia en Vacante Ocu" = "BP__Experiencia_vacante_ocu",
+                               "Brecha de Calidad de Competencia en Vacante Ocu" = "BC__Competencia_vacante_ocu",
+                               "Brecha de Calidad de Conocimientos Ocu" = "BC__Conocimientos_ocu" ,
+                               "Brecha de Calidad de Destreza Ocu" = "BC__destreza_ocu",
+                               "Brechas de Pertinencia Conocimientos Ocu" = "BP__Conocimientos_ocu",
+                               "Brecha de Calidad de Destreza Ocu" = "BC__destreza_ocu",
+                               "Brechas de Pertinencia De Conocimientos Ocu" = "BP__Conocimientos_ocu",
+                               "Brechas de Pertinencia de Destreza Ocu" = "BP__destreza_ocu",
+                               "Brecha de Cantidad de Programa Ocu" = "BQ__Programa_ocu",
+                               "Brecha de Cantidad de Atracción Ocu" = "BQ__Atraccion_ocu",
+                               "Brechas de Pertinencia de Desarticulación Ocu" = "BP__Desarticulacion_ocu" 
                              )
-              ),
-              radioButtons(
-                "select_sex_caract", "Sexo",
-                choices = c("Masculino",
-                            "Femenino"
-                ),
-                inline = TRUE
-              ),
-              selectInput("select_dept_brechas", "Departamento",
-                          choices = c(
-                            "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
-                            "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
-                            "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
-                            "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
-                            "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
-                            "Valle del Cauca", "Vaupés", "Vichada"
-                          ),
-                          multiple = FALSE,
-                          selected = "Bogotá D.C.",
-                          width = '120px'
-              ),
-              selectInput("select_year_caract", "Año",
-                          choices = 2015: 2024,
-                          multiple = FALSE,
-                          selected = 2023,
-                          width = '120px'
-              )
+              )#,
+              # radioButtons(
+              #   "select_sex_caract", "Sexo",
+              #   choices = c("Masculino",
+              #               "Femenino"
+              #   ),
+              #   inline = TRUE
+              # ),
+              # selectInput("select_dept_brechas", "Departamento",
+              #             choices = c(
+              #               "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bogotá D.C.", "Bolívar", "Boyacá", 
+              #               "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba", 
+              #               "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena", 
+              #               "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", 
+              #               "Risaralda", "San Andrés y Providencia", "Santander", "Sucre", "Tolima", 
+              #               "Valle del Cauca", "Vaupés", "Vichada"
+              #             ),
+              #             multiple = FALSE,
+              #             selected = "Bogotá D.C.",
+              #             width = '120px'
+              # ),
+              # selectInput("select_year_caract", "Año",
+              #             choices = 2015: 2024,
+              #             multiple = FALSE,
+              #             selected = 2023,
+              #             width = '120px'
+              # )
             ),
             conditionalPanel(
               condition = "input.select_main_base == 'Análisis Funcional'",
@@ -687,7 +769,7 @@ tab_infogeneral <- tabItem(
                                "Profesión regulada"
                              )
               )
-            )
+            ),
             
           ),
           div(class = "fluidrow_clear",
@@ -698,11 +780,21 @@ tab_infogeneral <- tabItem(
                                     )
                        )
                 )
-              )
+              ), 
+          div(
+            style = "height: 200px;"
           ),
-          column(10, 
-                 reactableOutput("main_databases")
-          )
+          box(title = "Descarga el Instructivo",
+                width = 12,
+              tags$p("Obtén información sobre..."),
+              downloadButton("download_pdf", "Descarga PDF",
+                             style="color: #333333; textbackground-color: #FFFFFF; border-color: #2e6da4"
+                             )
+              )
+          )#,
+          # column(10, 
+          #        reactableOutput("main_databases")
+          # )
           
     ),
     fluidRow(
@@ -749,66 +841,118 @@ tab_survey <- tabItem(
                  selectizeInput("survey_variables", "Seleccione",
                                 choices = c(
                                   "Información General",
-                                  "Otros Cargos",
-                                  "Estrategias desarrolladas para el cierre de brechas",
-                                  "Habilidades socioemocionales"
+                                  "Conocimientos",
+                                  "Destrezas",
+                                  "Programas",
+                                  "Brechas",
+                                  "Otros"
                                 )
                  ),
                  conditionalPanel(
                    condition = "input.survey_variables == 'Información General'",
                    checkboxGroupInput("info_general", "Información General", 
                                       choices = c(
-                                        "Actividad económica  principal de la empresa" = "Actividad económica  principal de la empresa",
+                                        "Actividad económica  principal de la empresa" = "Actividadeconómica",
                                         "Departamento" = "Departamento",
-                                        "Tamaño empresa" = "Para determinar el tamaño de la empresa, ¿cuántas personas trabajan actualmente en la empresa?"
+                                        "Tamaño empresa" = "tamanoEmpresa",
+                                        "Código de Área" = "Código_área",
+                                        "Nombre Área Cualificación" = "Nombreáreacualificación"
                                       )
                    )
                  ),
                  conditionalPanel(
-                   condition = "input.survey_variables == 'Otros Cargos'",
-                   checkboxGroupInput("otros_cargos", "Otros Cargos", 
+                   condition = "input.survey_variables == 'Brechas'",
+                   checkboxGroupInput("brechas", "Información General", 
                                       choices = c(
-                                        "¿Cuáles cargos misionales?" = "¿Cuáles cargos misionales?",
-                                        "Cargo misional 1" = "Cargo misional 1:",
-                                        "Cargo misional 2" = "Cargo misional 2:",
-                                        "Cargo misional 3" = "Cargo misional 3:",
-                                        "Cargo misional 4" = "Cargo misional 4:",
-                                        "Cargo misional 5" = "Cargo misional 5:",
-                                        "Cargo misional 6" = "Cargo misional 6:",
-                                        "Cargo misional 7" = "Cargo misional 7:",
-                                        "Cargo misional 8" = "Cargo misional 8:",
-                                        "Cargo misional 9" = "Cargo misional 9:",
-                                        "Cargo misional 10" = "Cargo misional 10:"
+                                        "Brechas de Cantidad Atracción D" = "BQ__Atraccion_D",
+                                        "Brechas de Pertinencia Desarticulación D" = "BP__Desarticulacion_D",
+                                        "Brechas de Cantidad Deficit D" = "BQ__DeficitP_D",
+                                        "Brechas de Cantidad Atracción Ocu" = "BQ__Atraccion_ocu",
+                                        "Brechas de Pertinencia Desarticulación Ocu" = "BP__Desarticulacion_ocu",
+                                        "Brechas de Cantidad Deficit Ocu" = "BQ__DeficitP_ocu",
+                                        "Brechas de Calidad Conocimientos Ocu" = "BC__Conocimientos_D",
+                                        "Brechas de Calidad Destreza D" = "BC__destreza_D",
+                                        "Brechas de Pertinencia Conocimientos D" = "BP__Conocimientos_D",
+                                        "Brechas de Pertinencia Destreza D" = "BP__destreza_D",
+                                        "Brecha de Cantidad Programa D" = "BQ__Programa_D",
+                                        "Brecha de Calidad Conocimientos Ocu" = "BC__Conocimientos_ocu",
+                                        "Brecha de Calidad Destreza Ocu" = "BC__destreza_ocu",
+                                        "Brecha de Calidad Conocimientos Ocu" = "BP__Conocimientos_ocu",
+                                        "Brechas de Pertinencia Destreza Ocu" = "BP__destreza_ocu",
+                                        "Brecha de Cantidad Programa Ocu" = "BQ__Programa_ocu",
+                                        "Brecha de Cantidad Atracción Vacante D" = "BQ__Atraccion_vacanteD",
+                                        "Brechas de Pertinencia experiencia Vacante D" = "BP__Experiencia_vacanteD",
+                                        "Brecha de Calidad Competencia Vacante D" = "BC__Competencia_vacanteD",
+                                        "Brecha de Cantidad Atracción Vacante Ocu" = "BQ__Atraccion_vacante_ocu",
+                                        "Brechas de Pertinencia experiencia Vacante Ocu" = "BP__Experiencia_vacante_ocu",
+                                        "Brecha de Calidad Competencia Vacante Ocu" = "BC__Competencia_vacante_ocu"
                                       )
                    )
                  ),
                  conditionalPanel(
-                   condition = "input.survey_variables == 'Estrategias desarrolladas para el cierre de brechas'",
-                   checkboxGroupInput("estrategias_cierre", "Estrategias desarrolladas para el cierre de brechas", 
+                   condition = "input.survey_variables == 'Conocimientos'",
+                   checkboxGroupInput("conocimientos", "Conocimientos", 
                                       choices = c(
-                                        "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?" = "¿Se involucra usted en el proceso, diseño y/o actualización de los programas de formación necesarios para su actividad productiva?",
-                                        "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?" = "En caso de no conseguir o atraer el personal idóneo para sus cargos vacantes, ¿Qué acción toma?",
-                                        "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:" = "Por favor mencione máximo 5 medios que usted ha utilizado para la búsqueda de personal en su organización:",
-                                        "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)" = "¿Cuáles fueron los motivos por los cuales no logro cubrir todas las vacantes? (máximo 5)"
+                                        "Conocimiento 1" = "Conocimiento1",
+                                        "Conocimiento 2" = "Conocimiento2",
+                                        "Conocimiento 3" = "Conocimiento3",
+                                        "Conocimiento 4" = "Conocimiento4",
+                                        "Conocimiento 5" = "Conocimiento5"
                                       )
                    )
                  ),
                  conditionalPanel(
-                   condition = "input.survey_variables == 'Habilidades socioemocionales'",
-                   checkboxGroupInput("habilidades_socio", "Habilidades socioemocionales", 
+                   condition = "input.survey_variables == 'Destrezas'",
+                   checkboxGroupInput("destrezas", "Destrezas", 
                                       choices = c(
-                                        "¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?" = "1. ¿La misión, visión o alcance social de su empresa define algún tipo de habilidad socioemocional?",
-                                        "¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?" = "2. ¿Cuáles son las habilidades socioemocionales que identifica su empresa como necesarias para el cumplimiento de su rol social?",
-                                        "¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?" = "3. ¿Qué otra habilidad socioemocional usted reconoce como importante en su empresa?",
-                                        "De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?" = "4. De acuerdo al cargo (operativo-directivo) ¿existen diferencias entre las habilidades socioemocionales requeridas para ejercer sus funciones?",
-                                        "¿Cuáles?" = "¿Cuáles?...95",
-                                        "¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?" = "5. ¿Existen diferencias en habilidades socioemocionales requeridas por una persona con mayor o menor experiencia laboral?",
-                                        "¿Cuáles?" = "¿Cuáles?...97",
-                                        "En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?" = "6.  En sus planes o programas de formación internos existen espacios para el desarrollo de habilidades socioemocionales?",
-                                        "¿Cuáles?" = "¿Cuáles?...99"
+                                        "Destreza 1" = "Destreza1",
+                                        "Destreza 2" = "Destreza2",
+                                        "Destreza 3" = "Destreza3",
+                                        "Destreza 4" = "Destreza4",
+                                        "Destreza 5" = "Destreza5"
+                                        )
+                   )
+                 ),
+                 conditionalPanel(
+                   condition = "input.survey_variables == 'Otros'",
+                   checkboxGroupInput("otros", "Otros", 
+                                      choices = c(
+                                        "Razones por las" = "Cuálessonlasrazonesporlas",
+                                        "Nivel educativo requerido" = "Cuáleselniveleducativorequ",
+                                        "Experiencia Mínima" = "CuáleslaExperienciamínimap",
+                                        "Rango Salarial" = "CuáleslaExperienciamínimap",
+                                        "Tipo de Contrato" = "Tipodecontrato",
+                                        "Modalidad del cargo" = "Lamodalidaddelcargoes",
+                                        "Rotación del cargo" = "Quétantarotacióntieneelcar",
+                                        "Tiempo" = "Porfavorindiquecuántotiempo",
+                                        "Cargo Difícil" = "Cargo_Dificil",
+                                        "Código Ocupación CDC" = "CódigoOcupaciónCDC",
+                                        "Ocupación CDC" = "OcupaciónCDC",
+                                        "Área de Desempeño" = "Cuálessuáreadedesempeño",
+                                        "Otra área de Desempeño" = "otherareadesempeno",
+                                        "Actividad Económica" = "Actividadeconómica",
+                                        "Otras Actividades Económicas" = "otheractivideconomicas",
+                                        "Cargos de difícil Consecución" = "CargosDificilC",
+                                        "Diseño de Programas" = "disenoprogramas",
+                                        "Acción Vacante" = "accionvacante",
+                                        "Medios de búsqueda" = "mediosbusqueda",
+                                        "Motivos No Vacante" = "motivosNovacante",
+                                        "Tiene Habilidades Emocionales" = "tienehabSocioemocionales",
+                                        "Habilidades Socioemocionales" = "habSocioemocionales"
                                         )
                                       )
+                   ),
+                 conditionalPanel(
+                   condition = "input.survey_variables == 'Programas'",
+                   checkboxGroupInput("programas", "Programas", 
+                                      choices = c(
+                                        "Programas son" = "ProgramasSon",
+                                        "Programa 1" = "Programa1",
+                                        "Programa 2" = "Programa2",
+                                        "Programa 3" = "Programa3"
+                                      )
                    )
+                 )
                  ),
              div(class = "fluidrow_clear",
                  fluidRow(

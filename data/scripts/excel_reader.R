@@ -2,6 +2,8 @@ library(readxl)
 library(tidyverse)
 library(RSQLite)
 library(stringi)
+library(haven)
+
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
@@ -9,29 +11,42 @@ con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 
 # Read updated tables -----------------------------------------------------
 
-# Read and write BaseFinal (consolidate base)
-fact_table <- read_xls("data/input/bases/BaseFinal.xls") %>% as_tibble()
+# # Read and write BaseFinal (consolidate base)
+
+# fact_table <- read_xls("data/input/bases/BaseFinal2.xls")
+# 
+# column_types <- (sapply(fact_table , class))
+# column_types[["Tasacrecimiento"]] <- "numeric"
+# column_types[["Ocupados Total"]] <- "numeric"
+# column_types[["Ocupados CIIU"]] <- "numeric"
+# column_types[["Valor agregado"]] <- "numeric"
+
+fact_table <- read_dta("data/input/bases/BaseFinal2.dta") %>% as_tibble()
 dbWriteTable(con, "fact_table", fact_table , overwrite = T)
 
-# Read and write CIIU table to database
-ciiu_table <- read_xls("data/input/bases/Sector.xls") %>% as_tibble()
-dbWriteTable(con, "CIIU", ciiu_table , overwrite = T)
+# # Read and write CIIU table to database
+# ciiu_table <- read_xls("data/input/bases/Sector.xls") %>% as_tibble()
+# dbWriteTable(con, "CIIU", ciiu_table , overwrite = T)
 
-# Read and write CINE table to database
-cine_table <- read_xls("data/input/bases/CINE.xls") %>% as_tibble()
-dbWriteTable(con, "CINE", cine_table, overwrite = T)
+# # Read and write CINE table to database
+# cine_table <- read_xls("data/input/bases/CINE.xls") %>% as_tibble()
+# dbWriteTable(con, "CINE", cine_table, overwrite = T)
 
-# Read and write CUOC table to database
-cuoc_table <- read_xls("data/input/bases/CUOC.xls") %>% as_tibble()
-dbWriteTable(con, "CUOC", cuoc_table , overwrite = T)
+# # Read and write CUOC table to database
+# cuoc_table <- read_xls("data/input/bases/CUOC.xls") %>% as_tibble()
+# dbWriteTable(con, "CUOC", cuoc_table , overwrite = T)
 
-# Read and write AREAS table to database
-areas_table <- read_xls("data/input/bases/AreasCualificacion.xls") %>% as_tibble()
-dbWriteTable(con, "areas_table", areas_table, overwrite = T)
+# Read and write CUOCV2 table to database
+# cuoc_table <- read_excel("data/input/bases/CUOCV2.xlsx") %>% as_tibble()
+# dbWriteTable(con, "CUOC", cuoc_table , overwrite = T)
 
-# Read and write CARACTERIZACIÓN table to database
-caract_table <- read_xls("data/input/bases/CARACTERIZACION.xls") %>% as_tibble()
-dbWriteTable(con, "Caract_table", caract_table, overwrite = T)
+# # Read and write AREAS table to database
+# areas_table <- read_xls("data/input/bases/AreasCualificacion.xls") %>% as_tibble()
+# dbWriteTable(con, "areas_table", areas_table, overwrite = T)
+
+# # Read and write CARACTERIZACIÓN table to database
+# caract_table <- read_xls("data/input/bases/CARACTERIZACION.xls") %>% as_tibble()
+# dbWriteTable(con, "Caract_table", caract_table, overwrite = T)
 
 
 # 

@@ -8,12 +8,16 @@ library(reactable)
 library(jsonlite)
 library(readxl)
 library(ggthemes) 
+library(haven)
 
 # Allow to create world clouds
 library(tm)
 library(wordcloud2)
+library(wordcloud)
 library(memoise)
 
+# Write databases
+source("data/scripts/excel_reader.R")
 
 # load the kobo.R file
 source("kobo.R")
@@ -25,6 +29,18 @@ base_descriptivas = read_excel("data/input/bases/Base1Descriptivas.xls")
 base_socioemocionales = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Socioemocionales")
 base_conocimientos = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Conocimientos")
 base_destrezas = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Destrezas")
+base_misionales = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "OtroCMisionales")
+base_medios = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "MediosBusqueda")
+base_motivos = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "MotivosNOVacante")
+
+# Load Caracterización Tables
+base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados")
+base_OcupadosCIIU <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por división CIIU")
+base_OcupadosEdadSexo <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por edad y sexo")
+base_OcupadosNivelEdu <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por Nivel edu")
+
+# Load SPE tables
+DemandaSPE <- read_dta("data/input/bases/DemandaSPE.dta")
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
@@ -32,13 +48,18 @@ con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
 # Read areas table from database
 areas_cualificacion <- dbReadTable(con, "areas_cualificacion")
 
-# Open facts table
-main_bases <- dbReadTable(con, "fact_table")
-colnames(main_bases) <- gsub("\\.", " ", colnames(main_bases))
-print(colnames(main_bases))
+# Read CUOC table
+cuoc_table_ <- read_excel("data/input/bases/CUOC.xls")
 
-  # readxl::read_xls("data/input/bases/BaseFinal.xls", guess_max = 2021) %>% 
-  # slice(c(2021:5000)) %>% as.tibble() 
+# Open facts table nd modifie variables
+main_bases <- dbReadTable(con, "fact_table")
+main_bases <- main_bases %>%
+  mutate(Tasacrecimiento = round(Tasacrecimiento, 2),
+                      Valoragregado = round(Valoragregado, 2),
+                      OcupadosCIIU = round(OcupadosCIIU, 2),
+                      OcupadosTotal = round(OcupadosTotal, 2),
+)
+
 
 shinyServer(function(input, output, session) {
 
@@ -74,6 +95,7 @@ shinyServer(function(input, output, session) {
         output$select_area_catalog <- renderUI({
           selectizeInput("select_area_catalog_", "Seleccione Área:",
                          choices = areas_cualificacion$nombre_area,
+                         selected = "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
                          multiple = T
                          )
         })
@@ -146,7 +168,7 @@ shinyServer(function(input, output, session) {
         
         output$table_CUOC <- renderReactable({
           sql_template <- "
-              SELECT \"Código_área\" AS codigo_area, COUNT(\"Código\") AS Denominacion
+              SELECT \"Código_área\" AS codigo_area, COUNT(\"Código denominaciones\") AS Denominacion
               FROM CUOC
               WHERE \"Nombre área cualificación\" IN (%s)
               GROUP BY \"Código_área\"
@@ -160,7 +182,7 @@ shinyServer(function(input, output, session) {
         # Deploy CUOC plots -------------------------------------------------------------
         output$CUOC_plot <- renderPlot({
           sql_template <- "
-              SELECT \"Código_área\" AS codigo_area, COUNT(\"Código\") AS denominacion
+              SELECT \"Código_área\" AS codigo_area, COUNT(\"Código Ocupación\") AS denominacion
               FROM CUOC
               WHERE \"Nombre área cualificación\" IN (%s)
               GROUP BY \"Código_área\"
@@ -257,8 +279,15 @@ shinyServer(function(input, output, session) {
         
         # Deploy selectizeinput object
         output$select_area_catalog_2 <- renderUI({
+          choices <- setNames(names(base_socioemocionales)[2:6], c("ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                                                                   "AGROPECUARIO, SILVICULTURA, PESCA, ACUICULTURA Y VETERINARIA",
+                                                                   "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
+                                                                   "CONSERVACIÓN, PROTECCIÓN Y SANEAMIENTO AMBIENTAL",
+                                                                   "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
+                              )
+          
           selectizeInput("select_area_catalog_2", "Seleccione área de cualificación",
-                         choices = names(base_socioemocionales)[2:6],
+                         choices = choices,
                          multiple = F
           )
         })
@@ -276,7 +305,7 @@ shinyServer(function(input, output, session) {
               aes(x = `Habilidades Socioemocionales`,
                   y = !!sym(selected_column),
                   fill = `Habilidades Socioemocionales`
-                    )
+              )
             ) +
             geom_text(aes(
               x = `Habilidades Socioemocionales`,
@@ -305,9 +334,10 @@ shinyServer(function(input, output, session) {
           base_socioemocionales %>%
             dplyr::select(`Habilidades Socioemocionales`, selected_column) %>% 
             arrange(desc(!!sym(selected_column))) %>% 
-            wordcloud2a(size = 1, color = "random-dark", rotateRatio = 0)
+            head(7) %>%
+            wordcloud2a(size = 0.2, color = "random-dark", rotateRatio = 0, widgetsize = 100)
         })
-        
+
         # Deploy conocimientos plots -------------------------------------------------------------
         output$conocimientos <- renderPlot({
           selected_column <- input$select_area_catalog_2
@@ -324,14 +354,14 @@ shinyServer(function(input, output, session) {
                   fill = `Conocimiento`
               )
             ) +
-            # geom_text(aes(
-            #   x = `Conocimiento`,
-            #   y = selected_column,
-            #   label = selected_column,
-            #   color = `Conocimiento`),
-            #   vjust = -0.5,
-            #   size = 8,
-            #   fontface = "bold") +
+            geom_text(aes(
+              x = `Conocimiento`,
+              y = `total`,
+              label = `total`,
+              color = `Conocimiento`),
+              vjust = -0.5,
+              size = 8,
+              fontface = "bold") +
             labs(
               # title = "Acumulado de conocimientos por área de cualificación",
               caption = NULL,
@@ -339,7 +369,7 @@ shinyServer(function(input, output, session) {
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
-              limits = c(0, 34)
+              limits = c(0, 50)
             ) +
             theme_few() +
             theme(text = element_text(size = 15)) +
@@ -351,8 +381,11 @@ shinyServer(function(input, output, session) {
           base_conocimientos %>% group_by(`Código_área`, `Conocimiento`) %>%
             summarise(total = sum(`Frecuencia`)) %>%
             filter(`Código_área` %in% selected_column) %>% 
-            as.data.frame() %>% dplyr::select(`Conocimiento`, `total`) %>%
-            wordcloud2a(size = 1, color = "random-dark", rotateRatio = 0)
+            as.data.frame() %>%
+            arrange(desc(`total`)) %>%
+            head(5) %>%
+            dplyr::select(`Conocimiento`, `total`) %>%
+            wordcloud2a(size = 0.2, color = "random-dark", rotateRatio = 0, widgetsize = 100)
         })
         
         
@@ -372,22 +405,24 @@ shinyServer(function(input, output, session) {
                   fill = `destreza`
               )
             ) +
-            # geom_text(aes(
-            #   x = `Conocimiento`,
-            #   y = selected_column,
-            #   label = selected_column,
-            #   color = `Conocimiento`),
-            #   vjust = -0.5,
-            #   size = 8,
-            #   fontface = "bold") +
+            geom_text(aes(
+              x = `destreza`,
+              y = `total`,
+              label = `total`,
+              color = `destreza`),
+              vjust = -0.5,
+              show.legend = FALSE,
+              size = 8,
+              fontface = "bold") +
             labs(
-              # title = "Acumulado de conocimientos por área de cualificación",
+              fill = "Destreza",
               caption = NULL,
               y = "Acumulado de destrezas",
+              x = "Destrezas"
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
-              limits = c(0, 34)
+              limits = c(0, 64)
             ) +
             theme_few() +
             theme(text = element_text(size = 15)) +
@@ -399,15 +434,119 @@ shinyServer(function(input, output, session) {
           base_destrezas %>% group_by(`Código_área`, `destreza`) %>%
             summarise(total = sum(`Frecuencia`)) %>%
             filter(`Código_área` %in% selected_column) %>% 
-            as.data.frame() %>% dplyr::select(`destreza`, `total`) %>%
-            wordcloud2a(size = 1, color = "random-dark", rotateRatio = 0)
+            as.data.frame() %>% 
+            arrange(desc(`total`)) %>%
+            head(5) %>%
+            dplyr::select(`destreza`, `total`) %>%
+            wordcloud2a(size = 0.2, color = "random-dark", rotateRatio = 0, widgetsize = 100)
+        })
+        
+        
+        # -------------------------------------------------
+        # Deploy selectizeinput object 5
+        output$select_area_catalog_5 <- renderUI({
+          choices <- setNames(names(base_socioemocionales)[2:6], c("ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                                                                   "AGROPECUARIO, SILVICULTURA, PESCA, ACUICULTURA Y VETERINARIA",
+                                                                   "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
+                                                                   "CONSERVACIÓN, PROTECCIÓN Y SANEAMIENTO AMBIENTAL",
+                                                                   "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
+          )
+          selectizeInput("select_area_catalog_5", "Seleccione Área:",
+                         choices = choices,
+                         multiple = F
+          )
+        })
+        
+        # Observe to event clear button 5
+        observeEvent(input$clear_areas_5, {
+          updateSelectizeInput(session, "select_area_catalog_5", selected = character(0))
+        })
+        
+        # Deploy Medios de búsqueda plots -------------------------------------------------------------
+        output$medios <- renderPlot({
+          selected_column <- input$select_area_catalog_5
+          
+          base_medios %>%
+            dplyr::select(`Medios de busqueda de personal`, !!sym(selected_column)) %>% 
+            arrange(desc(!!sym(selected_column))) %>% 
+            head(5) %>%
+            ggplot() +
+            geom_col(
+              aes(x = `Medios de busqueda de personal`,
+                  y = !!sym(selected_column),
+                  fill = `Medios de busqueda de personal`
+              )
+            ) +
+            geom_text(aes(
+              x = `Medios de busqueda de personal`,
+              y = !!sym(selected_column),
+              label = !!sym(selected_column),
+              color = `Medios de busqueda de personal`),
+              vjust = -0.5,
+              size = 8,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              y = "Acumulado de medios de búsqueda",
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 30)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)
+            ) +
+            scale_x_discrete(labels = NULL)
+        })
+        
+        # Deploy Motivos No Vacatnte plots -------------------------------------------------------------
+        output$motivosNovacante <- renderPlot({
+          selected_column <- input$select_area_catalog_5
+          base_motivos %>%
+            dplyr::select(`Motivos no se cubrió la vacante`, !!sym(selected_column)) %>% 
+            arrange(desc(!!sym(selected_column))) %>% 
+            head(5) %>%
+            ggplot() +
+            geom_col(
+              aes(x = `Motivos no se cubrió la vacante`,
+                  y = !!sym(selected_column),
+                  fill = `Motivos no se cubrió la vacante`
+              )
+            ) +
+            geom_text(aes(
+              x = `Motivos no se cubrió la vacante`,
+              y = !!sym(selected_column),
+              label = !!sym(selected_column),
+              color = `Motivos no se cubrió la vacante`),
+              vjust = -0.5,
+              size = 8,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              y = "Acumulado de medios de motivos",
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 30)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)
+            ) +
+            scale_x_discrete(labels = NULL)
         })
 
 ############################################ PLOTS DESCRIPTIVAS ###########################################
-        # Deploy selectizeinput object
+        # Deploy selectizeinput object 3
         output$select_area_catalog_3 <- renderUI({
+          choices <- setNames(names(base_socioemocionales)[2:6], c("ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                                                                   "AGROPECUARIO, SILVICULTURA, PESCA, ACUICULTURA Y VETERINARIA",
+                                                                   "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
+                                                                   "CONSERVACIÓN, PROTECCIÓN Y SANEAMIENTO AMBIENTAL",
+                                                                   "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
+          )
           selectizeInput("select_area_catalog_3", "Seleccione Área:",
-                         choices = names(table(base_descriptivas$`Código_área`)),
+                         choices = choices,
+                         selected = "AFIR",
                          multiple = T
           )
         })
@@ -416,6 +555,27 @@ shinyServer(function(input, output, session) {
         observeEvent(input$clear_areas_3, {
           updateSelectizeInput(session, "select_area_catalog_3", selected = character(0))
         })
+        
+                                 # -------------------------------------------------
+        # Deploy selectizeinput object 4
+        output$select_area_catalog_4 <- renderUI({
+          choices <- setNames(names(base_socioemocionales)[2:6], c("ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                                                                   "AGROPECUARIO, SILVICULTURA, PESCA, ACUICULTURA Y VETERINARIA",
+                                                                   "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
+                                                                   "CONSERVACIÓN, PROTECCIÓN Y SANEAMIENTO AMBIENTAL",
+                                                                   "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
+          )
+          selectizeInput("select_area_catalog_4", "Seleccione Área:",
+                         choices = choices,
+                         multiple = T
+          )
+        })
+        
+        # Observe to event clear button 4
+        observeEvent(input$clear_areas_4, {
+          updateSelectizeInput(session, "select_area_catalog_4", selected = character(0))
+        })
+
         
 # -----------------Descriptivas área de desempeño
         output$descriptivas_area <- renderPlot({
@@ -442,11 +602,11 @@ shinyServer(function(input, output, session) {
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
-              limits = c(0, 40)
+              limits = c(0, 86)
             ) +
             theme_few() +
             theme(text = element_text(size = 15)
-            ) 
+            )
         })
 
 # -----------------Descriptivas tamaño empresa
@@ -512,7 +672,214 @@ shinyServer(function(input, output, session) {
             theme(text = element_text(size = 15)
             )
         })
-
+        
+        # -----------------Descriptivas Departamentos
+        output$departamentos <- renderPlot({
+          base_descriptivas %>% dplyr::select(`Código_área`, `Departamento`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3) %>%
+            group_by(`Departamento`) %>% count(`Departamento`) %>%
+            ggplot() +
+            geom_col(aes(
+              x = `Departamento`,
+              y = `n`,
+              fill = as.character(`Departamento`))) +
+            geom_text(aes(
+              x = `Departamento`,
+              y = `n`,
+              label = `n`,
+              color = `Departamento`),
+              vjust = -0.5,
+              size = 8,
+              show.legend = FALSE,
+              fontface = "bold") +
+            labs(
+              # title = "Número de actividades económicas por área de cualificación",
+              y = "Acumulado de empresas",
+              fill = "Cargos de difícil consecución"
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 61)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15)
+            )
+        }) 
+########################################## BASES CARACTERIZACIÓN ##########################################
+        
+  ####################### TASA OCUPADOS
+        output$base_TasaOcupados <- renderReactable(
+          base_TasaOcupados %>% select(
+            input$caract_TasaOcu_areaCual_,
+            input$caract_TasaOcu_eduAno_,
+            input$caract_TasaOcu_indices_
+          ) %>% reactable(
+            filterable = TRUE, minRows = 10
+          )
+        )
+        # Clear Button
+        observeEvent(input$clear_baseTasaOcupados, {
+          updateSelectizeInput(session, "caract_TasaOcu_areaCual_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_baseTasaOcupados, {
+          updateSelectizeInput(session, "caract_TasaOcu_eduAno_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_baseTasaOcupados, {
+          updateSelectizeInput(session, "caract_TasaOcu_indices_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_tasa_ocupados <- downloadHandler(
+          filename = function(){"Ocupados_departamentos.csv"},
+          content = function(file){
+            write.csv2(base_TasaOcupados %>% select(
+              input$caract_TasaOcu_areaCual_,
+              input$caract_TasaOcu_eduAno_,
+              input$caract_TasaOcu_indices_
+            ),
+            file,
+            row.names = T,
+            # fileEncoding = "ASCII"
+            )
+          }
+        )
+        
+  ####################### OCUPADOS CIIU
+        output$base_ocupadosCIIU <- renderReactable(
+          base_OcupadosCIIU %>% select(
+            input$caract_ocuCIIU_areaCual_,
+            input$caract_ocuCIIU_Ano_,
+            input$caract_ocuCIIU_indices_
+          ) %>% reactable(
+            filterable = TRUE, minRows = 10
+          )
+        )
+        
+        # Clear Button
+        observeEvent(input$clear_ocupadosCIIU, {
+          updateSelectizeInput(session, "caract_ocuCIIU_areaCual_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_ocupadosCIIU, {
+          updateSelectizeInput(session, "caract_ocuCIIU_Ano_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_ocupadosCIIU, {
+          updateSelectizeInput(session, "caract_ocuCIIU_indices_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_ocupados_CIIU <- downloadHandler(
+          filename = function(){"Ocupados_SectoresCIIU.csv"},
+          content = function(file){
+            write.csv2(base_OcupadosCIIU %>% select(
+              input$caract_ocuCIIU_areaCual_,
+              input$caract_ocuCIIU_Ano_,
+              input$caract_ocuCIIU_indices_
+            ),
+            file,
+            row.names = T,
+            # fileEncoding = "ASCII"
+            )
+          }
+        )
+        
+  ####################### OCUPADOS EDAD Y SEXO
+        output$base_ocupadosEdadSexo <- renderReactable(
+          base_OcupadosEdadSexo %>% select(
+            input$caract_ocuEdadSexo_areaCual_,
+            input$caract_ocuEdadSexo_Ano_,
+            input$caract_ocuEdadSexo_Edad_,
+            input$caract_ocuEdadSexo_indices_
+          ) %>% reactable(
+            filterable = TRUE, minRows = 10
+          )
+        )
+        
+        # Clear Button
+        observeEvent(input$clear_ocupadosEdadSexo, {
+          updateSelectizeInput(session, "caract_ocuEdadSexo_areaCual_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_ocupadosEdadSexo, {
+          updateSelectizeInput(session, "caract_ocuEdadSexo_Ano_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_ocupadosEdadSexo, {
+          updateSelectizeInput(session, "caract_ocuEdadSexo_Edad_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_ocupadosEdadSexo, {
+          updateSelectizeInput(session, "caract_ocuEdadSexo_indices_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_ocupadosEdadySexo <- downloadHandler(
+          filename = function(){"Ocupados_EdadySexo.csv"},
+          content = function(file){
+            write.csv2(base_OcupadosEdadSexo %>% select(
+              input$caract_ocuEdadSexo_areaCual_,
+              input$caract_ocuEdadSexo_Ano_,
+              input$caract_ocuEdadSexo_Edad_,
+              input$caract_ocuEdadSexo_indices_
+            ),
+            file,
+            row.names = T,
+            # fileEncoding = "ASCII"
+            )
+          }
+        )
+        
+  ####################### OCUPADOS NIVEL EDUCATIVO
+        output$base_ocupadosNivelEdu <- renderReactable(
+          base_OcupadosNivelEdu %>% select(
+            input$caract_OcuNivelEdu_areaCual_,
+            input$caract_OcuNivelEdu_Ano_,
+            input$caract_OcuNivelEdu_indices_
+          ) %>% reactable(
+            filterable = TRUE, minRows = 10
+          )
+        )
+        
+        # Clear Button
+        observeEvent(input$clear_NivelEdu, {
+          updateSelectizeInput(session, "caract_OcuNivelEdu_areaCual_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_NivelEdu, {
+          updateSelectizeInput(session, "caract_OcuNivelEdu_areaCual_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_NivelEdu, {
+          updateSelectizeInput(session, "caract_OcuNivelEdu_areaCual_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_Ocu_NivelEdu <- downloadHandler(
+          filename = function(){"Ocupados_NivelEducativo.csv"},
+          content = function(file){
+            write.csv2(base_OcupadosNivelEdu %>% select(
+              input$caract_OcuNivelEdu_areaCual_,
+              input$caract_OcuNivelEdu_Ano_,
+              input$caract_OcuNivelEdu_indices_
+            ),
+            file,
+            row.names = T,
+            # fileEncoding = "ASCII"
+            )
+          }
+        )
+######################################### INFORMACIÓN DEMANDA ###################################################
+        output$base_demandaSPE <- renderReactable(
+          DemandaSPE %>% select(
+            input$caract_OtrasFuentes_SPE_otros_,
+            input$caract_OtrasFuentes_SPE_Areas_
+          ) %>% reactable(
+            filterable = TRUE, minRows = 10
+          )
+        )
 ###########################################################################################################
         output$selected_row_details <- renderText({
             selected <- getReactableState("areas_catalog", "selected")
@@ -554,11 +921,13 @@ shinyServer(function(input, output, session) {
 
         output$survey_table <- renderReactable(
             datos %>%
-            select("Seleccione el área de cualificación para la cual esta realizando la entrevista.",
+            select(
                    c(input$info_general,
-                   input$otros_cargos, 
-                   input$estrategias_cierre,
-                   input$habilidades_socio)
+                     input$brechas,
+                     input$otros, 
+                     input$destrezas,
+                     input$conocimientos,
+                     input$programas)
                    ) %>%
             reactable(
                 filterable = TRUE, minRows = 10
@@ -570,15 +939,19 @@ shinyServer(function(input, output, session) {
         })
         
         observeEvent(input$clear_survey, {
-          updateSelectizeInput(session, "otros_cargos", selected = character(0))
+          updateSelectizeInput(session, "otros", selected = character(0))
         })
         
         observeEvent(input$clear_survey, {
-          updateSelectizeInput(session, "estrategias_cierre", selected = character(0))
+          updateSelectizeInput(session, "destrezas", selected = character(0))
         })
         
         observeEvent(input$clear_survey, {
-          updateSelectizeInput(session, "habilidades_socio", selected = character(0))
+          updateSelectizeInput(session, "conocimientos", selected = character(0))
+        })
+        
+        observeEvent(input$clear_survey, {
+          updateSelectizeInput(session, "programas", selected = character(0))
         })
         
         # Download button of survey table
@@ -586,36 +959,42 @@ shinyServer(function(input, output, session) {
           filename = function(){"encuesta_filtrada.csv"},
           content = function(file){
             write.csv2(datos %>% select(
-                                      "Seleccione el área de cualificación para la cual esta realizando la entrevista.",
                                       c(input$info_general,
-                                        input$otros_cargos, 
-                                        input$estrategias_cierre,
-                                        input$habilidades_socio)
-            ), file, row.names = T, fileEncoding = "ASCII")
+                                        input$otros,
+                                        input$destrezas,
+                                        input$conocimientos,
+                                        input$programas
+                                        )
+            ),
+            file,
+            row.names = T,
+            # fileEncoding = "ASCII"
+            )
           }
         )
+  
 
 
 # Switch tabs using images in Catalogo tab --------------------------------
 
         observeEvent(input$artes_button, {
-          updateTabItems(session, "tabs", selected = "infogeneral")
+          updateTabItems(session, "tabs", selected = "bases_oficiales")
         })
         
         observeEvent(input$fisicas_button, {
-          updateTabItems(session, "tabs", selected = "infogeneral")
+          updateTabItems(session, "tabs", selected = "bases_oficiales")
         })
         
         observeEvent(input$agropecuarias_button, {
-          updateTabItems(session, "tabs", selected = "infogeneral")
+          updateTabItems(session, "tabs", selected = "bases_oficiales")
         })
         
         observeEvent(input$alimentos_button, {
-          updateTabItems(session, "tabs", selected = "infogeneral")
+          updateTabItems(session, "tabs", selected = "bases_oficiales")
         })
         
         observeEvent(input$conservacion_button, {
-          updateTabItems(session, "tabs", selected = "infogeneral")
+          updateTabItems(session, "tabs", selected = "bases_oficiales")
         })
         
 
@@ -630,7 +1009,8 @@ shinyServer(function(input, output, session) {
                      input$denominacion_cuoc,
                      input$cine,
                      input$ciiu,
-                     input$caract_sector
+                     input$caract_sector,
+                     input$brechas_hum
                    )
             ) %>% distinct() %>%
             reactable(
@@ -644,15 +1024,21 @@ shinyServer(function(input, output, session) {
         output$download_csv <- downloadHandler(
           filename = function(){"datos_consolidados.csv"},
           content = function(file){
-            write.csv2(main_bases %>% select("Ocupación",
-                                            c(
-                                              input$area_cualificacion,
-                                              input$denominacion_cuoc,
-                                              input$cine,
-                                              input$ciiu
-                                            )
-              
-            ), file, row.names = T, fileEncoding = "ASCII")
+            write.csv2(main_bases %>%
+                         select( 
+                           c(
+                             input$area_cualificacion,
+                             input$denominacion_cuoc,
+                             input$cine,
+                             input$ciiu,
+                             input$caract_sector,
+                             input$brechas_hum
+                             )
+                           ),
+            file,
+            row.names = T#,
+            # fileEncoding = "ASCII"
+            )
           }
         )
         
