@@ -24,7 +24,10 @@ dashboard_sidebar <- dashboardSidebar(
                  icon = icon("question-circle"), startExpanded = FALSE,
                  menuSubItem("Información Demanda SPE",
                           tabName = "demandaSPE"
-                          )
+                          ),
+                 menuSubItem("Oferta SNIES",
+                             tabName = "info_snies"
+                             )
                  ),
         menuItem("Estadísticas Áreas MNC",
                  icon = icon("pencil"), startExpanded = FALSE,

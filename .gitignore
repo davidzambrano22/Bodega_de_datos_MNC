@@ -13,3 +13,7 @@ data/input
 
 # Useless data
 docs/
+
+#Database
+data/db/mnc-relational.db
+

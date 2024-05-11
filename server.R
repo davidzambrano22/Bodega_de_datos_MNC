@@ -34,13 +34,32 @@ base_medios = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Medi
 base_motivos = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "MotivosNOVacante")
 
 # Load Caracterización Tables
-base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados")
-base_OcupadosCIIU <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por división CIIU")
-base_OcupadosEdadSexo <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por edad y sexo")
-base_OcupadosNivelEdu <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por Nivel edu")
+base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados") %>%
+  mutate(
+    `Ocupados` = round(`Ocupados`, 2),
+    `Tasa de ocupados` = round(`Tasa de ocupados`, 2)
+  )
+base_OcupadosCIIU <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por división CIIU") %>%
+  mutate(
+    `Ocupados` = round(`Ocupados`, 2),
+    `Proporción ocupados` = round(`Proporción ocupados`, 2)
+  )
+base_OcupadosEdadSexo <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por edad y sexo") %>%
+  mutate(
+    `Ocupados Hombres` = round(`Ocupados Hombres`, 2),
+    `Ocupados Mujeres` = round(`Ocupados Hombres`, 2),
+    `%Hombres` = round(`%Hombres`, 2),
+    `% Mujeres` = round(`% Mujeres`, 2)
+  )
+base_OcupadosNivelEdu <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por Nivel edu") %>%
+  mutate(
+    `Ocupados` = round(`Ocupados`, 2),
+    `% Ocupados` = round(`% Ocupados`, 2)
+  )
 
 # Load SPE tables
 DemandaSPE <- read_dta("data/input/bases/DemandaSPE.dta")
+base_OfertaSNIES <- read_excel("data/input/bases/InformacionSNIES.xlsx")
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
@@ -871,15 +890,88 @@ shinyServer(function(input, output, session) {
             )
           }
         )
-######################################### INFORMACIÓN DEMANDA ###################################################
+######################################### OTRAS FUENTES DE INFORMACIÓN ###################################################
+        
+  ####################### INFORMACIÓN DEMANDA SPE
         output$base_demandaSPE <- renderReactable(
           DemandaSPE %>% select(
             input$caract_OtrasFuentes_SPE_otros_,
+            input$caract_OtrasFuentes_SPE_generales_,
             input$caract_OtrasFuentes_SPE_Areas_
           ) %>% reactable(
             filterable = TRUE, minRows = 10
           )
         )
+        
+        # Clear Button
+        observeEvent(input$clear_SPE, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_SPE_otros_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_SPE, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_SPE_generales_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_SPE, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_SPE_Areas_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_SPE <- downloadHandler(
+          filename = function(){"InformaciónDemandaSPE.csv"},
+          content = function(file){
+            write.csv2(DemandaSPE %>% select(
+              input$caract_OtrasFuentes_SPE_otros_,
+              input$caract_OtrasFuentes_SPE_generales_,
+              input$caract_OtrasFuentes_SPE_Areas_
+            ),
+            file,
+            row.names = T,
+            # fileEncoding = "ASCII"
+            )
+          }
+        )
+        
+  ####################### INFORMACIÓN OFERTA SNIES
+        output$base_OfertaSNIES <- renderReactable(
+          base_OfertaSNIES %>% select(
+            input$caract_OtrasFuentes_snies_Areas_,
+            input$caract_OtrasFuentes_snies_programa_,
+            input$caract_OtrasFuentes_snies_general_
+          ) %>% reactable(
+            filterable = TRUE, minRows = 10
+          )
+        )
+        
+        # Clear Button
+        observeEvent(input$clear_snies, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_snies_Areas_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_snies, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_snies_programa_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_snies, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_snies_general_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_snies <- downloadHandler(
+          filename = function(){"InformaciónDemandaSPE.csv"},
+          content = function(file){
+            write.csv2(base_OfertaSNIES %>% select(
+              input$caract_OtrasFuentes_snies_Areas_,
+              input$caract_OtrasFuentes_snies_programa_,
+              input$caract_OtrasFuentes_snies_general_
+            ),
+            file,
+            row.names = T,
+            # fileEncoding = "ASCII"
+            )
+          }
+        )
+        
 ###########################################################################################################
         output$selected_row_details <- renderText({
             selected <- getReactableState("areas_catalog", "selected")

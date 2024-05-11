@@ -28,7 +28,7 @@ source("dashboard/ui/dashboard_AnalisisCompetencias.R")
 source("dashboard/ui/Informacion_etapa/contex_sector/dashboard_ContextSector.R")
 
 # Otras Fuentes de Información
-source("dashboard/ui/otras_fuentes/info_demandaSPE/dashboard_demandaSPE.R")
+source("dashboard/ui/otras_fuentes/dashboard_otras_fuentes.R")
 
 ui <- shinyUI(
     dashboardPage(
@@ -51,7 +51,8 @@ ui <- shinyUI(
                 tab_OcupadosCIIU,
                 tab_Ocupados_EdadSexo,
                 tab_Ocupados_NivelEdu,
-                tab_demandaSPE
+                tab_demandaSPE,
+                tab_infoSNIES
             )
         )
     )
