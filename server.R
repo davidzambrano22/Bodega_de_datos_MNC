@@ -1190,5 +1190,14 @@ shinyServer(function(input, output, session) {
         observeEvent(input$clear_bases, {
           updateSelectizeInput(session, "estructura_cualificacion", selected = character(0))
         })
+        
+        
+        # toggle sidebar
+        observeEvent(input$showSidebar, {
+          shinyjs::show(id = "sidebar")
+        })
+        observeEvent(input$hideSidebar, {
+          shinyjs::toggle(id = "sidebar")
+        })
 
 })

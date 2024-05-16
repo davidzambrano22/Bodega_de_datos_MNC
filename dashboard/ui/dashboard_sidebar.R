@@ -1,8 +1,9 @@
 
 
 dashboard_sidebar <- dashboardSidebar(
+    width = 276,
     sidebarMenu(
-        id = "tabs",
+        id = "Sidebar",
         menuItem("Inicio",
             tabName = "home", icon = icon("home")),
         menuItem("Áreas de Cualificación",
@@ -31,13 +32,35 @@ dashboard_sidebar <- dashboardSidebar(
                  ),
         menuItem("Estadísticas Áreas MNC",
                  icon = icon("pencil"), startExpanded = FALSE,
-                 menuSubItem(
+                 menuItem(
                    "Información General",
-                   tabName = "est_area_cual"
+                   menuSubItem(
+                     "Áreas de Cualificación",
+                     tabName = "est_area_cual"
                    ),
-                 menuSubItem(
+                   menuSubItem(
+                     "Áreas de Desempeño",
+                     tabName = "est_areasDesempeño"
+                   ),
+                   menuSubItem(
+                     "Departamentos"
+                   ),
+                   menuSubItem(
+                     "Tamaño de la Empresa"
+                   )
+                 ),
+                 menuItem(
                    "Estadísticas Encuesta Demanda",
-                   tabName = "est_enc_dem"
+                   menuSubItem(
+                     "Departamentos",
+                     tabName = "est_enc_dem"
+                   ),
+                   menuSubItem(
+                     "Tamaño de la empresa"
+                   ),
+                   menuSubItem(
+                     ""
+                   )
                    ),
                  menuSubItem(
                    "Análisis de compentencias",
@@ -45,4 +68,4 @@ dashboard_sidebar <- dashboardSidebar(
                    )
                  )
         )
-    )
+)
