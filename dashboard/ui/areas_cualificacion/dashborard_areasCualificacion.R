@@ -1,7 +1,7 @@
 library(shinyWidgets)
 
 tab_areasCualificacion <- tabItem(
-  tabName = "catalogo",
+  tabName = "tab_catalogo",
   class = "tab_catalogo",
   tags$style('.tab_catalogo {
                              background-color: #ffffff;
@@ -52,11 +52,12 @@ tab_areasCualificacion <- tabItem(
         solidHeader = TRUE,
         status = "primary",
         collapsible = F,
+        div(style="height: 40px;"),
         fluidRow(
           column(4, 
                  div(class = "box-areas",
                      actionButton("artes_button",
-                                  img(id = "alimentos_button",
+                                  img(id = "artes_button_",
                                       src = "images/artes.png"),
                                   class = "areas-button"
                                      ),
@@ -67,7 +68,7 @@ tab_areasCualificacion <- tabItem(
           column(4,
                  div(class = "box-areas",
                      actionButton("conservacion_button",
-                                  img(id = "conservacion_button",
+                                  img(id = "conservacion_button_",
                                       src = "images/ambiental.png"),
                                   class = "areas-button"
                                   ),
@@ -79,7 +80,7 @@ tab_areasCualificacion <- tabItem(
                  column(4, 
                         div(class = "box-areas",
                             actionButton("fisicas_button",
-                                         img(id = "alimentos_button",
+                                         img(id = "fisicas_button_",
                                              src = "images/fisicas.png"),
                                          class = "areas-button"
                             ),
@@ -96,7 +97,7 @@ tab_areasCualificacion <- tabItem(
                  column(4, 
                         div(class = "box-areas",
                             actionButton("alimentos_button",
-                                         img(id = "alimentos_button",
+                                         img(id = "alimentos_button_",
                                              src = "images/alimentos.png"),
                                          class = "areas-button"
                             ),
@@ -108,7 +109,7 @@ tab_areasCualificacion <- tabItem(
                  column(4, 
                         div(class = "box-areas",
                             actionButton("agropecuarias_button",
-                                         img(id = "agropecuarias_button",
+                                         img(id = "agropecuarias_button_",
                                              src = "images/agropecuarias.png"),
                                          class = "areas-button"
                             ),

@@ -7,7 +7,7 @@ dashboard_sidebar <- dashboardSidebar(
         menuItem("Inicio",
             tabName = "home", icon = icon("home")),
         menuItem("Áreas de Cualificación",
-            tabName = "catalogo", icon = icon("book")),
+            tabName = "tab_catalogo", icon = icon("book")),
         menuItem("Bases de Datos Oficiales",
                  tabName = "bases_oficiales", icon = icon("cloud")),
         menuItem("Información por Etapas MNC",
@@ -43,28 +43,28 @@ dashboard_sidebar <- dashboardSidebar(
                      tabName = "est_areasDesempeño"
                    ),
                    menuSubItem(
-                     "Departamentos"
+                     "Departamentos",
+                     tabName = "est_departamentos"
                    ),
                    menuSubItem(
-                     "Tamaño de la Empresa"
+                     "Tamaño de la Empresa",
+                     tabName = "est_tamañoEmpresa"
+                   ),
+                   menuSubItem(
+                     "Cargos de Difícil Consecución",
+                     tabName = "est_dificilConsecucion"
+                   ),
+                   menuSubItem(
+                     "Medios de Búsqueda",
+                     tabName = "est_mediosBusqueda"
                    )
                  ),
                  menuItem(
-                   "Estadísticas Encuesta Demanda",
-                   menuSubItem(
-                     "Departamentos",
-                     tabName = "est_enc_dem"
-                   ),
-                   menuSubItem(
-                     "Tamaño de la empresa"
-                   ),
-                   menuSubItem(
-                     ""
-                   )
-                   ),
-                 menuSubItem(
                    "Análisis de compentencias",
-                   tabName = "analisis_competencias"
+                   menuSubItem(
+                     "Análisis de Competencias",
+                     tabName = "analisis_competencias"
+                     )
                    )
                  )
         )

@@ -19,13 +19,12 @@ tab_BasesOficiales <- tabItem(
   div(style = "height: 40px;"),
   
   fluidRow(
-    div( style = "font-size: 17px;",
+    div(style = "font-size: 17px;",
     column(2,
            box(title = "Bases de datos",
                width = 12,
                solidHeader = TRUE,
                status = "primary",
-               color = "black",
                selectizeInput("select_main_base", "Seleccione Base",
                               choices = c(
                                 "Areas de Cualificación",

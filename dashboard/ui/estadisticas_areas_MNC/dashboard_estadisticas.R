@@ -1,5 +1,5 @@
 
-
+# ############################# ANÁLISIS DE COMPETENCIAS ############################
 tab_AnalisisCompetencias <- tabItem(
   tabName = "analisis_competencias",
   class = "analisis_competencias",
@@ -18,56 +18,73 @@ tab_AnalisisCompetencias <- tabItem(
   ),
   div(style = "height: 40px;"),
   fluidRow(
-    box(width=12,
-        fluidRow(
-          column(6,
-                 uiOutput("select_area_catalog_2")
-          )
-        ),
-        tags$h2("Habilidades Socioemocionales", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-        tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-        div(style = "height: 30px;"),
-        fluidRow(
-          
-          column(7,
-                 plotOutput("socioemocionales")
-          ),
-          column(4,
-                 wordcloud2Output("wordcloud_habilidades")
-          )
-        ),
-        
-        div(style = "height: 30px;"),
-        fluidRow(
-          tags$h2("Conocimientos CUOC", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-          tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-          div(style = "height: 10px;"),
-          column(7,
-                 plotOutput("conocimientos")
-                 
-          ), 
-          column(4,
-                 wordcloud2Output("wordcloud_conocimientos")
-          )
-        ),
-        
-        div(style = "height: 30px;"),
-        fluidRow(
-          tags$h2("Destrezas CUOC", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-          tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-          div(style = "height: 10px;"),
-          column(7,
-                 plotOutput("destrezas")
-                 
-          ), 
-          column(4,
-                 wordcloud2Output("wordcloud_destrezas")
+          div(style = "font-size: 17px;",
+          column(2,
+                 box(title="Seleccione:",
+                     width=12,
+                     status="primary",
+                     solidHeader=T,
+                     uiOutput("select_area_catalog_2")
+                 ),
+                 box(title = "Guía",
+                     width = 12,
+                     solidHeader = TRUE,
+                     status = "primary",
+                     collapsible = T,
+                     collapsed = T,
+                     tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                     div(style = "height: 10px;"),
+                     style = "font-size: 18px; text-align: justify;"
                  )
+                 
+          ),
+          column(10,
+                 tags$h2("Habilidades Socioemocionales", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+                 tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+                 div(style = "height: 30px;"),
+                 fluidRow(
+                   
+                   column(8,
+                          plotOutput("socioemocionales")
+                   ),
+                   column(4,
+                          wordcloud2Output("wordcloud_habilidades")
+                          )
+                   ),
+                   div(style = "height: 30px;"),
+                   fluidRow(
+                     tags$h2("Conocimientos CUOC", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+                     tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+                     div(style = "height: 10px;"),
+                     column(8,
+                            plotOutput("conocimientos")
+                            
+                     ),
+                     column(4,
+                            wordcloud2Output("wordcloud_conocimientos")
+                     )
+                   ),
+                    div(style = "height: 30px;"),
+                   fluidRow(
+                     tags$h2("Destrezas CUOC", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+                     tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+                     div(style = "height: 10px;"),
+                     column(7,
+                            plotOutput("destrezas")
+
+                     ),
+                     column(4,
+                            wordcloud2Output("wordcloud_destrezas")
+                            )
+                     )
+                 )
+          
           )
-        )
   )
 )
 
+
+# ############################# ÁREAS DE DESEMPEÑO ############################
 tab_areasDesempeño <- tabItem(
   div(style = "height: 20px;"),
   tabName = "est_areasDesempeño",
@@ -76,26 +93,262 @@ tab_areasDesempeño <- tabItem(
                              background-color: #ffffff;
               }'),
   fluidRow(
-    tags$h2("Área de Desempeño", style = "text-align: center; font-weight: bold; color: #4682B4;"),
+    column(8, offset = 2,
+           tags$h1("Estadísticas por Áreas de Desempeño",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
     tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-    div(style = "height: 10px;"),
-    column(2,
-           box(title="Seleccione:",
-             width=12,
-             status="primary",
-             solidHeader=T,
-             uiOutput("select_area_catalog_3")
-               )
-           
+      )
     ),
-    column(8, offset = 1,
-           plotOutput("descriptivas_area")
-           )
+    div(style = "height: 60px;"),
+    fluidRow(
+      div(style = "font-size: 17px;",
+      column(2,
+             box(title="Seleccione:",
+               width=12,
+               status="primary",
+               solidHeader=T,
+               uiOutput("select_area_catalog_3"),
+               div(style="height: 20px;"),
+               column(2, offset =1,
+                      actionButton("clear_areas_3", "Limpiar Filtros", icon = icon("eraser"),
+                                   style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                      )
+               )
+                 ),
+             box(title = "Guía",
+                 width = 12,
+                 solidHeader = TRUE,
+                 status = "primary",
+                 collapsible = T,
+                 collapsed = T,
+                 tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                 div(style = "height: 10px;"),
+                 style = "font-size: 18px; text-align: justify;"
+             )
+             
+      ),
+      column(8, offset = 1,
+             fluidRow(
+               column(5, offset=2,
+                      plotlyOutput("pie_descriptivas_area")
+                      )
+             ),
+             div(style="height: 100px;"),
+             fluidRow(
+               plotOutput("descriptivas_area")
+               )
+             )
+      )
       )
 )
 
-tab_EstAreaCual <- tabItem(
+# ############################# DEPARTAMENTOS ############################
+tab_departamentos <- tabItem(
   div(style = "height: 20px;"),
+  tabName = "est_departamentos",
+  class = "est_departamentos",
+  tags$style('.est_departamentos {
+                             background-color: #ffffff;
+              }'),
+  fluidRow(
+    column(8, offset = 2,
+           tags$h1("Estadísticas por Departamentos",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
+           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+    )
+  ),
+  div(style = "height: 30px;"),
+  fluidRow(
+    div(style = "font-size: 17px;",
+        column(2,
+               box(title="Seleccione:",
+                   width=12,
+                   status="primary",
+                   solidHeader=T,
+                   uiOutput("select_area_catalog_3_1"),
+                   div(style="height: 20px;"),
+                   column(2, offset =1,
+                          actionButton("clear_areas_3_1", "Limpiar Filtros", icon = icon("eraser"),
+                                       style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                          )
+                   )
+               ),
+               box(title = "Guía",
+                   width = 12,
+                   solidHeader = TRUE,
+                   status = "primary",
+                   collapsible = T,
+                   collapsed = T,
+                   tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                   div(style = "height: 10px;"),
+                   style = "font-size: 18px; text-align: justify;"
+               )
+               
+        ),
+        column(8, offset = 1,
+               plotOutput("departamentos")
+        )
+    )
+  )
+)
+
+# ############################# TAMAÑO DE LA EMPRESA ############################
+tab_tamanoEmpresa <- tabItem(
+  div(style = "height: 20px;"),
+  tabName = "est_tamañoEmpresa",
+  class = "est_tamañoEmpresa",
+  tags$style('.est_tamañoEmpresa {
+                             background-color: #ffffff;
+              }'),
+  fluidRow(
+    column(8, offset = 2,
+           tags$h1("Estadísticas por Tamaño de la Empresa",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
+           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+    )
+  ),
+  div(style = "height: 30px;"),
+  fluidRow(
+    div(style = "font-size: 17px;",
+        column(2,
+               box(title="Seleccione:",
+                   width=12,
+                   status="primary",
+                   solidHeader=T,
+                   uiOutput("select_area_catalog_3_2"),
+                   div(style="height: 20px;"),
+                   column(2, offset =1,
+                          actionButton("clear_areas_3_2", "Limpiar Filtros", icon = icon("eraser"),
+                                       style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                          )
+                   )
+               ),
+               box(title = "Guía",
+                   width = 12,
+                   solidHeader = TRUE,
+                   status = "primary",
+                   collapsible = T,
+                   collapsed = T,
+                   tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                   div(style = "height: 10px;"),
+                   style = "font-size: 18px; text-align: justify;"
+               )
+               
+        ),
+        column(8, offset = 1,
+               plotOutput("tamano_empresa")
+        )
+    )
+  )
+)
+# ############################# DIFÍCIL CONSECUCIÓN ############################
+tab_dificilConsecucion <- tabItem(
+  div(style = "height: 20px;"),
+  tabName = "est_dificilConsecucion",
+  class = "est_dificilConsecucion",
+  tags$style('.est_dificilConsecucion {
+                             background-color: #ffffff;
+              }'),
+  fluidRow(
+    column(8, offset = 2,
+           tags$h1("Estadísticas por Cargos de Difícil Consecución",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
+           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+    )
+  ),
+  div(style = "height: 30px;"),
+  fluidRow(
+    div(style = "font-size: 17px;",
+        column(2,
+               box(title="Seleccione:",
+                   width=12,
+                   status="primary",
+                   solidHeader=T,
+                   uiOutput("select_area_catalog_3_3"),
+                   div(style="height: 20px;"),
+                   column(2, offset =1,
+                          actionButton("clear_areas_3_3", "Limpiar Filtros", icon = icon("eraser"),
+                                       style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                          )
+                   )
+               ),
+               box(title = "Guía",
+                   width = 12,
+                   solidHeader = TRUE,
+                   status = "primary",
+                   collapsible = T,
+                   collapsed = T,
+                   tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                   div(style = "height: 10px;"),
+                   style = "font-size: 18px; text-align: justify;"
+               )
+               
+        ),
+        column(8, offset = 1,
+               plotOutput("dificil_consecucion")
+        )
+    )
+  )
+)
+
+# ############################# MEDIOS DE BÚSQUEDA ############################
+tab_mediosBusqueda <- tabItem(
+  div(style = "height: 20px;"),
+  tabName = "est_mediosBusqueda",
+  class = "est_mediosBusqueda",
+  tags$style('.est_mediosBusqueda {
+                             background-color: #ffffff;
+              }'),
+  fluidRow(
+    column(8, offset = 2,
+           tags$h1("Estadísticas por Medios de Búsqueda",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
+           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+    )
+  ),
+  div(style = "height: 30px;"),
+  fluidRow(
+    div(style = "font-size: 17px;",
+        column(2,
+               box(title="Seleccione:",
+                   width=12,
+                   status="primary",
+                   solidHeader=T,
+                   uiOutput("select_area_catalog_5"),
+                   div(style="height: 20px;")
+                   # column(2, offset =1,
+                   #        actionButton("clear_areas_5", "Limpiar Filtros", icon = icon("eraser"),
+                   #                     style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                   #        )
+                   # )
+               ),
+               box(title = "Guía",
+                   width = 12,
+                   solidHeader = TRUE,
+                   status = "primary",
+                   collapsible = T,
+                   collapsed = T,
+                   tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                   div(style = "height: 10px;"),
+                   style = "font-size: 18px; text-align: justify;"
+               )
+               
+        ),
+        column(8, offset = 1,
+               plotOutput("medios")
+        )
+    )
+  )
+)
+
+# ############################# ÁREAS DE CUALIFICACIÓN ############################
+
+tab_EstAreaCual <- tabItem(
   tabName = "est_area_cual",
   class = "est_area_cual",
   tags$style('.est_area_cual {
@@ -207,31 +460,6 @@ tab_EstEncDemanda <- tabItem(
           column(10, offset = 1,
                  plotOutput("descriptivas_area")
           )
-        ),
-        fluidRow(
-          tags$h2("Tamaño de la Empresa", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-          tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-          div(style = "height: 10px;"),
-          column(10, offset = 1,
-                 plotOutput("tamano_empresa")
-          )
-        ),
-        div(style = "height: 10px;"),
-        fluidRow(
-          tags$h2("Cargos Críticos de Difícil Consecución", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-          tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-          div(style = "height: 10px;"),
-          column(10, offset = 1,
-                 plotOutput("dificil_consecucion")
-          )
-        ),
-        fluidRow(
-          tags$h2("Departamentos", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-          tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-          div(style = "height: 10px;"),
-          column(10, offset = 1,
-                 plotOutput("departamentos")
-          )
         )
     ),
     box(width=12,
@@ -243,14 +471,6 @@ tab_EstEncDemanda <- tabItem(
         fluidRow(
           column(2,
                  uiOutput("select_area_catalog_5")
-          )
-        ),
-        fluidRow(
-          tags$h2("Medios de Búsqueda", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-          tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-          div(style = "height: 10px;"),
-          column(10, offset = 1,
-                 plotOutput("medios")
           )
         ),
         

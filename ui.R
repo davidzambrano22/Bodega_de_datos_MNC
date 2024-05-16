@@ -69,10 +69,8 @@ ui <- fluidPage(
           ),
             tabItems(
                 tab_home,
-                # tab_catalogo,
                 tab_BasesOficiales,
                 tab_areasCualificacion,
-                # tab_consulta,
                 tab_infogeneral,
                 tab_survey,
                 tab_EstAreaCual,
@@ -84,7 +82,11 @@ ui <- fluidPage(
                 tab_Ocupados_NivelEdu,
                 tab_demandaSPE,
                 tab_infoSNIES,
-                tab_areasDesempeño
+                tab_areasDesempeño,
+                tab_departamentos,
+                tab_tamanoEmpresa,
+                tab_dificilConsecucion,
+                tab_mediosBusqueda
             )
         )
     )
