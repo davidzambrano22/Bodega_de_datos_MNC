@@ -159,7 +159,7 @@ tab_departamentos <- tabItem(
            tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
     )
   ),
-  div(style = "height: 30px;"),
+  div(style = "height: 60px;"),
   fluidRow(
     div(style = "font-size: 17px;",
         column(2,
@@ -188,7 +188,15 @@ tab_departamentos <- tabItem(
                
         ),
         column(8, offset = 1,
-               plotOutput("departamentos")
+               fluidRow(
+                 column(5, offset=2,
+                        plotlyOutput("pie_departamentos")
+                 )
+               ),
+               div(style="height: 100px;"),
+               fluidRow(
+                 plotOutput("departamentos")
+               )
         )
     )
   )
@@ -210,7 +218,7 @@ tab_tamanoEmpresa <- tabItem(
            tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
     )
   ),
-  div(style = "height: 30px;"),
+  div(style = "height: 60px;"),
   fluidRow(
     div(style = "font-size: 17px;",
         column(2,
@@ -239,11 +247,21 @@ tab_tamanoEmpresa <- tabItem(
                
         ),
         column(8, offset = 1,
-               plotOutput("tamano_empresa")
+               fluidRow(
+                 column(5, offset=2,
+                        plotlyOutput("pie_tamano_empresa")
+                 )
+               ),
+               div(style="height: 100px;"),
+               fluidRow(
+                 plotOutput("tamano_empresa")
+                 )
+               )
         )
     )
   )
-)
+
+
 # ############################# DIFÍCIL CONSECUCIÓN ############################
 tab_dificilConsecucion <- tabItem(
   div(style = "height: 20px;"),
@@ -260,7 +278,7 @@ tab_dificilConsecucion <- tabItem(
            tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
     )
   ),
-  div(style = "height: 30px;"),
+  div(style = "height: 60px;"),
   fluidRow(
     div(style = "font-size: 17px;",
         column(2,
@@ -289,7 +307,15 @@ tab_dificilConsecucion <- tabItem(
                
         ),
         column(8, offset = 1,
-               plotOutput("dificil_consecucion")
+               fluidRow(
+                 column(5, offset=2,
+                        plotlyOutput("pie_dificil_consecucion")
+                 )
+               ),
+               div(style="height: 100px;"),
+                 fluidRow(
+                   plotOutput("dificil_consecucion")
+               )
         )
     )
   )
@@ -340,11 +366,19 @@ tab_mediosBusqueda <- tabItem(
                
         ),
         column(8, offset = 1,
-               plotOutput("medios")
+               fluidRow(
+                 column(5, offset=2,
+                        plotlyOutput("pie_medios")
+                 )
+               ),
+               div(style="height: 100px;"),
+               fluidRow(
+                 plotOutput("medios")
+               )
+        )
         )
     )
   )
-)
 
 # ############################# ÁREAS DE CUALIFICACIÓN ############################
 

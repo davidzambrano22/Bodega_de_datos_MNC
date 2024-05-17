@@ -61,7 +61,7 @@ tab_TasaOcupados <- tabItem(
                                       choices = c(
                                         "Ocupados" = "Ocupados",
                                         "Tasa de Ocupados" = "Tasa de ocupados",
-                                        "PET" = "PET"
+                                        "Población en Edad de Trabajar" = "Población en Edad de Trabajar"
                                       )
                    )
                  ),
@@ -272,8 +272,8 @@ tab_Ocupados_EdadSexo <- tabItem(
                                     choices = c(
                                       "Ocupados Hombres" = "Ocupados Hombres",
                                       "Ocupados Mujeres" = "Ocupados Mujeres",
-                                      "Porcentaje de Hombres" = "%Hombres",
-                                      "Porcentaje de Mujeres" = "% Mujeres"
+                                      "Proporción Hombres" = "Proporción Hombres",
+                                      "Proporción Mujeres" = "Proporción Mujeres"
                                     )
                  )
                ),
@@ -373,7 +373,7 @@ tab_Ocupados_NivelEdu <- tabItem(
                                         choices = c(
                                           "Nivel Educativo" = "Nivel educativo",
                                           "Ocupados" = "Ocupados",
-                                          "Porcentaje de Ocupados" = "% Ocupados"
+                                          "Porcentaje de Ocupados" = "Proporción Ocupados"
                                         )
                      )
                    ), 

@@ -39,25 +39,25 @@ base_motivos = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Mot
 # Load Caracterización Tables
 base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados") %>%
   mutate(
-    `Ocupados` = round(`Ocupados`, 2),
+    `Ocupados` = round(`Ocupados`, 0),
     `Tasa de ocupados` = round(`Tasa de ocupados`, 2)
   )
 base_OcupadosCIIU <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por división CIIU") %>%
   mutate(
-    `Ocupados` = round(`Ocupados`, 2),
+    `Ocupados` = round(`Ocupados`, 0),
     `Proporción ocupados` = round(`Proporción ocupados`, 2)
   )
 base_OcupadosEdadSexo <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por edad y sexo") %>%
   mutate(
-    `Ocupados Hombres` = round(`Ocupados Hombres`, 2),
-    `Ocupados Mujeres` = round(`Ocupados Hombres`, 2),
-    `%Hombres` = round(`%Hombres`, 2),
-    `% Mujeres` = round(`% Mujeres`, 2)
+    `Ocupados Hombres` = round(`Ocupados Hombres`, 0),
+    `Ocupados Mujeres` = round(`Ocupados Mujeres`, 0),
+    `Proporción Hombres` = round(`Proporción Hombres`, 2),
+    `Proporción Mujeres` = round(`Proporción Mujeres`, 2)
   )
 base_OcupadosNivelEdu <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por Nivel edu") %>%
   mutate(
-    `Ocupados` = round(`Ocupados`, 2),
-    `% Ocupados` = round(`% Ocupados`, 2)
+    `Ocupados` = round(`Ocupados`, 0),
+    `Proporción Ocupados` = round(`Proporción Ocupados`, 2)
   )
 
 # Load SPE tables
@@ -521,6 +521,34 @@ shinyServer(function(input, output, session) {
             scale_x_discrete(labels = NULL)
         })
         
+        # Piechart medios de búsqueda
+        colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
+          output$pie_medios <- renderPlotly({
+          selected_column <- input$select_area_catalog_5
+          
+          base_medios %>%
+            dplyr::select(`Medios de busqueda de personal`, !!sym(selected_column)) %>% 
+            arrange(desc(!!sym(selected_column))) %>% 
+            head(5) %>%
+            plot_ly(labels = ~`Medios de busqueda de personal`, values = ~selected_column, type="pie")#,
+                    # textposition = 'inside',
+                    # textinfo = 'label+percent',
+                    # insidetextfont = list(color = '#FFFFFF'),
+                    # hoverinfo = 'text',
+                    # text = !!sym(selected_column),
+                    # marker = list(colors = colors,
+                    #               line = list(color = '#FFFFFF', width = 1)),
+                    # #The 'pull' attribute can also be used to create space between the sectors
+                    # showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecucion',
+                    #                                 width = 500,
+                    #                                 height = 500,
+                    #                                 xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                    #                                 yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+          })
+              
+          
+        
+        
         # Deploy Motivos No Vacatnte plots -------------------------------------------------------------
         output$motivosNovacante <- renderPlot({
           selected_column <- input$select_area_catalog_5
@@ -764,6 +792,28 @@ shinyServer(function(input, output, session) {
             theme(text = element_text(size = 15)
             ) 
         })
+        
+        # Pie chart descriptivas área de desempeño
+        colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
+        output$pie_tamano_empresa <- renderPlotly({
+          base_descriptivas %>% dplyr::select(`Código_área`, `Tamaño empresa`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_2) %>%
+            group_by(`Tamaño empresa`) %>% count(`Tamaño empresa`) %>% 
+            plot_ly(labels = ~`Tamaño empresa`, values = ~n, type="pie",
+                    textposition = 'inside',
+                    textinfo = 'label+percent',
+                    insidetextfont = list(color = '#FFFFFF'),
+                    hoverinfo = 'text',
+                    text = n,
+                    marker = list(colors = colors,
+                                  line = list(color = '#FFFFFF', width = 1)),
+                    #The 'pull' attribute can also be used to create space between the sectors
+                    showlegend = FALSE) %>%  layout(title = 'Piechart por Tamaño de la Empresa',
+                                                    width = 500,
+                                                    height = 500,
+                                                    xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                                                    yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+        })
 
 # -----------------Descriptivas Cargos dificil consecusión
         output$dificil_consecucion <- renderPlot({
@@ -798,6 +848,28 @@ shinyServer(function(input, output, session) {
             )
         })
         
+        # Pie chart cargos de dificil consecucion
+        colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
+        output$pie_dificil_consecucion <- renderPlotly({
+          base_descriptivas %>% dplyr::select(`Código_área`, `Cargos dificil consecusión`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_3) %>%
+            group_by(`Cargos dificil consecusión`) %>% count(`Cargos dificil consecusión`) %>% 
+            plot_ly(labels = ~`Cargos dificil consecusión`, values = ~n, type="pie",
+                    textposition = 'inside',
+                    textinfo = 'label+percent',
+                    insidetextfont = list(color = '#FFFFFF'),
+                    hoverinfo = 'text',
+                    text = n,
+                    marker = list(colors = colors,
+                                  line = list(color = '#FFFFFF', width = 1)),
+                    #The 'pull' attribute can also be used to create space between the sectors
+                    showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecucion',
+                                                    width = 500,
+                                                    height = 500,
+                                                    xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                                                    yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+        })
+        
         # -----------------Descriptivas Departamentos
         output$departamentos <- renderPlot({
           base_descriptivas %>% dplyr::select(`Código_área`, `Departamento`) %>%
@@ -830,6 +902,28 @@ shinyServer(function(input, output, session) {
             theme(text = element_text(size = 15)
             )
         }) 
+        
+        # Pie chart por Departamentos
+        colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
+        output$pie_departamentos <- renderPlotly({
+          base_descriptivas %>% dplyr::select(`Código_área`, `Departamento`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_1) %>%
+            group_by(`Departamento`) %>% count(`Departamento`) %>% 
+            plot_ly(labels = ~`Departamento`, values = ~n, type="pie",
+                    textposition = 'inside',
+                    textinfo = 'label+percent',
+                    insidetextfont = list(color = '#FFFFFF'),
+                    hoverinfo = 'text',
+                    text = n,
+                    marker = list(colors = colors,
+                                  line = list(color = '#FFFFFF', width = 1)),
+                    #The 'pull' attribute can also be used to create space between the sectors
+                    showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecucion',
+                                                    width = 500,
+                                                    height = 500,
+                                                    xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                                                    yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+        })
 ########################################## BASES CARACTERIZACIÓN ##########################################
         
   ####################### TASA OCUPADOS

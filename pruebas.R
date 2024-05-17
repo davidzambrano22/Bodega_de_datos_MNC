@@ -11,32 +11,32 @@ library(haven)
 library(plotly)
 
 
-base_descriptivas = read_excel("data/input/bases/Base1Descriptivas.xls")
-base_socioemocionales = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Socioemocionales")
-names(base_socioemocionales)
+base_medios = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "MediosBusqueda")
+names(base_medios)
 
-base_descriptivas %>% dplyr::select(`Código_área`, `¿Cuál es su área de desempeño?`) %>%
-  dplyr::filter(`Código_área` %in%  c("AFIR")) %>%
-  group_by(`¿Cuál es su área de desempeño?`) %>% count(`¿Cuál es su área de desempeño?`) %>% 
-  plot_ly(labels = ~`¿Cuál es su área de desempeño?`, values = ~n, type="pie",
-        textposition = 'inside',
-        
-        textinfo = 'label+percent',
-        
-        insidetextfont = list(color = '#FFFFFF'),
-        
-        hoverinfo = 'text',
-        
-        text = ~paste('$', n, ' billions'),
-        
-        marker = list(colors = colors,
-                      
-                      line = list(color = '#FFFFFF', width = 1)),
-        
-        #The 'pull' attribute can also be used to create space between the sectors
-        
-        showlegend = FALSE) %>%  layout(title = 'United States Personal Expenditures by Categories in 1960',
-                                       
-                                       xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                                       
-                                       yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+base_medios %>%
+  dplyr::select(`Medios de busqueda de personal`, `AFIR`) %>% 
+  arrange("AFIR") %>% 
+  head(5) %>%
+  plot_ly(labels = ~`Medios de busqueda de personal`, values = ~AFIR, type="pie",
+          textposition = 'inside',
+          textinfo = 'label+percent',
+          insidetextfont = list(color = '#FFFFFF'),
+          hoverinfo = 'text',
+          text = ~AFIR,
+          marker = list(colors = colors,
+                        line = list(color = '#FFFFFF', width = 1)),
+          #The 'pull' attribute can also be used to create space between the sectors
+          showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecucion',
+                                          width = 500,
+                                          height = 500,
+                                          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                                          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+
+
+base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados")
+base_OcupadosCIIU <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por división CIIU")
+base_OcupadosEdadSexo <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por edad y sexo")
+base_OcupadosNivelEdu <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por Nivel edu")
+names(base_OcupadosNivelEdu)
