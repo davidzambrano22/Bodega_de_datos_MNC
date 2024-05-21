@@ -27,7 +27,7 @@ tab_TasaOcupados <- tabItem(
                  selectizeInput("caract_TasaOcu_areaCual", "Seleccione Base",
                                 choices = c(
                                   "Área de Cualificación",
-                                  "Departamento y Año",
+                                  "Departamento",
                                   "Índices"
                                 )
                  ),
@@ -46,12 +46,10 @@ tab_TasaOcupados <- tabItem(
                    )
                  ),
                  conditionalPanel(
-                   condition = "input.caract_TasaOcu_areaCual == 'Departamento y Año'",
+                   condition = "input.caract_TasaOcu_areaCual == 'Departamento'",
                    checkboxGroupInput("caract_TasaOcu_eduAno_", "Seleccione Atributos", 
                                       choices = c(
-                                        "Departamento" = "Departamento",
-                                        "Código del departamento" = "Codigo Depto",
-                                        "Año" = "Año"
+                                        "Código del departamento" = "Codigo Depto"
                                       )
                    )
                  ),
@@ -65,9 +63,37 @@ tab_TasaOcupados <- tabItem(
                                       )
                    )
                  ),
-             div(
-               style = "height: 50px;"
-               ),
+                 div(
+                   style = "height: 30px;"
+                 ),
+                 selectizeInput("ocu_depto_año", "Seleccione Año",  # Seleccione por año
+                                choices = 2022:2024
+                 ),
+                 div(
+                   style = "height: 10px;"
+                 ),
+                 selectizeInput("ocu_depto_depto", "Seleccione Departamento",  # Seleccione por departamento
+                                choices = c(
+                                  "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bolívar", "Boyacá",
+                                  "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba",
+                                  "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena",
+                                  "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", "Risaralda",
+                                  "San Andrés y Providencia", "Santander", "Sucre", "Tolima", "Valle del Cauca",
+                                  "Vaupés", "Vichada"
+                                ),
+                                selected = c(
+                                  "Amazonas", "Antioquia", "Arauca", "Atlántico", "Bolívar", "Boyacá",
+                                  "Caldas", "Caquetá", "Casanare", "Cauca", "Cesar", "Chocó", "Córdoba",
+                                  "Cundinamarca", "Guainía", "Guaviare", "Huila", "La Guajira", "Magdalena",
+                                  "Meta", "Nariño", "Norte de Santander", "Putumayo", "Quindío", "Risaralda",
+                                  "San Andrés y Providencia", "Santander", "Sucre", "Tolima", "Valle del Cauca",
+                                  "Vaupés", "Vichada"
+                                ),
+                                multiple = T
+                 ),
+                 div(
+                   style = "height: 30px;"
+                 ),
              fluidRow(
                column(2, offset = 1,
                       actionButton("clear_baseTasaOcupados", "Limpiar Filtros", icon = icon("eraser"),
@@ -130,7 +156,6 @@ tab_OcupadosCIIU <- tabItem(
                    selectizeInput("caract_OcuCIIU_areaCual", "Seleccione Base",
                                   choices = c(
                                     "Área de Cualificación",
-                                    "Año",
                                     "Índices"
                                   )
                    ),
@@ -149,14 +174,6 @@ tab_OcupadosCIIU <- tabItem(
                      )
                    ),
                    conditionalPanel(
-                     condition = "input.caract_OcuCIIU_areaCual == 'Año'",
-                     checkboxGroupInput("caract_ocuCIIU_Ano_", "Seleccione Atributos", 
-                                        choices = c(
-                                          "Año" = "Año"
-                                        )
-                     )
-                   ),
-                   conditionalPanel(
                      condition = "input.caract_OcuCIIU_areaCual == 'Índices'",
                      checkboxGroupInput("caract_ocuCIIU_indices_", "Seleccione Atributos", 
                                         choices = c(
@@ -168,7 +185,13 @@ tab_OcupadosCIIU <- tabItem(
                      )
                    ),
                    div(
-                     style = "height: 50px;"
+                     style = "height: 30px;"
+                   ),
+                   selectizeInput("ocu_CIIU_año", "Seleccione Año",  # Seleccione por año
+                                  choices = 2022:2024
+                   ),
+                   div(
+                     style = "height: 30px;"
                    ),
                    fluidRow(
                      column(2, offset = 1,
@@ -231,8 +254,6 @@ tab_Ocupados_EdadSexo <- tabItem(
                selectizeInput("caract_OcuEdadSexo_areaCual", "Seleccione Base",
                               choices = c(
                                 "Área de Cualificación",
-                                "Rangos de Edad",
-                                "Año",
                                 "Índices"
                               )
                ),
@@ -251,22 +272,6 @@ tab_Ocupados_EdadSexo <- tabItem(
                  )
                ),
                conditionalPanel(
-                 condition = "input.caract_OcuEdadSexo_areaCual == 'Año'",
-                 checkboxGroupInput("caract_ocuEdadSexo_Ano_", "Seleccione Atributos", 
-                                    choices = c(
-                                      "Año" = "Año"
-                                    )
-                 )
-               ),
-               conditionalPanel(
-                 condition = "input.caract_OcuEdadSexo_areaCual == 'Rangos de Edad'",
-                 checkboxGroupInput("caract_ocuEdadSexo_Edad_", "Seleccione Atributos", 
-                                    choices = c(
-                                      "Rango de edad" = "Rango de edad"
-                                    )
-                 )
-               ),
-               conditionalPanel(
                  condition = "input.caract_OcuEdadSexo_areaCual == 'Índices'",
                  checkboxGroupInput("caract_ocuEdadSexo_indices_", "Seleccione Atributos", 
                                     choices = c(
@@ -278,7 +283,17 @@ tab_Ocupados_EdadSexo <- tabItem(
                  )
                ),
                div(
-                 style = "height: 50px;"
+                 style = "height: 30px;"
+               ),
+               selectizeInput("ocu_edadsexo_año_", "Seleccione Año",  # Seleccione por año
+                              choices = 2022:2024
+               ),
+               div(
+                 style = "height: 30px;"
+               ),
+               uiOutput("ocu_niveledu_rangoEdad"),
+               div(
+                 style = "height: 30px;"
                ),
                fluidRow(
                  column(2, offset = 1,
@@ -341,7 +356,6 @@ tab_Ocupados_NivelEdu <- tabItem(
                    selectizeInput("caract_OcuNivelEdu_areaCual", "Seleccione Base",
                                   choices = c(
                                     "Área de Cualificación",
-                                    "Año",
                                     "Índices"
                                   )
                    ),
@@ -360,25 +374,23 @@ tab_Ocupados_NivelEdu <- tabItem(
                      )
                    ),
                    conditionalPanel(
-                     condition = "input.caract_OcuNivelEdu_areaCual == 'Año'",
-                     checkboxGroupInput("caract_OcuNivelEdu_Ano_", "Seleccione Atributos", 
-                                        choices = c(
-                                          "Año" = "Año"
-                                        )
-                     )
-                   ),
-                   conditionalPanel(
                      condition = "input.caract_OcuNivelEdu_areaCual == 'Índices'",
                      checkboxGroupInput("caract_OcuNivelEdu_indices_", "Seleccione Atributos", 
                                         choices = c(
-                                          "Nivel Educativo" = "Nivel educativo",
                                           "Ocupados" = "Ocupados",
                                           "Porcentaje de Ocupados" = "Proporción Ocupados"
                                         )
                      )
                    ), 
                    div(
-                     style = "height: 50px;"
+                     style = "height: 30px;"
+                   ),
+                   selectizeInput("ocu_niveledu_año_", "Seleccione Año",  # Seleccione por año
+                                  choices = 2022:2024
+                   ),
+                   uiOutput("ocu_niveledu_niveledu"), # Seleccione por Nivel Educativo
+                   div(
+                     style = "height: 30px;"
                    ),
                    fluidRow(
                      column(2, offset = 1,

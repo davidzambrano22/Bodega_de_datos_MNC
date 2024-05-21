@@ -17,7 +17,23 @@ tab_BasesOficiales <- tabItem(
     
   ),
   div(style = "height: 40px;"),
-  
+  fluidRow(
+    column(10, offset=1,
+           box(title = "Información",
+               width = 12,
+               solidHeader = TRUE,
+               status = "primary",
+               collapsible = T,
+               collapsed = F,
+               tags$p("A través de esta sección los usuarios podrán acceder a información detallada que integra las diversas áreas de cualificación del Marco Nacional de Cualificaciones (MNC). Esta información se basa en las fuentes de la Clasificación Nacional de Ocupaciones (CUOC), la Clasificación Internacional Normalizada de la Educación Adaptada a Colombia (CINE), y la Clasificación Industrial Internacional Uniforme (CIUU) rev. 4. Con esta integración, se proporciona un acceso completo y actualizado a las clasificaciones esenciales para el análisis ocupacional y educativo en Colombia.", style = "font-size: 20px;"),
+               div(style = "height: 10px;"),
+               div(style="text-align:center;"
+               ),
+               style = "font-size: 18px; text-align: justify;"
+           )
+    )
+  ),
+  div(style = "height: 40px;"),
   fluidRow(
     div(style = "font-size: 17px;",
     column(2,
@@ -115,7 +131,7 @@ tab_BasesOficiales <- tabItem(
                ),
                fluidRow(
                  column(2, offset = 1,
-                        downloadButton("download_csv", "Descargar Tabla",
+                        downloadButton("download_mainBases", "Descargar Tabla",
                                        style="color: #333333; background-color: #F5F5F5; font-size: 17px;"
                         )
                  )
@@ -125,12 +141,20 @@ tab_BasesOficiales <- tabItem(
            div(
              style = "height: 200px;"
            ),
-           box(title = "Guía", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
+           box(title = "Material de apoyo", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
                width = 12,
-               tags$p("En esta sección encontrará información sobre...",
-                      style = "font-size: 17px; text-align: justify;"
-                      ),
-               tags$a("Descargar el instructivo...", href="fichas_brechas.pdf", target="_blank", style = "font-size: 17px;")
+               HTML("<a href='https://www.dane.gov.co/index.php/sistema-estadistico-nacional-sen/normas-y-estandares/nomenclaturas-y-clasificaciones/clasificaciones#clasificaciones-adaptadas' target='_blank'> 
+                        <p align: center; color: #4682B4;'>
+                          DANE - Clasificaciones
+                        </p>
+                     </a>"
+               ),
+               HTML("<a href='https://especiales.colombiaaprende.edu.co/mnc/catalogo.html' target='_blank'> 
+                        <p align: center; color: #4682B4;'>
+                          Marco Nacional de Cualificaciones
+                        </p>
+                     </a>"
+               )
            )
     ),
     column(10, 

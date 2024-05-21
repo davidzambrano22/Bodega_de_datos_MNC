@@ -26,7 +26,7 @@ tab_areasCualificacion <- tabItem(
         status = "primary",
         collapsible = T,
         collapsed = F,
-        tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+        tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero interactivo de Power BI. Estos datos proporcionan una visión detallada de las áreas de cualificación, facilitando el análisis y la comprensión de cada componente del Marco Nacional de Cualificaciones (MNC). Para acceder al panel interactivo y explorar la información de manera más dinámica, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
         div(style = "height: 10px;"),
         div(style="text-align:center;",
             actionButton("link_to_powerBI_report",
@@ -47,7 +47,7 @@ tab_areasCualificacion <- tabItem(
   fluidRow(
     div(style = "height: 30px;"),
     column(10, offset=1,
-    box(title= "Áreas estudiadas en el 2024",
+    box(title= "Áreas del MNC con Información Disponible",
         width = 12,
         solidHeader = TRUE,
         status = "primary",

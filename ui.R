@@ -21,6 +21,8 @@ source("dashboard/ui/bases_oficiales/dashboard_BasesOficiales.R")
 source("dashboard/ui/estadisticas_areas_MNC/dashboard_estadisticas.R")
 # Areas de Cualificación
 source("dashboard/ui/areas_cualificacion/dashborard_areasCualificacion.R")
+#INFOETAPAS
+source("dashboard/ui/Informacion_etapa/info_etapas.R")
 # ContextSector
 source("dashboard/ui/Informacion_etapa/contex_sector/dashboard_ContextSector.R")
 # Otras Fuentes de Información
@@ -82,9 +84,8 @@ ui <- fluidPage(
                 tab_Ocupados_NivelEdu,
                 tab_demandaSPE,
                 tab_infoSNIES,
-                tab_areasDesempeño,
-                tab_departamentos,
-                tab_tamanoEmpresa,
+                tab_estadisticas_generales,
+                tab_infoEtapas,
                 tab_dificilConsecucion,
                 tab_mediosBusqueda
             )

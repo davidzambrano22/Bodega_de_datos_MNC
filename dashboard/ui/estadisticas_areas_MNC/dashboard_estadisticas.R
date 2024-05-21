@@ -20,6 +20,7 @@ tab_AnalisisCompetencias <- tabItem(
   fluidRow(
           div(style = "font-size: 17px;",
           column(2,
+                 div(style="height: 40px;"),
                  box(title="Seleccione:",
                      width=12,
                      status="primary",
@@ -83,13 +84,14 @@ tab_AnalisisCompetencias <- tabItem(
   )
 )
 
+# ################################ INFORMACIÓN GENERAL ################################
 
 # ############################# ÁREAS DE DESEMPEÑO ############################
-tab_areasDesempeño <- tabItem(
+tab_estadisticas_generales <- tabItem(
   div(style = "height: 20px;"),
-  tabName = "est_areasDesempeño",
-  class = "est_areasDesempeño",
-  tags$style('.est_areasDesempeño {
+  tabName = "est_generales",
+  class = "est_generales",
+  tags$style('.est_generales {
                              background-color: #ffffff;
               }'),
   fluidRow(
@@ -104,7 +106,7 @@ tab_areasDesempeño <- tabItem(
     fluidRow(
       div(style = "font-size: 17px;",
       column(2,
-             box(title="Seleccione:",
+             box(title="Áreas de Cualificación:",
                width=12,
                status="primary",
                solidHeader=T,
@@ -140,127 +142,109 @@ tab_areasDesempeño <- tabItem(
                )
              )
       )
+      ),
+    div(style="height: 50px;"),
+    fluidRow(
+      column(8, offset = 2,
+             tags$h1("Estadísticas por Departamentos",
+                     style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+             ),
+             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
       )
-)
-
-# ############################# DEPARTAMENTOS ############################
-tab_departamentos <- tabItem(
-  div(style = "height: 20px;"),
-  tabName = "est_departamentos",
-  class = "est_departamentos",
-  tags$style('.est_departamentos {
-                             background-color: #ffffff;
-              }'),
-  fluidRow(
-    column(8, offset = 2,
-           tags$h1("Estadísticas por Departamentos",
-                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
-           ),
-           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-    )
-  ),
-  div(style = "height: 60px;"),
-  fluidRow(
-    div(style = "font-size: 17px;",
-        column(2,
-               box(title="Seleccione:",
-                   width=12,
-                   status="primary",
-                   solidHeader=T,
-                   uiOutput("select_area_catalog_3_1"),
-                   div(style="height: 20px;"),
-                   column(2, offset =1,
-                          actionButton("clear_areas_3_1", "Limpiar Filtros", icon = icon("eraser"),
-                                       style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
-                          )
+    ),
+    div(style = "height: 60px;"),
+    fluidRow(
+      div(style = "font-size: 17px;",
+          column(2,
+                 box(title="Seleccione:",
+                     width=12,
+                     status="primary",
+                     solidHeader=T,
+                     uiOutput("select_area_catalog_3_1"),
+                     div(style="height: 20px;"),
+                     column(2, offset =1,
+                            actionButton("clear_areas_3_1", "Limpiar Filtros", icon = icon("eraser"),
+                                         style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                            )
+                     )
+                 ),
+                 box(title = "Guía",
+                     width = 12,
+                     solidHeader = TRUE,
+                     status = "primary",
+                     collapsible = T,
+                     collapsed = T,
+                     tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                     div(style = "height: 10px;"),
+                     style = "font-size: 18px; text-align: justify;"
+                 )
+                 
+          ),
+          column(8, offset = 1,
+                 fluidRow(
+                   column(5, offset=2,
+                          plotlyOutput("pie_departamentos")
                    )
-               ),
-               box(title = "Guía",
-                   width = 12,
-                   solidHeader = TRUE,
-                   status = "primary",
-                   collapsible = T,
-                   collapsed = T,
-                   tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
-                   div(style = "height: 10px;"),
-                   style = "font-size: 18px; text-align: justify;"
-               )
-               
-        ),
-        column(8, offset = 1,
-               fluidRow(
-                 column(5, offset=2,
-                        plotlyOutput("pie_departamentos")
+                 ),
+                 div(style="height: 100px;"),
+                 fluidRow(
+                   plotOutput("departamentos")
                  )
-               ),
-               div(style="height: 100px;"),
-               fluidRow(
-                 plotOutput("departamentos")
-               )
-        )
-    )
-  )
-)
-
-# ############################# TAMAÑO DE LA EMPRESA ############################
-tab_tamanoEmpresa <- tabItem(
-  div(style = "height: 20px;"),
-  tabName = "est_tamañoEmpresa",
-  class = "est_tamañoEmpresa",
-  tags$style('.est_tamañoEmpresa {
-                             background-color: #ffffff;
-              }'),
-  fluidRow(
-    column(8, offset = 2,
-           tags$h1("Estadísticas por Tamaño de la Empresa",
-                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
-           ),
-           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-    )
-  ),
-  div(style = "height: 60px;"),
-  fluidRow(
-    div(style = "font-size: 17px;",
-        column(2,
-               box(title="Seleccione:",
-                   width=12,
-                   status="primary",
-                   solidHeader=T,
-                   uiOutput("select_area_catalog_3_2"),
-                   div(style="height: 20px;"),
-                   column(2, offset =1,
-                          actionButton("clear_areas_3_2", "Limpiar Filtros", icon = icon("eraser"),
-                                       style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
-                          )
+          )
+      )
+    ),
+    div(style="height: 50px;"),
+    fluidRow(
+      column(8, offset = 2,
+             tags$h1("Estadísticas por Tamaño de la Empresa",
+                     style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+             ),
+             tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
+      )
+    ),
+    div(style = "height: 60px;"),
+    fluidRow(
+      div(style = "font-size: 17px;",
+          column(2,
+                 box(title="Seleccione:",
+                     width=12,
+                     status="primary",
+                     solidHeader=T,
+                     uiOutput("select_area_catalog_3_2"),
+                     div(style="height: 20px;"),
+                     column(2, offset =1,
+                            actionButton("clear_areas_3_2", "Limpiar Filtros", icon = icon("eraser"),
+                                         style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                            )
+                     )
+                 ),
+                 box(title = "Guía",
+                     width = 12,
+                     solidHeader = TRUE,
+                     status = "primary",
+                     collapsible = T,
+                     collapsed = T,
+                     tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                     div(style = "height: 10px;"),
+                     style = "font-size: 18px; text-align: justify;"
+                 )
+                 
+          ),
+          column(8, offset = 1,
+                 fluidRow(
+                   column(5, offset=2,
+                          plotlyOutput("pie_tamano_empresa")
                    )
-               ),
-               box(title = "Guía",
-                   width = 12,
-                   solidHeader = TRUE,
-                   status = "primary",
-                   collapsible = T,
-                   collapsed = T,
-                   tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
-                   div(style = "height: 10px;"),
-                   style = "font-size: 18px; text-align: justify;"
-               )
-               
-        ),
-        column(8, offset = 1,
-               fluidRow(
-                 column(5, offset=2,
-                        plotlyOutput("pie_tamano_empresa")
+                 ),
+                 div(style="height: 100px;"),
+                 fluidRow(
+                   plotOutput("tamano_empresa")
                  )
-               ),
-               div(style="height: 100px;"),
-               fluidRow(
-                 plotOutput("tamano_empresa")
-                 )
-               )
-        )
+          )
+      )
     )
-  )
-
+  
+)
 
 # ############################# DIFÍCIL CONSECUCIÓN ############################
 tab_dificilConsecucion <- tabItem(
@@ -282,7 +266,7 @@ tab_dificilConsecucion <- tabItem(
   fluidRow(
     div(style = "font-size: 17px;",
         column(2,
-               box(title="Seleccione:",
+               box(title="Áreas de Cualificación",
                    width=12,
                    status="primary",
                    solidHeader=T,
@@ -341,7 +325,7 @@ tab_mediosBusqueda <- tabItem(
   fluidRow(
     div(style = "font-size: 17px;",
         column(2,
-               box(title="Seleccione:",
+               box(title="Áreas de Cualificación",
                    width=12,
                    status="primary",
                    solidHeader=T,
@@ -406,7 +390,8 @@ tab_EstAreaCual <- tabItem(
   fluidRow(
       div(style = "font-size: 17px;",
           column(2,
-                 box(title = "Bases de datos",
+                 div(style="height: 40px;"),
+                 box(title = "Áreas de Cualificaión",
                      width = 12,
                      solidHeader = TRUE,
                      status = "primary",
@@ -424,7 +409,7 @@ tab_EstAreaCual <- tabItem(
                      status = "primary",
                      collapsible = T,
                      collapsed = T,
-                     tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+                     tags$p("...", style = "font-size: 20px;"),
                      div(style = "height: 10px;"),
                      style = "font-size: 18px; text-align: justify;"
                  )

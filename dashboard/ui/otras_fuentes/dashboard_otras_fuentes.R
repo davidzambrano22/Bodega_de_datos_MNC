@@ -54,7 +54,8 @@ tab_demandaSPE <- tabItem(
                                          "Mes" = "Mes",
                                          "Dia" = "Dia",
                                          "Código del Municipio" = "cod_mpio",
-                                         "Municipio" = "Municipio"
+                                         "Municipio" = "Municipio",
+                                         "Departamento" = "Departamento"
                                         )
                      )
                    ),
@@ -74,6 +75,16 @@ tab_demandaSPE <- tabItem(
                                         )
                      )
                    ),
+                   div(
+                     style = "height: 30px;"
+                   ),
+                   selectizeInput("otrasFuentes_SPE_año", "Seleccione Año",  # Seleccione por año
+                                  choices = 2022:2024
+                                  ),
+                   div(
+                     style = "height: 30px;"
+                   ),
+                   uiOutput("otrasFuentes_SPE_depto"),
                    div(
                      style = "height: 30px;"
                    ),

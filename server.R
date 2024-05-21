@@ -40,7 +40,8 @@ base_motivos = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Mot
 base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados") %>%
   mutate(
     `Ocupados` = round(`Ocupados`, 0),
-    `Tasa de ocupados` = round(`Tasa de ocupados`, 2)
+    `Tasa de ocupados` = round(`Tasa de ocupados`, 2),
+    `Población en Edad de Trabajar` = round(`Población en Edad de Trabajar`, 0)
   )
 base_OcupadosCIIU <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por división CIIU") %>%
   mutate(
@@ -727,7 +728,7 @@ shinyServer(function(input, output, session) {
               show.legend = FALSE,
               fontface = "bold") +
             labs(
-              # title = "Número de actividades económicas por área de cualificación",
+              title = "Número de Actividades Económicas por Área de Desempeño",
               y = "Acumulado de empresas"
             ) +
             # change the y max limit to the highest bar plus 10
@@ -735,7 +736,8 @@ shinyServer(function(input, output, session) {
               limits = c(0, 86)
             ) +
             theme_few() +
-            theme(text = element_text(size = 15)
+            theme(text = element_text(size = 15),
+            plot.title = element_text(hjust = 0.5) 
             )
         })
         
@@ -750,15 +752,18 @@ shinyServer(function(input, output, session) {
                     textinfo = 'label+percent',
                     insidetextfont = list(color = '#FFFFFF'),
                     hoverinfo = 'text',
-                    text = ~paste('$', n, ' billions'),
+                    text = ~paste('', n, ''),
                     marker = list(colors = colors,
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
-                    showlegend = FALSE) %>%  layout(title = 'Piechart Áreas de Desempeño',
-                                                    width = 500,
-                                                    height = 500,
-                                                    xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                                                    yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+                    showlegend = FALSE) %>%
+            layout(title = 'Piechart por Área de Desempeño',
+                   font = list(size = 13)) %>% 
+            layout(
+                width = 500,
+                height = 500,
+                xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
         })
         
 
@@ -781,7 +786,7 @@ shinyServer(function(input, output, session) {
               size = 8,
               fontface = "bold") +
             labs(
-              # title = "Número de actividades económicas por área de cualificación",
+              title = "Número de Actividades Económicas por Tamaño de la Empresa",
               y = "Acumulado de empresas"
             ) +
             # change the y max limit to the highest bar plus 10
@@ -789,11 +794,12 @@ shinyServer(function(input, output, session) {
               limits = c(0, 40)
             ) +
             theme_few() +
-            theme(text = element_text(size = 15)
+            theme(text = element_text(size = 15),
+                  plot.title = element_text(hjust = 0.5) 
             ) 
         })
         
-        # Pie chart descriptivas área de desempeño
+        # Pie chart descriptivas por Tamaño de la Empresa
         colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
         output$pie_tamano_empresa <- renderPlotly({
           base_descriptivas %>% dplyr::select(`Código_área`, `Tamaño empresa`) %>%
@@ -804,15 +810,18 @@ shinyServer(function(input, output, session) {
                     textinfo = 'label+percent',
                     insidetextfont = list(color = '#FFFFFF'),
                     hoverinfo = 'text',
-                    text = n,
+                    text = ~paste('', n, ''),
                     marker = list(colors = colors,
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
-                    showlegend = FALSE) %>%  layout(title = 'Piechart por Tamaño de la Empresa',
-                                                    width = 500,
-                                                    height = 500,
-                                                    xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                                                    yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+                    showlegend = FALSE) %>% 
+            layout(title = 'Piechart por Tamaño de la Empresa',
+                                                    font = list(size = 13)) %>% 
+            layout(
+              width = 500,
+              height = 500,
+              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
         })
 
 # -----------------Descriptivas Cargos dificil consecusión
@@ -835,7 +844,7 @@ shinyServer(function(input, output, session) {
               show.legend = FALSE,
               fontface = "bold") +
             labs(
-              # title = "Número de actividades económicas por área de cualificación",
+              title = "Número de Actividades Económicas por Cargos de Difícil Consecución",
               y = "Acumulado de empresas",
               fill = "Cargos de difícil consecución"
             ) +
@@ -844,7 +853,8 @@ shinyServer(function(input, output, session) {
               limits = c(0, 61)
             ) +
             theme_few() +
-            theme(text = element_text(size = 15)
+            theme(text = element_text(size = 15),
+                  plot.title = element_text(hjust = 0.5) 
             )
         })
         
@@ -863,11 +873,13 @@ shinyServer(function(input, output, session) {
                     marker = list(colors = colors,
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
-                    showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecucion',
-                                                    width = 500,
-                                                    height = 500,
-                                                    xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                                                    yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+                    showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecución',
+                                                    font = list(size = 13)) %>% 
+            layout(
+              width = 500,
+              height = 500,
+              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
         })
         
         # -----------------Descriptivas Departamentos
@@ -890,7 +902,7 @@ shinyServer(function(input, output, session) {
               show.legend = FALSE,
               fontface = "bold") +
             labs(
-              # title = "Número de actividades económicas por área de cualificación",
+              title = "Número de Actividades Económicas por Departamento",
               y = "Acumulado de empresas",
               fill = "Cargos de difícil consecución"
             ) +
@@ -899,7 +911,8 @@ shinyServer(function(input, output, session) {
               limits = c(0, 61)
             ) +
             theme_few() +
-            theme(text = element_text(size = 15)
+            theme(text = element_text(size = 15),
+                  plot.title = element_text(hjust = 0.5) 
             )
         }) 
         
@@ -914,15 +927,17 @@ shinyServer(function(input, output, session) {
                     textinfo = 'label+percent',
                     insidetextfont = list(color = '#FFFFFF'),
                     hoverinfo = 'text',
-                    text = n,
+                    text = ~paste('', n, ''),
                     marker = list(colors = colors,
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
-                    showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecucion',
-                                                    width = 500,
-                                                    height = 500,
-                                                    xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                                                    yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+                    showlegend = FALSE) %>%  layout(title = 'Piechart por Departamento',
+                                                    font = list(size = 13)) %>% 
+            layout(
+              width = 500,
+              height = 500,
+              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
         })
 ########################################## BASES CARACTERIZACIÓN ##########################################
         
@@ -930,16 +945,28 @@ shinyServer(function(input, output, session) {
         output$base_TasaOcupados <- renderReactable(
           base_TasaOcupados %>% select(
             Código_área,
+            Año,
+            Departamento,
             input$caract_TasaOcu_areaCual_,
             input$caract_TasaOcu_eduAno_,
             input$caract_TasaOcu_indices_
-          ) %>% reactable(
+          ) %>% filter(Año %in% input$ocu_depto_año) %>% 
+            filter(Departamento %in% input$ocu_depto_depto) %>% 
+            reactable(
             filterable = TRUE, minRows = 10
           )
         )
         # Clear Button
         observeEvent(input$clear_baseTasaOcupados, {
           updateSelectizeInput(session, "caract_TasaOcu_areaCual_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_baseTasaOcupados, {
+          updateSelectizeInput(session, "ocu_depto_depto", selected = character(0))
+        })
+        
+        observeEvent(input$clear_baseTasaOcupados, {
+          updateSelectizeInput(session, "ocu_depto_año", selected = character(0))
         })
         
         observeEvent(input$clear_baseTasaOcupados, {
@@ -961,7 +988,7 @@ shinyServer(function(input, output, session) {
             ),
             file,
             row.names = T,
-            # fileEncoding = "ASCII"
+            fileEncoding = "ISO-8859-1"
             )
           }
         )
@@ -970,10 +997,12 @@ shinyServer(function(input, output, session) {
         output$base_ocupadosCIIU <- renderReactable(
           base_OcupadosCIIU %>% select(
             Código_área,
+            Año,
             input$caract_ocuCIIU_areaCual_,
             input$caract_ocuCIIU_Ano_,
             input$caract_ocuCIIU_indices_
-          ) %>% reactable(
+          ) %>% filter(Año %in% input$ocu_CIIU_año) %>% 
+            reactable(
             filterable = TRUE, minRows = 10
           )
         )
@@ -1002,7 +1031,7 @@ shinyServer(function(input, output, session) {
             ),
             file,
             row.names = T,
-            # fileEncoding = "ASCII"
+            fileEncoding = "UTF-8"
             )
           }
         )
@@ -1011,14 +1040,27 @@ shinyServer(function(input, output, session) {
         output$base_ocupadosEdadSexo <- renderReactable(
           base_OcupadosEdadSexo %>% select(
             Código_área,
+            Año,
+            `Rango de edad`,
             input$caract_ocuEdadSexo_areaCual_,
             input$caract_ocuEdadSexo_Ano_,
             input$caract_ocuEdadSexo_Edad_,
-            input$caract_ocuEdadSexo_indices_
-          ) %>% reactable(
+            input$caract_ocuEdadSexo_indices_) %>% 
+            filter(Año %in% input$ocu_edadsexo_año_) %>%
+            filter(`Rango de edad` %in% input$ocu_niveledu_rangoEdad_) %>%
+            reactable(
             filterable = TRUE, minRows = 10
           )
         )
+        
+        # Selectize Input
+        output$ocu_niveledu_rangoEdad <- renderUI({
+          selectizeInput("ocu_niveledu_rangoEdad_", "Seleccione Rango de Edad:",
+                         choices = names(table(base_OcupadosEdadSexo$`Rango de edad`)),
+                         multiple = T,
+                         selected = names(table(base_OcupadosEdadSexo$`Rango de edad`))
+          )
+        })
         
         # Clear Button
         observeEvent(input$clear_ocupadosEdadSexo, {
@@ -1026,7 +1068,11 @@ shinyServer(function(input, output, session) {
         })
         
         observeEvent(input$clear_ocupadosEdadSexo, {
-          updateSelectizeInput(session, "caract_ocuEdadSexo_Ano_", selected = character(0))
+          updateSelectizeInput(session, "ocu_niveledu_rangoEdad_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_ocupadosEdadSexo, {
+          updateSelectizeInput(session, "ocu_edadsexo_año_", selected = character(0))
         })
         
         observeEvent(input$clear_ocupadosEdadSexo, {
@@ -1058,13 +1104,27 @@ shinyServer(function(input, output, session) {
         output$base_ocupadosNivelEdu <- renderReactable(
           base_OcupadosNivelEdu %>% select(
             Código_área,
+            Año,
+            `Nivel educativo`,
             input$caract_OcuNivelEdu_areaCual_,
             input$caract_OcuNivelEdu_Ano_,
             input$caract_OcuNivelEdu_indices_
-          ) %>% reactable(
+          ) %>%
+            filter(Año %in% input$ocu_niveledu_año_) %>%
+            filter(`Nivel educativo` %in% input$ocu_niveledu_niveledu_) %>% 
+            reactable(
             filterable = TRUE, minRows = 10
           )
         )
+        
+        # Selectize Input
+        output$ocu_niveledu_niveledu <- renderUI({
+          selectizeInput("ocu_niveledu_niveledu_", "Seleccione Nivel Educativo:",
+                         choices = names(table(base_OcupadosNivelEdu$`Nivel educativo`)),
+                         multiple = T,
+                         selected = names(table(base_OcupadosNivelEdu$`Nivel educativo`))
+          )
+        })
         
         # Clear Button
         observeEvent(input$clear_NivelEdu, {
@@ -1072,11 +1132,11 @@ shinyServer(function(input, output, session) {
         })
         
         observeEvent(input$clear_NivelEdu, {
-          updateSelectizeInput(session, "caract_OcuNivelEdu_areaCual_", selected = character(0))
+          updateSelectizeInput(session, "ocu_niveledu_niveledu_", selected = character(0))
         })
         
         observeEvent(input$clear_NivelEdu, {
-          updateSelectizeInput(session, "caract_OcuNivelEdu_areaCual_", selected = character(0))
+          updateSelectizeInput(session, "ocu_niveledu_año_", selected = character(0))
         })
         
         #Download Button
@@ -1099,17 +1159,37 @@ shinyServer(function(input, output, session) {
   ####################### INFORMACIÓN DEMANDA SPE
         output$base_demandaSPE <- renderReactable(
           DemandaSPE %>% select(
+            `Año`,
+            `Departamento`,
             input$caract_OtrasFuentes_SPE_otros_,
             input$caract_OtrasFuentes_SPE_generales_,
             input$caract_OtrasFuentes_SPE_Areas_
-          ) %>% reactable(
+          ) %>% filter(Año %in% input$otrasFuentes_SPE_año) %>% 
+            filter(Departamento %in% input$otrasFuentes_SPE_depto_) %>% 
+            reactable(
             filterable = TRUE, minRows = 10
           )
         )
         
+        output$otrasFuentes_SPE_depto <- renderUI({
+          selectizeInput("otrasFuentes_SPE_depto_", "Seleccione Departamento:",
+                         choices = names(table(DemandaSPE$`Departamento`)),
+                         multiple = T,
+                         selected = names(table(DemandaSPE$`Departamento`))
+          )
+        })
+        
         # Clear Button
         observeEvent(input$clear_SPE, {
           updateSelectizeInput(session, "caract_OtrasFuentes_SPE_otros_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_SPE, {
+          updateSelectizeInput(session, "otrasFuentes_SPE_año", selected = character(0))
+        })
+        
+        observeEvent(input$clear_SPE, {
+          updateSelectizeInput(session, "otrasFuentes_SPE_depto_", selected = character(0))
         })
         
         observeEvent(input$clear_SPE, {
@@ -1139,6 +1219,7 @@ shinyServer(function(input, output, session) {
   ####################### INFORMACIÓN OFERTA SNIES
         output$base_OfertaSNIES <- renderReactable(
           base_OfertaSNIES %>% select(
+            `Código_área`,
             input$caract_OtrasFuentes_snies_Areas_,
             input$caract_OtrasFuentes_snies_programa_,
             input$caract_OtrasFuentes_snies_general_
@@ -1162,7 +1243,7 @@ shinyServer(function(input, output, session) {
         
         #Download Button
         output$download_snies <- downloadHandler(
-          filename = function(){"InformaciónDemandaSPE.csv"},
+          filename = function(){"Información_OfertaEducativa.csv"},
           content = function(file){
             write.csv2(base_OfertaSNIES %>% select(
               input$caract_OtrasFuentes_snies_Areas_,
@@ -1293,7 +1374,22 @@ shinyServer(function(input, output, session) {
           updateTabItems(session, "Sidebar", selected = "bases_oficiales")
         })
         
+        # Switch tabs using images in Información por Etapas tab --------------------------------
+        observeEvent(input$link_to_ocu_dept, {
+          updateTabItems(session, "Sidebar", selected = "tasa_ocupados")
+        })
 
+        observeEvent(input$link_to_ocu_sect, {
+          updateTabItems(session, "Sidebar", selected = "ocupados_ciiu")
+        })
+        
+        observeEvent(input$link_to_ocu_edad, {
+          updateTabItems(session, "Sidebar", selected = "ocupados_edadSexo")
+        })
+        
+        observeEvent(input$link_to_ocu_nivEdu, {
+          updateTabItems(session, "Sidebar", selected = "ocupados_NivelEdu")
+        })
 # Behavior of DESCRIPTIVOS POR ÁREA ---------------------------------------
         
         # Render table
@@ -1304,9 +1400,7 @@ shinyServer(function(input, output, session) {
                      input$area_cualificacion,
                      input$denominacion_cuoc,
                      input$cine,
-                     input$ciiu,
-                     input$caract_sector,
-                     input$brechas_hum
+                     input$ciiu
                    )
             ) %>% distinct() %>%
             reactable(
@@ -1317,23 +1411,18 @@ shinyServer(function(input, output, session) {
         )
         
         # Download table
-        output$download_csv <- downloadHandler(
-          filename = function(){"datos_consolidados.csv"},
+        output$download_mainBases <- downloadHandler(
+          filename = function(){"Bases_Oficiales.csv"},
           content = function(file){
-            write.csv2(main_bases %>%
-                         select( 
-                           c(
-                             input$area_cualificacion,
-                             input$denominacion_cuoc,
-                             input$cine,
-                             input$ciiu,
-                             input$caract_sector,
-                             input$brechas_hum
-                             )
-                           ),
+            write.csv2(main_bases %>% 
+                         select(Código_área,
+                               input$area_cualificacion,
+                               input$denominacion_cuoc,
+                               input$cine,
+                               input$ciiu
+                               ),
             file,
-            row.names = T#,
-            # fileEncoding = "ASCII"
+            row.names = F
             )
           }
         )

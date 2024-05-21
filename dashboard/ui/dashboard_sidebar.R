@@ -10,16 +10,21 @@ dashboard_sidebar <- dashboardSidebar(
             tabName = "tab_catalogo", icon = icon("book")),
         menuItem("Bases de Datos Oficiales",
                  tabName = "bases_oficiales", icon = icon("cloud")),
-        menuItem("Información por Etapas MNC",
-            icon = icon("bar-chart"), startExpanded = FALSE,
-                menuItem(
-                    "Contextualización Sector",
-                    tabName = "tasa_ocupados",
-                    menuSubItem("Ocupados Departamentos", tabName = "tasa_ocupados"),
-                    menuSubItem("Ocupados Sectores", tabName = "ocupados_ciiu"),
-                    menuSubItem("Ocupados Edad y Sexo", tabName = "ocupados_edadSexo"),
-                    menuSubItem("Ocupados Nivel Educativo", tabName = "ocupados_NivelEdu")
-                    )
+        menuItem("Bases de datos Etapas MNC",
+                 icon = icon("bar-chart"),
+                 startExpanded = FALSE,
+                 menuItem("Información por Etapas MNC",
+                          tabName = "info_etapas",
+                          startExpanded = T
+                          ),
+                 menuItem(
+                      "Contextualización Sector",
+                      tabName = "tasa_ocupados",
+                      menuSubItem("Ocupados Departamentos", tabName = "tasa_ocupados"),
+                      menuSubItem("Ocupados Sectores", tabName = "ocupados_ciiu"),
+                      menuSubItem("Ocupados Edad y Sexo", tabName = "ocupados_edadSexo"),
+                      menuSubItem("Ocupados Nivel Educativo", tabName = "ocupados_NivelEdu")
+                      )
         ),
         menuItem("Otras Fuentes de Información",
                  icon = icon("question-circle"), startExpanded = FALSE,
@@ -39,16 +44,8 @@ dashboard_sidebar <- dashboardSidebar(
                      tabName = "est_area_cual"
                    ),
                    menuSubItem(
-                     "Áreas de Desempeño",
-                     tabName = "est_areasDesempeño"
-                   ),
-                   menuSubItem(
-                     "Departamentos",
-                     tabName = "est_departamentos"
-                   ),
-                   menuSubItem(
-                     "Tamaño de la Empresa",
-                     tabName = "est_tamañoEmpresa"
+                     "Información General",
+                     tabName = "est_generales"
                    ),
                    menuSubItem(
                      "Cargos de Difícil Consecución",
@@ -60,7 +57,7 @@ dashboard_sidebar <- dashboardSidebar(
                    )
                  ),
                  menuItem(
-                   "Análisis de compentencias",
+                   "Análisis de Compentencias",
                    menuSubItem(
                      "Análisis de Competencias",
                      tabName = "analisis_competencias"
