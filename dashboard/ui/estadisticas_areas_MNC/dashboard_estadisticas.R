@@ -8,15 +8,14 @@ tab_AnalisisCompetencias <- tabItem(
               }'),
   div(style = "height: 20px;"),
   fluidRow(
-    
     column(8, offset = 2,
-           tags$h1("Análisis de Competencias",
+           tags$h1("Conocimientos CUOC",
                    style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
            ),
            tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;")
     )
   ),
-  div(style = "height: 40px;"),
+  div(style = "height: 60px;"),
   fluidRow(
           div(style = "font-size: 17px;",
           column(2,
@@ -40,47 +39,113 @@ tab_AnalisisCompetencias <- tabItem(
                  
           ),
           column(10,
-                 tags$h2("Habilidades Socioemocionales", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-                 tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-                 div(style = "height: 30px;"),
                  fluidRow(
-                   
-                   column(8,
-                          plotOutput("socioemocionales")
+                   div(style = "text-align: center;",
+                   box(width = 12,
+                       plotOutput("conocimientos")
+                      )
+                   )
                    ),
-                   column(4,
-                          wordcloud2Output("wordcloud_habilidades")
-                          )
-                   ),
-                   div(style = "height: 30px;"),
-                   fluidRow(
-                     tags$h2("Conocimientos CUOC", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-                     tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-                     div(style = "height: 10px;"),
-                     column(8,
-                            plotOutput("conocimientos")
-                            
-                     ),
-                     column(4,
-                            wordcloud2Output("wordcloud_conocimientos")
-                     )
-                   ),
-                    div(style = "height: 30px;"),
-                   fluidRow(
-                     tags$h2("Destrezas CUOC", style = "text-align: center; font-weight: bold; color: #4682B4;"),
-                     tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 10%;"),
-                     div(style = "height: 10px;"),
-                     column(7,
-                            plotOutput("destrezas")
-
-                     ),
-                     column(4,
-                            wordcloud2Output("wordcloud_destrezas")
-                            )
-                     )
+                 fluidRow(
+                   wordcloud2Output("wordcloud_conocimientos")
+                 )
                  )
           
           )
+  ),
+  div(style="height: 60px;"),
+  fluidRow(
+    column(8, offset = 2,
+           tags$h1("Habilidades Socioemocionales",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
+           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;")
+    )
+  ),
+  div(style = "height: 40px;"),
+  fluidRow(
+    div(style = "font-size: 17px;",
+        column(2,
+               # div(style="height: 40px;"),
+               # box(title="Seleccione:",
+               #     width=12,
+               #     status="primary",
+               #     solidHeader=T,
+               #     uiOutput("select_area_catalog_2_2")
+               # ),
+               # box(title = "Guía",
+               #     width = 12,
+               #     solidHeader = TRUE,
+               #     status = "primary",
+               #     collapsible = T,
+               #     collapsed = T,
+               #     tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+               #     div(style = "height: 10px;"),
+               #     style = "font-size: 18px; text-align: justify;"
+               # )
+               
+        ),
+        column(10,
+               fluidRow(
+               div(style = "text-align: center;",
+                   box(width = 12,
+                       wordcloud2Output("wordcloud_habilidades")
+                   )
+               )
+               ),
+               fluidRow(
+                 plotOutput("socioemocionales")
+               )
+        )
+        
+    )
+  ),
+  div(style="height: 60px;"),
+  fluidRow(
+    column(8, offset = 2,
+           tags$h1("Destrezas CUOC",
+                   style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
+           ),
+           tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;")
+    )
+  ),
+  div(style = "height: 60px;"),
+  fluidRow(
+    div(style = "font-size: 17px;",
+        column(2,
+               # div(style="height: 40px;"),
+               # box(title="Seleccione:",
+               #     width=12,
+               #     status="primary",
+               #     solidHeader=T,
+               #     uiOutput("select_area_catalog_2")
+               # ),
+               # box(title = "Guía",
+               #     width = 12,
+               #     solidHeader = TRUE,
+               #     status = "primary",
+               #     collapsible = T,
+               #     collapsed = T,
+               #     tags$p("En esta sección, encontrará datos estadísticos desagregados y representados gráficamente en un tablero de PBI. Para acceder al panel interactivo, haga clic en el siguiente enlace:", style = "font-size: 20px;"),
+               #     div(style = "height: 10px;"),
+               #     style = "font-size: 18px; text-align: justify;"
+               # )
+               
+        ),
+        column(10,
+               fluidRow(
+                 div(style = "text-align: center;",
+                     box(width = 12,
+                         wordcloud2Output("wordcloud_destrezas")
+                     )
+                 )
+               ),
+               fluidRow(
+                 plotOutput("destrezas")
+               )
+        )
+        
+    )
   )
 )
 
@@ -130,15 +195,19 @@ tab_estadisticas_generales <- tabItem(
              )
              
       ),
-      column(8, offset = 1,
-             fluidRow(
-               column(5, offset=2,
-                      plotlyOutput("pie_descriptivas_area")
-                      )
-             ),
-             div(style="height: 100px;"),
-             fluidRow(
-               plotOutput("descriptivas_area")
+      column(9, offset = 0,
+               box(status = "primary",
+                   width = 12,
+                   solidHeader = T,
+                   fluidRow(
+                     column(5, offset=2,
+                            plotlyOutput("pie_descriptivas_area")
+                            )
+                   ),
+                   div(style="height: 100px;"),
+                   fluidRow(
+                     plotOutput("descriptivas_area")
+                     )
                )
              )
       )

@@ -25,7 +25,7 @@ tab_BasesOficiales <- tabItem(
                status = "primary",
                collapsible = T,
                collapsed = F,
-               tags$p("A través de esta sección los usuarios podrán acceder a información detallada que integra las diversas áreas de cualificación del Marco Nacional de Cualificaciones (MNC). Esta información se basa en las fuentes de la Clasificación Nacional de Ocupaciones (CUOC), la Clasificación Internacional Normalizada de la Educación Adaptada a Colombia (CINE), y la Clasificación Industrial Internacional Uniforme (CIUU) rev. 4. Con esta integración, se proporciona un acceso completo y actualizado a las clasificaciones esenciales para el análisis ocupacional y educativo en Colombia.", style = "font-size: 20px;"),
+               tags$p("A través de esta sección los usuarios podrán acceder a información detallada que integra las diversas áreas de cualificación del Marco Nacional de Cualificaciones (MNC). Esta información se basa en las fuentes de la Clasificación Nacional de Ocupaciones (CUOC), la Clasificación Internacional Normalizada de la Educación Adaptada a Colombia (CINE-F), y la Clasificación Industrial Internacional Uniforme (CIIU) rev. 4. Con esta integración, se proporciona un acceso completo y actualizado a las clasificaciones esenciales para el análisis ocupacional y educativo en Colombia.", style = "font-size: 20px;"),
                div(style = "height: 10px;"),
                div(style="text-align:center;"
                ),
@@ -54,12 +54,12 @@ tab_BasesOficiales <- tabItem(
                  condition = "input.select_main_base == 'Areas de Cualificación'",
                  checkboxGroupInput("area_cualificacion", "Seleccione Atributos", 
                                     choices = c(
-                                      "Codigo Área" = "Código_área",
-                                      "Nombre área cualificación" = "Nombreáreacualificación"
+                                      "Código Área" = "Código área",
+                                      "Nombre área cualificación" = "Nombre área cualificación"
                                     ),
                                     selected = c(
-                                      "Código_área",
-                                      "Nombreáreacualificación"
+                                      "Código área",
+                                      "Nombre área cualificación"
                                     )
                  )
                ),
@@ -67,31 +67,27 @@ tab_BasesOficiales <- tabItem(
                  condition = "input.select_main_base == 'Ocupaciones CUOC'",
                  checkboxGroupInput("denominacion_cuoc", "Seleccione Atributos", 
                                     choices = c(
-                                      "Código Grandes Grupos" = "CódigoGrandesGrupos",
-                                      "Grandes Grupos" = "GrandesGrupos",
-                                      "Código Subgrupos principales" = "CódigoSubgruposprincipales",
-                                      "Subgrupos principales" = "Subgruposprincipales",
-                                      "Código subgrupos" = "Códigosubgrupos",
+                                      "Código Grandes Grupos" = "Código Grandes Grupos",
+                                      "Grandes Grupos" = "Grandes Grupos",
+                                      "Código Subgrupos principales" = "Código Subgrupos principales",
+                                      "Subgrupos principales" = "Subgrupos principales",
+                                      "Código subgrupos" = "Código subgrupos",
                                       "Subgrupos" = "Subgrupos",
-                                      "Códigos Grupos primarios" = "CódigosGruposprimarios",
-                                      "Grupos primarios" = "Gruposprimarios",
-                                      "Código Ocupación" = "CódigoOcupación",
+                                      "Códigos Grupos primarios" = "Códigos Grupos primarios",
+                                      "Grupos primarios" = "Grupos primarios",
+                                      "Código Ocupación" = "Código Ocupación",
                                       "Ocupación" = "Ocupación",
-                                      "Código denominaciones" = "Códigodenominaciones",
+                                      "Código denominaciones" = "Código denominaciones",
                                       "Denominacion" = "Denominacion",
-                                      "Código CIUO 08 A.C." = "CódigoCIUO08AC",
-                                      "Código CNO" = "CódigoCNO",
-                                      "Nombre Ocupación Afín" = "NombreOcupaciónAfín",
-                                      "Nombre Destreza" = "NombreDestreza", 
-                                      "Nombre Conocimiento" = "NombreConocimiento",
-                                      "Nivel Competencia" = "NivelCompetencia",
-                                      "Descripción Ocupación" = "DescripciónOcupación",
-                                      "Consecutivo Función" = "ConsecutivoFunción",
-                                      "Redacción Función" = "RedacciónFunción"
-                                    ),
-                                    selected = c(
-                                      "Código_área",
-                                      "Nombre área cualificación"
+                                      "Código CIUO 08 A.C." = "Código CIUO08AC",
+                                      "Código CNO" = "Código CNO",
+                                      "Nombre Ocupación Afín" = "Nombre Ocupación Afín",
+                                      "Nombre Destreza" = "Nombre Destreza", 
+                                      "Nombre Conocimiento" = "Nombre Conocimiento",
+                                      "Nivel Competencia" = "Nivel Competencia",
+                                      "Descripción Ocupación" = "Descripción Ocupación",
+                                      "Consecutivo Función" = "Consecutivo Función",
+                                      "Redacción Función" = "Redacción Función"
                                     )
                  )
                ),
@@ -99,8 +95,8 @@ tab_BasesOficiales <- tabItem(
                  condition = "input.select_main_base == 'Educación CINE'",
                  checkboxGroupInput("cine", "Seleccione Atributos", 
                                     choices = c(
-                                      "Código CINE-2011 AC" = "CódigoCINE2011AC",
-                                      "Campos Detallado" = "CamposDetallado"
+                                      "Código CINE-2011 AC" = "Código CINE2011 AC",
+                                      "Campos Detallado" = "Campos Detallado"
                                     )
                  )
                ),
@@ -111,7 +107,7 @@ tab_BasesOficiales <- tabItem(
                                       "Sección" = "Sección",
                                       "División" = "División",
                                       "Grupo" = "Grupo",
-                                      "Código_ciiu" = "Código_ciiu",
+                                      "Código_ciiu" = "Código CIIU",
                                       "Descripción" = "Descripción"
                                     )
                  )
@@ -141,7 +137,12 @@ tab_BasesOficiales <- tabItem(
            div(
              style = "height: 200px;"
            ),
-           box(title = "Material de apoyo", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
+           box(title = "Ayuda", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
+               width = 12,
+               tags$p("En el filtro, se pueden encontrar las bases y sus atributos, los cuales se podrán seleccionar, filtrar y descargar según los diferentes filtros disponibles. Esto permite a los usuarios personalizar y obtener información específica según sus necesidades particulares.",
+                      style = "font-size: 17px;")
+           ),
+           box(title = "Material de Apoyo", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
                width = 12,
                HTML("<a href='https://www.dane.gov.co/index.php/sistema-estadistico-nacional-sen/normas-y-estandares/nomenclaturas-y-clasificaciones/clasificaciones#clasificaciones-adaptadas' target='_blank'> 
                         <p align: center; color: #4682B4;'>
@@ -156,6 +157,7 @@ tab_BasesOficiales <- tabItem(
                      </a>"
                )
            )
+           
     ),
     column(10, 
            reactableOutput("main_databases")

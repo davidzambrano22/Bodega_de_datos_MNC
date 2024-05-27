@@ -9,10 +9,27 @@ tab_demandaSPE <- tabItem(
   div(style = "height: 40px;"),
   fluidRow(
     column(8, offset = 2,
-           tags$h1("Información Demanda SPE",
+           tags$h1("Información Ofertas Laborales SPE",
                    style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
            ),
            tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;")
+    )
+  ),
+  div(style = "height: 40px;"),
+  fluidRow(
+    column(10, offset=1,
+           box(title = "Información",
+               width = 12,
+               solidHeader = TRUE,
+               status = "primary",
+               collapsible = T,
+               collapsed = F,
+               tags$p("En esta sección se presenta la información de las ofertas laborales (vacantes), es decir, los anuncios de empleo registrados por los empleadores en el Sistema de Información del Servicio de Empleo. Esta base de datos contiene información detallada sobre las vacantes, incluyendo título, descripción, experiencia requerida y rango salarial. La información se encuentra desagregada por área de cualificación, año y departamentos, proporcionando una visión completa y detallada de las oportunidades laborales disponibles.", style = "font-size: 20px;"),
+               div(style = "height: 10px;"),
+               div(style="text-align:center;"
+               ),
+               style = "font-size: 18px; text-align: justify;"
+           )
     )
   ),
   div(
@@ -37,12 +54,12 @@ tab_demandaSPE <- tabItem(
                      condition = "input.caract_OtrasFuentes_SPE == 'Área de Cualificación'",
                      checkboxGroupInput("caract_OtrasFuentes_SPE_Areas_", "Seleccione Atributos", 
                                         choices = c(
-                                          "Codigo Área" = "Código_área",
-                                          "Nombre Área cualificación" = "Nombreáreacualificación"
+                                          "Codigo Área" = "Código área",
+                                          "Nombre Área cualificación" = "Nombre área cualificación"
                                         ),
                                         selected = c(
-                                          "Código_área",
-                                          "Nombreáreacualificación"
+                                          "Código área",
+                                          "Nombre área cualificación"
                                         )
                      )
                    ),
@@ -53,9 +70,9 @@ tab_demandaSPE <- tabItem(
                                          "Año" = "Año",
                                          "Mes" = "Mes",
                                          "Dia" = "Dia",
-                                         "Código del Municipio" = "cod_mpio",
-                                         "Municipio" = "Municipio",
-                                         "Departamento" = "Departamento"
+                                         "Código del Municipio" = "Código municipio",
+                                         "Municipio" = "Municipio"#,
+                                         # "Departamento" = "Departamento"
                                         )
                      )
                    ),
@@ -63,14 +80,14 @@ tab_demandaSPE <- tabItem(
                      condition = "input.caract_OtrasFuentes_SPE == 'Información del Cargo'",
                      checkboxGroupInput("caract_OtrasFuentes_SPE_otros_", "Seleccione Atributos", 
                                         choices = c(
-                                          "Cantidad de Vacantes" = "CantidadVacantes",
-                                          "Cargo Solicitado" = "CargoSolicitado",
-                                          "Experiencia Laboral" = "Experiencia_laboral",
-                                          "Rangos Salariales" = "Rangos_salariales",
-                                          "Códigos Grupos Primarios" = "CódigosGruposprimarios",
-                                          "Código CIIU" = "Código_ciiu",
-                                          "Nivel Educativo" = "Nivel_educativo",
-                                          "Código Ocupación" = "CódigoOcupación",
+                                          "Cantidad de Vacantes" = "Cantidad Vacantes",
+                                          "Cargo Solicitado" = "Cargo Solicitado",
+                                          "Experiencia Laboral" = "Experiencia laboral",
+                                          "Rangos Salariales" = "Rangos salariales",
+                                          "Códigos Grupos Primarios" = "Códigos Grupos primarios",
+                                          "Código CIIU" = "Código CIIU",
+                                          "Nivel Educativo" = "Nivel educativo",
+                                          "Código Ocupación" = "Código Ocupación",
                                           "Ocupación" = "Ocupación"
                                         )
                      )
@@ -79,7 +96,7 @@ tab_demandaSPE <- tabItem(
                      style = "height: 30px;"
                    ),
                    selectizeInput("otrasFuentes_SPE_año", "Seleccione Año",  # Seleccione por año
-                                  choices = 2022:2024
+                                  choices = 2020:2023
                                   ),
                    div(
                      style = "height: 30px;"
@@ -107,12 +124,20 @@ tab_demandaSPE <- tabItem(
                      
                    )
                ),
-               box(title = "Guía", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
+               box(title = "Material de Apoyo", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
                    width = 12,
-                   tags$p("En esta sección encontrará información sobre...",
-                          style = "font-size: 17px; text-align: justify;"
+                   HTML("<a href='https://www.serviciodeempleo.gov.co/dataempleo-spe' target='_blank'> 
+                        <p align: center; color: #4682B4;'>
+                          SPE- Servicio Público de Empleo
+                        </p>
+                     </a>"
                    ),
-                   tags$a("Descargar el instructivo...", href="fichas_brechas.pdf", target="_blank", style = "font-size: 17px;")
+                   HTML("<a href='OfertasLaborales.pdf' target='_blank'> 
+                        <p align: center; color: #4682B4;'>
+                          Ofertas Laborales
+                        </p>
+                     </a>"
+                   )
                )
         ),
         column(10,
@@ -135,6 +160,23 @@ tab_infoSNIES <- tabItem(
                    style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
            ),
            tags$hr(style = "border-top: 4px solid black; margin-top: 5px; margin-bottom: 10px;  border-color: #D3D3D3; width: 20%;")
+    )
+  ),
+  div(style = "height: 40px;"),
+  fluidRow(
+    column(10, offset=1,
+           box(title = "Información",
+               width = 12,
+               solidHeader = TRUE,
+               status = "primary",
+               collapsible = T,
+               collapsed = F,
+               tags$p("En esta sección se presenta la información del Sistema Nacional de Información de la Educación Superior (SNIES), el cual recopila y organiza datos relevantes sobre la educación superior en Colombia. Esta base de datos contiene información detallada sobre estudiantes matriculados, admitidos e inscritos, así como sobre el personal docente y administrativo. La información se encuentra desagregada por área de cualificación, proporcionando una visión completa y detallada del comportamiento del sector de educación superior en el país.", style = "font-size: 20px;"),
+               div(style = "height: 10px;"),
+               div(style="text-align:center;"
+               ),
+               style = "font-size: 18px; text-align: justify;"
+           )
     )
   ),
   div(
@@ -160,12 +202,12 @@ tab_infoSNIES <- tabItem(
                        condition = "input.caract_OtrasFuentes_snies == 'Área de Cualificación'",
                        checkboxGroupInput("caract_OtrasFuentes_snies_Areas_", "Seleccione Atributos", 
                                           choices = c(
-                                            "Codigo Área" = "Código_área",
+                                            "Codigo Área" = "Código área",
                                             "Nombre Área cualificación" = "Nombre área cualificación"
                                           ),
                                           selected = c(
-                                            "Código_área",
-                                            "Nombreáreacualificación"
+                                            "Código área",
+                                            "Nombre área cualificación"
                                           )
                        )
                      ),
@@ -173,23 +215,23 @@ tab_infoSNIES <- tabItem(
                        condition = "input.caract_OtrasFuentes_snies == 'Información del Programa'",
                        checkboxGroupInput("caract_OtrasFuentes_snies_programa_", "Seleccione Atributos", 
                                           choices = c(
-                                            "Estado del Programa" = "Estado_programa",
+                                            "Estado del Programa" = "Estado programa",
                                             "Justificacion" = "Justificacion",
-                                            "Justificacion Detallada" = "Justificacion_detallada",
-                                            "Reconocimiento de Ministerio" = "Reconocimiento_del_ministerio",
-                                            "Resolución de Aprobación" = "Resolución_de_aprobación",
-                                            "Fecha de Resolución" = "Fecha_de_resolución",
-                                            "Fechade Ejecutoria" = "Fecha_ejecutoria",
-                                            "Vigencia en Años" = "Vigencia_años",
-                                            "Núcleo_básico_del_conocimiento" = "Núcleo_básico_del_conocimiento",
-                                            "Nivel de Formación" = "Nivel_de_formación",
+                                            "Justificacion Detallada" = "Justificacion detallada",
+                                            "Reconocimiento de Ministerio" = "Reconocimiento del ministerio",
+                                            "Resolución de Aprobación" = "Resolución de aprobación",
+                                            "Fecha de Resolución" = "Fecha de resolución",
+                                            "Fechade Ejecutoria" = "Fecha ejecutoria",
+                                            "Vigencia en Años" = "Vigencia años",
+                                            "Núcleo básico del conocimiento" = "Núcleo básico del conocimiento",
+                                            "Nivel de Formación" = "Nivel de formación",
                                             "Modalidad" = "Modalidad",
-                                            "Número de Créditos" = "Número_créditos",
-                                            "Número de Periodos de Duración" = "Número_periodos_de_duración",
+                                            "Número de Créditos" = "Número créditos",
+                                            "Número de Periodos de Duración" = "Número periodos de duración",
                                             "Periodicidad" = "Periodicidad",
-                                            "Se Ofrece por Ciclos Propedéut" = "Se_ofrece_por_ciclos_propedéut",
-                                            "Periodicidadde Admisiones" = "Periodicidad_admisiones",
-                                            "Programa en Convenio" = "Programa_en_convenio"
+                                            "Se Ofrece por Ciclos Propedéut" = "Se ofrece por ciclos propedéut",
+                                            "Periodicidadde Admisiones" = "Periodicidad admisiones",
+                                            "Programa en Convenio" = "Programa en convenio"
                                           )
                        )
                      ),
@@ -197,14 +239,14 @@ tab_infoSNIES <- tabItem(
                        condition = "input.caract_OtrasFuentes_snies == 'Información General'",
                        checkboxGroupInput("caract_OtrasFuentes_snies_general_", "Seleccione Atributos", 
                                           choices = c(
-                                            "Municipio de Oferta del Programa" = "Municipio_oferta_programa",
-                                            "Departamento de Oferta del Programa" = "Departamento_oferta_programa",
-                                            "Nivel Académico"= "Nivel_académico",
-                                            "Área de Conocimiento" = "Área_de_conocimiento",
-                                            "Cine f 2013 Campo Detallado" = "Cine_f_2013_ac_campo_detallado",
-                                            "Cine f 2013 ac Campo Específic" = "Cine_f_2013_ac_campo_específic",
-                                            "Cine f 2013 ac campo Amplio" = "Cine_f_2013_ac_campo_amplio",
-                                            "Fecha de Registro en Snies" = "Fecha_de_registro_en_snies"
+                                            "Municipio de Oferta del Programa" = "Municipio oferta programa",
+                                            # "Departamento de Oferta del Programa" = "Departamento oferta programa",
+                                            "Nivel Académico"= "Nivel académico",
+                                            "Área de Conocimiento" = "Área de conocimiento",
+                                            "Cine f 2013 Campo Detallado" = "Cine f 2013 ac campo detallado",
+                                            "Cine f 2013 ac Campo Específic" = "Cine f 2013 ac campo específic",
+                                            "Cine f 2013 ac campo Amplio" = "Cine f 2013 ac campo amplio",
+                                            "Fecha de Registro en Snies" = "Fecha de registro en snies"
                                           )
                        )
                      ),
@@ -230,12 +272,20 @@ tab_infoSNIES <- tabItem(
                        
                      )
                  ),
-                 box(title = "Guía", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
+                 box(title = "Material de Apoyo", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
                      width = 12,
-                     tags$p("En esta sección encontrará información sobre...",
-                            style = "font-size: 17px; text-align: justify;"
+                     HTML("<a href='https://snies.mineducacion.gov.co/portal/' target='_blank'> 
+                        <p align: center; color: #4682B4;'>
+                          Portal MinEducación
+                        </p>
+                     </a>"
                      ),
-                     tags$a("Descargar el instructivo...", href="fichas_brechas.pdf", target="_blank", style = "font-size: 17px;")
+                     HTML("<a href='SNIES.pdf' target='_blank'> 
+                        <p align: center; color: #4682B4;'>
+                          SNIES
+                        </p>
+                     </a>"
+                     )
                  )
           ),
           column(10,

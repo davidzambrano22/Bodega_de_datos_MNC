@@ -26,7 +26,7 @@ library(haven)
 # print(names(datos))
 
 datos <- BaseEncuestaDemanda <- read_dta("data/input/BaseEncuestaDemanda.dta")
-print(names(datos))
+
 
 # # Read the xlsx file (sheet 2)
 # datos_cargos <- readxl::read_xlsx(path.to.xlsx.file, sheet = 2)

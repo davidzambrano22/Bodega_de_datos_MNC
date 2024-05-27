@@ -15,6 +15,8 @@ source("dashboard/ui/dashboard_header.R")
 source("dashboard/ui/dashboard_sidebar.R")
 source("dashboard/ui/dashboard_tabs.R")
 
+# Home
+source("dashboard/ui/home/tab_home.R")
 # Bases oficiales
 source("dashboard/ui/bases_oficiales/dashboard_BasesOficiales.R")
 # Estadísticas
@@ -73,7 +75,7 @@ ui <- fluidPage(
                 tab_home,
                 tab_BasesOficiales,
                 tab_areasCualificacion,
-                tab_infogeneral,
+                # tab_infogeneral,
                 tab_survey,
                 tab_EstAreaCual,
                 tab_EstEncDemanda,

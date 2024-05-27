@@ -18,10 +18,8 @@ library(tm)
 library(wordcloud2)
 library(wordcloud)
 library(memoise)
-
 # Write databases
 source("data/scripts/excel_reader.R")
-
 # load the kobo.R file
 source("kobo.R")
 # Load wordcloud2a script
@@ -37,33 +35,65 @@ base_medios = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "Medi
 base_motivos = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "MotivosNOVacante")
 
 # Load Caracterización Tables
-base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados") %>%
+base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados")
+names(base_TasaOcupados)[4] <- "Código área"
+base_TasaOcupados <- base_TasaOcupados %>%
   mutate(
     `Ocupados` = round(`Ocupados`, 0),
     `Tasa de ocupados` = round(`Tasa de ocupados`, 2),
     `Población en Edad de Trabajar` = round(`Población en Edad de Trabajar`, 0)
   )
-base_OcupadosCIIU <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por división CIIU") %>%
+
+base_OcupadosCIIU <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por división CIIU")
+names(base_OcupadosCIIU)[1] <- "Código área"
+names(base_OcupadosCIIU)[3] <-"Código CIIU"
+
+base_OcupadosCIIU <- base_OcupadosCIIU %>%
   mutate(
     `Ocupados` = round(`Ocupados`, 0),
     `Proporción ocupados` = round(`Proporción ocupados`, 2)
   )
-base_OcupadosEdadSexo <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por edad y sexo") %>%
+
+
+base_OcupadosEdadSexo <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por edad y sexo")
+names(base_OcupadosEdadSexo)[1] <- "Código área"  
+
+base_OcupadosEdadSexo <- base_OcupadosEdadSexo %>%
   mutate(
     `Ocupados Hombres` = round(`Ocupados Hombres`, 0),
     `Ocupados Mujeres` = round(`Ocupados Mujeres`, 0),
     `Proporción Hombres` = round(`Proporción Hombres`, 2),
     `Proporción Mujeres` = round(`Proporción Mujeres`, 2)
   )
-base_OcupadosNivelEdu <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por Nivel edu") %>%
+
+base_OcupadosNivelEdu <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Ocupados por Nivel edu")
+names(base_OcupadosNivelEdu)[1] <- "Código área"  
+
+base_OcupadosNivelEdu <- base_OcupadosNivelEdu %>%
   mutate(
     `Ocupados` = round(`Ocupados`, 0),
-    `Proporción Ocupados` = round(`Proporción Ocupados`, 2)
+    `Proporción Ocupados` = round(`Proporción Ocupados`, 2),
+    `Nivel educativo` = gsub("\\*", "", `Nivel educativo`)
   )
 
 # Load SPE tables
 DemandaSPE <- read_dta("data/input/bases/DemandaSPE.dta")
+names(DemandaSPE) <- c("Cantidad Vacantes","Cargo Solicitado","Año","Mes","Dia","Código municipio", 
+                       "Departamento","Municipio","Experiencia laboral","Rangos salariales","Códigos Grupos primarios","Código CIIU",
+                       "Nivel educativo","Código Ocupación","Ocupación","Código área","Nombre área cualificación"
+)
+
 base_OfertaSNIES <- read_excel("data/input/bases/InformacionSNIES.xlsx")
+names(base_OfertaSNIES) <- c(
+  "Código institución padre","Código institución","Nombre_institución","Estado institución","Carácter_académico",
+  "Sector","Registro unico","Código snies del programa","Código anterior icfes","Nombre del programa",
+  "Titulo_otorgado","Estado programa","Justificacion","Justificacion detallada","Reconocimiento del ministerio",
+  "Resolución de aprobación","Fecha de resolución","Fecha ejecutoria","Vigencia años","Fecha de registro en snies",
+  "Cine f 2013 ac campo amplio","Cine f 2013 ac campo específic","Cine f 2013 ac campo detallado","Área de conocimiento","Núcleo básico del conocimiento",
+  "Nivel académico","Nivel de formación","Modalidad","Número créditos","Número periodos de duración",
+  "Periodicidad","Se ofrece por ciclos propedéut","Periodicidad admisiones","Programa en convenio","Departamento oferta programa", 
+  "Municipio oferta programa","Costo matrícula estud nuevos","Código área","Nombre área cualificación" 
+)
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
@@ -76,11 +106,27 @@ cuoc_table_ <- read_excel("data/input/bases/CUOC.xls")
 
 # Open facts table nd modify variables
 main_bases <- dbReadTable(con, "fact_table")
+main_bases_names <- c(
+  "Sección","División","Grupo","Código CIIU","Descripción",
+  "Código área","Nombre área cualificación","Código CINE2011 AC","Campos Detallado","Código Grandes Grupos",
+  "Grandes Grupos","Código Subgrupos principales","Subgrupos principales","Código subgrupos","Subgrupos",
+  "Códigos Grupos primarios","Grupos primarios","Código Ocupación","Ocupación","Código denominaciones",
+  "Denominacion","Código CIUO08AC","Código CNO","Ocupación Afín","Nombre Ocupación Afín",
+  "Nombre Destreza","Nombre Conocimiento","Nivel Competencia","Descripción Ocupación","Consecutivo Función",
+  "Redacción Función","Valor agregado","Ocupados CIIU","Ocupados Total","Año",
+  "Tasacrecimiento","BQ Atraccion D","BP Desarticulacion D","BQ DeficitP D","Denominacion CDC",
+  "BC Conocimientos D","BC destreza D","BP Conocimientos D","BP destreza D","BQ Programa D",
+  "BQ Atraccion vacanteD","BP Experiencia_vacanteD","BC Competencia vacanteD","BQ Atraccion vacante ocu","BP Experiencia vacante ocu",
+  "BC Competencia vacante ocu","BC Conocimientos ocu","BC destreza ocu","BP Conocimientos ocu","BP destreza ocu",
+  "BQ Programa ocu","BQ Atraccion ocu","BP Desarticulacion ocu","BQ DeficitP ocu"
+)
+names(main_bases) <- main_bases_names
+
 main_bases <- main_bases %>%
   mutate(Tasacrecimiento = round(Tasacrecimiento, 2),
-                      Valoragregado = round(Valoragregado, 2),
-                      OcupadosCIIU = round(OcupadosCIIU, 2),
-                      OcupadosTotal = round(OcupadosTotal, 2),
+                      `Valor agregado` = round(`Valor agregado`, 2),
+                      `Ocupados CIIU` = round(`Ocupados CIIU`, 2),
+                      `Ocupados Total` = round(`Ocupados Total`, 2),
 )
 
 
@@ -315,6 +361,36 @@ shinyServer(function(input, output, session) {
           )
         })
         
+        # Deploy selectizeinput object
+        output$select_area_catalog_2_1 <- renderUI({
+          choices <- setNames(names(base_socioemocionales)[2:6], c("ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                                                                   "AGROPECUARIO, SILVICULTURA, PESCA, ACUICULTURA Y VETERINARIA",
+                                                                   "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
+                                                                   "CONSERVACIÓN, PROTECCIÓN Y SANEAMIENTO AMBIENTAL",
+                                                                   "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
+          )
+          
+          selectizeInput("select_area_catalog_2", "Seleccione área de cualificación",
+                         choices = choices,
+                         multiple = F
+          )
+        })
+        
+        # Deploy selectizeinput object
+        output$select_area_catalog_2_2 <- renderUI({
+          choices <- setNames(names(base_socioemocionales)[2:6], c("ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                                                                   "AGROPECUARIO, SILVICULTURA, PESCA, ACUICULTURA Y VETERINARIA",
+                                                                   "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
+                                                                   "CONSERVACIÓN, PROTECCIÓN Y SANEAMIENTO AMBIENTAL",
+                                                                   "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
+          )
+          
+          selectizeInput("select_area_catalog_2", "Seleccione área de cualificación",
+                         choices = choices,
+                         multiple = F
+          )
+        })
+        
         
         # Deploy habilidades socioemocionales plots -------------------------------------------------------------
         output$socioemocionales <- renderPlot({
@@ -358,7 +434,7 @@ shinyServer(function(input, output, session) {
             dplyr::select(`Habilidades Socioemocionales`, selected_column) %>% 
             arrange(desc(!!sym(selected_column))) %>% 
             head(7) %>%
-            wordcloud2a(size = 0.2, color = "random-dark", rotateRatio = 0, widgetsize = 100)
+            wordcloud2a(size = 0.5, color = "random-dark", rotateRatio = 0, widgetsize = 100)
         })
 
         # Deploy conocimientos plots -------------------------------------------------------------
@@ -408,7 +484,7 @@ shinyServer(function(input, output, session) {
             arrange(desc(`total`)) %>%
             head(5) %>%
             dplyr::select(`Conocimiento`, `total`) %>%
-            wordcloud2a(size = 0.2, color = "random-dark", rotateRatio = 0, widgetsize = 100)
+            wordcloud2a(size = 0.5, color = "random-dark", rotateRatio = 0, widgetsize = 100)
         })
         
         
@@ -461,7 +537,7 @@ shinyServer(function(input, output, session) {
             arrange(desc(`total`)) %>%
             head(5) %>%
             dplyr::select(`destreza`, `total`) %>%
-            wordcloud2a(size = 0.2, color = "random-dark", rotateRatio = 0, widgetsize = 100)
+            wordcloud2a(size = 0.5, color = "random-dark", rotateRatio = 0, widgetsize = 100)
         })
         
         
@@ -509,7 +585,7 @@ shinyServer(function(input, output, session) {
               size = 8,
               fontface = "bold") +
             labs(
-              # title = "Número de actividades económicas por área de cualificación",
+              title = "Número de Actividades Económicas por Medios de Búsqueda",
               y = "Acumulado de medios de búsqueda",
             ) +
             # change the y max limit to the highest bar plus 10
@@ -517,7 +593,8 @@ shinyServer(function(input, output, session) {
               limits = c(0, 30)
             ) +
             theme_few() +
-            theme(text = element_text(size = 15)
+            theme(text = element_text(size = 15),
+                  plot.title = element_text(hjust = 0.5) 
             ) +
             scale_x_discrete(labels = NULL)
         })
@@ -869,7 +946,7 @@ shinyServer(function(input, output, session) {
                     textinfo = 'label+percent',
                     insidetextfont = list(color = '#FFFFFF'),
                     hoverinfo = 'text',
-                    text = n,
+                    text = ~paste('', n, ''),
                     marker = list(colors = colors,
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
@@ -944,7 +1021,7 @@ shinyServer(function(input, output, session) {
   ####################### TASA OCUPADOS
         output$base_TasaOcupados <- renderReactable(
           base_TasaOcupados %>% select(
-            Código_área,
+            `Código área`,
             Año,
             Departamento,
             input$caract_TasaOcu_areaCual_,
@@ -982,6 +1059,9 @@ shinyServer(function(input, output, session) {
           filename = function(){"Ocupados_departamentos.csv"},
           content = function(file){
             write.csv2(base_TasaOcupados %>% select(
+              `Código área`,
+              Año,
+              Departamento,
               input$caract_TasaOcu_areaCual_,
               input$caract_TasaOcu_eduAno_,
               input$caract_TasaOcu_indices_
@@ -996,7 +1076,7 @@ shinyServer(function(input, output, session) {
   ####################### OCUPADOS CIIU
         output$base_ocupadosCIIU <- renderReactable(
           base_OcupadosCIIU %>% select(
-            Código_área,
+            `Código área`,
             Año,
             input$caract_ocuCIIU_areaCual_,
             input$caract_ocuCIIU_Ano_,
@@ -1025,13 +1105,15 @@ shinyServer(function(input, output, session) {
           filename = function(){"Ocupados_SectoresCIIU.csv"},
           content = function(file){
             write.csv2(base_OcupadosCIIU %>% select(
+              `Código área`,
+              Año,
               input$caract_ocuCIIU_areaCual_,
               input$caract_ocuCIIU_Ano_,
               input$caract_ocuCIIU_indices_
             ),
             file,
             row.names = T,
-            fileEncoding = "UTF-8"
+            fileEncoding = "ISO-8859-1"
             )
           }
         )
@@ -1039,7 +1121,7 @@ shinyServer(function(input, output, session) {
   ####################### OCUPADOS EDAD Y SEXO
         output$base_ocupadosEdadSexo <- renderReactable(
           base_OcupadosEdadSexo %>% select(
-            Código_área,
+            `Código área`,
             Año,
             `Rango de edad`,
             input$caract_ocuEdadSexo_areaCual_,
@@ -1088,6 +1170,9 @@ shinyServer(function(input, output, session) {
           filename = function(){"Ocupados_EdadySexo.csv"},
           content = function(file){
             write.csv2(base_OcupadosEdadSexo %>% select(
+              `Código área`,
+              Año,
+              `Rango de edad`,
               input$caract_ocuEdadSexo_areaCual_,
               input$caract_ocuEdadSexo_Ano_,
               input$caract_ocuEdadSexo_Edad_,
@@ -1095,7 +1180,7 @@ shinyServer(function(input, output, session) {
             ),
             file,
             row.names = T,
-            # fileEncoding = "ASCII"
+            fileEncoding = "ISO-8859-1"
             )
           }
         )
@@ -1103,7 +1188,7 @@ shinyServer(function(input, output, session) {
   ####################### OCUPADOS NIVEL EDUCATIVO
         output$base_ocupadosNivelEdu <- renderReactable(
           base_OcupadosNivelEdu %>% select(
-            Código_área,
+            `Código área`,
             Año,
             `Nivel educativo`,
             input$caract_OcuNivelEdu_areaCual_,
@@ -1144,13 +1229,16 @@ shinyServer(function(input, output, session) {
           filename = function(){"Ocupados_NivelEducativo.csv"},
           content = function(file){
             write.csv2(base_OcupadosNivelEdu %>% select(
+              `Código área`,
+              Año,
+              `Nivel educativo`,
               input$caract_OcuNivelEdu_areaCual_,
               input$caract_OcuNivelEdu_Ano_,
               input$caract_OcuNivelEdu_indices_
             ),
             file,
             row.names = T,
-            # fileEncoding = "ASCII"
+            fileEncoding = "ISO-8859-1"
             )
           }
         )
@@ -1205,13 +1293,15 @@ shinyServer(function(input, output, session) {
           filename = function(){"InformaciónDemandaSPE.csv"},
           content = function(file){
             write.csv2(DemandaSPE %>% select(
+              `Año`,
+              `Departamento`,
               input$caract_OtrasFuentes_SPE_otros_,
               input$caract_OtrasFuentes_SPE_generales_,
               input$caract_OtrasFuentes_SPE_Areas_
             ),
             file,
             row.names = T,
-            # fileEncoding = "ASCII"
+            fileEncoding = "ISO-8859-1"
             )
           }
         )
@@ -1219,7 +1309,7 @@ shinyServer(function(input, output, session) {
   ####################### INFORMACIÓN OFERTA SNIES
         output$base_OfertaSNIES <- renderReactable(
           base_OfertaSNIES %>% select(
-            `Código_área`,
+            `Código área`,
             input$caract_OtrasFuentes_snies_Areas_,
             input$caract_OtrasFuentes_snies_programa_,
             input$caract_OtrasFuentes_snies_general_
@@ -1246,13 +1336,14 @@ shinyServer(function(input, output, session) {
           filename = function(){"Información_OfertaEducativa.csv"},
           content = function(file){
             write.csv2(base_OfertaSNIES %>% select(
+              `Código área`,
               input$caract_OtrasFuentes_snies_Areas_,
               input$caract_OtrasFuentes_snies_programa_,
               input$caract_OtrasFuentes_snies_general_
             ),
             file,
             row.names = T,
-            # fileEncoding = "ASCII"
+            fileEncoding = "ISO-8859-1"
             )
           }
         )
@@ -1345,7 +1436,7 @@ shinyServer(function(input, output, session) {
             ),
             file,
             row.names = T,
-            # fileEncoding = "ASCII"
+            fileEncoding = "ISO-8859-1"
             )
           }
         )
@@ -1390,13 +1481,15 @@ shinyServer(function(input, output, session) {
         observeEvent(input$link_to_ocu_nivEdu, {
           updateTabItems(session, "Sidebar", selected = "ocupados_NivelEdu")
         })
-# Behavior of DESCRIPTIVOS POR ÁREA ---------------------------------------
+        
+        
+# Behavior of MAIN DATABASES ---------------------------------------
         
         # Render table
         output$main_databases <- renderReactable(
           main_bases %>%
             select(
-                   c(Código_área,
+                   c(`Código área`,
                      input$area_cualificacion,
                      input$denominacion_cuoc,
                      input$cine,
@@ -1415,14 +1508,15 @@ shinyServer(function(input, output, session) {
           filename = function(){"Bases_Oficiales.csv"},
           content = function(file){
             write.csv2(main_bases %>% 
-                         select(Código_área,
+                         select(`Código área`,
                                input$area_cualificacion,
                                input$denominacion_cuoc,
                                input$cine,
                                input$ciiu
                                ),
             file,
-            row.names = F
+            row.names = F,
+            fileEncoding = "ISO-8859-1"
             )
           }
         )

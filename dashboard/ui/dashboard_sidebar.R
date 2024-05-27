@@ -28,7 +28,7 @@ dashboard_sidebar <- dashboardSidebar(
         ),
         menuItem("Otras Fuentes de Información",
                  icon = icon("question-circle"), startExpanded = FALSE,
-                 menuSubItem("Información Demanda SPE",
+                 menuSubItem("Ofertas Laborales SPE",
                           tabName = "demandaSPE"
                           ),
                  menuSubItem("Oferta SNIES",
