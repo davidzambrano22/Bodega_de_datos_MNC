@@ -7,7 +7,25 @@ tab_infoEtapas <- tabItem(
               }'),
   div(style = "height: 60px;"),
   fluidRow(
-    column(8, offset = 2,
+    column(2,
+           div(style = "height: 150px;"),
+           div(style = "font-size: 17px;",
+           box(
+             title = "Material de Apoyo",
+             width = 12,
+             solidHeader = TRUE,
+             status = "primary",
+             collapsible = T,
+             HTML("<a href='Fichas brechas.pdf' target='_blank'> 
+                        <p align: center; color: #4682B4; font-size: 17px;'>
+                          Fichas Brechas
+                        </p>
+                     </a>"
+                  )
+             )
+           )
+           ),
+    column(8,
            tags$h1("Información por Etapas del MNC",
                    style = "font-size: 45px; text-align: center; font-weight: bold; color: #4682B4;"
            ),
@@ -72,14 +90,17 @@ tab_infoEtapas <- tabItem(
                    ),
                    tags$ul(
                      tags$li(
-                       HTML("<b>Cantidad:</b> Se refiere al número insuficiente de trabajadores con las competencias necesarias para cubrir las demandas del mercado laboral.")
-                       ),
+                       actionLink("link_to_cantidad", label = "Cantidad:"),
+                       tags$p("Se refiere al número insuficiente de trabajadores con las competencias necesarias para cubrir las demandas del mercado laboral.")
+                     ),
                      tags$li(
-                       HTML("<b>Calidad:</b> Indica la falta de habilidades o conocimientos específicos que se requieren para desempeñar un trabajo de manera efectiva.")
-                       ),
+                       actionLink("link_to_calidad", label = "Calidad:"),
+                       tags$p("Indica la falta de habilidades o conocimientos específicos que se requieren para desempeñar un trabajo de manera efectiva.")
+                     ),
                      tags$li(
-                       HTML("<b>Pertinencia:</b> Se relaciona con la adecuación de las competencias de los trabajadores a las necesidades y exigencias del mercado laboral.")
-                       )
+                       actionLink("link_to_pertinencia", label = "Pertinencia:"),
+                       tags$p("Se relaciona con la adecuación de las competencias de los trabajadores a las necesidades y exigencias del mercado laboral.")
+                     )
                    )
                )
         )

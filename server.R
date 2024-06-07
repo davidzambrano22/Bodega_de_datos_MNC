@@ -34,6 +34,18 @@ base_misionales = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "
 base_medios = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "MediosBusqueda")
 base_motivos = read_excel("data/input/bases/Base2Descriptivas.xls", sheet = "MotivosNOVacante")
 
+# Load base descriptivas v1
+base_mediosBusqueda <- read_excel("data/input/bases/Base2Descriptivasv1.xls", sheet = "MediosBusqueda")
+base_MotivosNoVacante <- read_excel("data/input/bases/Base2Descriptivasv1.xls", sheet = "MotivosNOVacante")
+base_AccionesVacante <- read_excel("data/input/bases/Base2Descriptivasv1.xls", sheet = "AccionesVacante")
+base_DiseñoPrograma <- read_excel("data/input/bases/Base2Descriptivasv1.xls", sheet = "DisenoPrograma")
+
+# Load Base descriptivas 5 
+base_brechasCantidad = read_excel("data/input/bases/Base5DescriptivasBrechas.xls", sheet = "BrechasCantidad")
+base_brechasCalidad = read_excel("data/input/bases/Base5DescriptivasBrechas.xls", sheet = "BrechasCalidad")
+base_pertinencia = read_excel("data/input/bases/Base5DescriptivasBrechas.xls", sheet = "BrechasPertinencia")
+base_demanda__ = read_excel("data/input/bases/Base5DescriptivasBrechas.xls", sheet = "BaseDemanda")
+
 # Load Caracterización Tables
 base_TasaOcupados <- read_excel("data/input/bases/Caracterizacion.xlsx", sheet = "Tasa de ocupados")
 names(base_TasaOcupados)[4] <- "Código área"
@@ -77,11 +89,9 @@ base_OcupadosNivelEdu <- base_OcupadosNivelEdu %>%
   )
 
 # Load SPE tables
-DemandaSPE <- read_dta("data/input/bases/DemandaSPE.dta")
-names(DemandaSPE) <- c("Cantidad Vacantes","Cargo Solicitado","Año","Mes","Dia","Código municipio", 
-                       "Departamento","Municipio","Experiencia laboral","Rangos salariales","Códigos Grupos primarios","Código CIIU",
-                       "Nivel educativo","Código Ocupación","Ocupación","Código área","Nombre área cualificación"
-)
+DemandaSPE <- read_dta("data/input/bases/BaseFinalSPEV2.dta")
+names(DemandaSPE) <- c("Año","Código municipio","Departamento","Municipio","Experiencia laboral","Rangos salariales","Código CIIU",
+                       "Nivel educativo","Código Ocupación","Ocupación","Código área","Nombre área cualificación","Cantidad Vacantes","Puestos Trabajo")
 
 base_OfertaSNIES <- read_excel("data/input/bases/InformacionSNIES.xlsx")
 names(base_OfertaSNIES) <- c(
@@ -94,6 +104,8 @@ names(base_OfertaSNIES) <- c(
   "Periodicidad","Se ofrece por ciclos propedéut","Periodicidad admisiones","Programa en convenio","Departamento oferta programa", 
   "Municipio oferta programa","Costo matrícula estud nuevos","Código área","Nombre área cualificación" 
 )
+
+base_oferta_educativa <- read_excel("data/input/bases/OfertaEducativa.xls")
 
 # create a connection to the database called "mcn-relational.db"
 con <- dbConnect(RSQLite::SQLite(), "data/db/mnc-relational.db")
@@ -129,6 +141,25 @@ main_bases <- main_bases %>%
                       `Ocupados Total` = round(`Ocupados Total`, 2),
 )
 
+# Load Difícil Consecución
+base_cargosDificilConsec = read_excel("data/input/bases/Base3DescriptivasCDC.xls", sheet = "CargosDC")
+base_estadisticas_DC <- read_excel("data/input/bases/Base3DescriptivasCDC.xls", sheet = "NúmeroDC")
+base_cargos_criticos <- read_excel("data/input/bases/Base3DescriptivasCDC.xls", sheet = "CargosCriticos")
+base_demanda <- read_excel("data/input/bases/Base3DescriptivasCDC.xls", sheet = "DemandaSA&IS")
+
+# Load Brechas Empresas
+base_brechaEmpresasEstadisticas <- read_excel("data/input/bases/BrechasEmpresas.xls", sheet = "Estadisticas")
+names(base_brechaEmpresasEstadisticas)[1] <- "Código área"
+names(base_brechaEmpresasEstadisticas)[2] <- "Nombre área cualificación"
+names(base_brechaEmpresasEstadisticas)[3] <- "Ocupación Misional"
+
+base_brechaEmpresasDenominación = read_excel("data/input/bases/BrechasEmpresas.xls", sheet = "Denominacion")
+names(base_brechaEmpresasDenominación)[1] <- "Código área"
+names(base_brechaEmpresasDenominación)[2] <- "Nombre área cualificación"
+
+base_brechaEmpresasOcupacion = read_excel("data/input/bases/BrechasEmpresas.xls", sheet = "Ocupacion")
+names(base_brechaEmpresasOcupacion)[1] <- "Código área"
+names(base_brechaEmpresasOcupacion)[2] <- "Nombre área cualificación"
 
 shinyServer(function(input, output, session) {
 
@@ -561,75 +592,64 @@ shinyServer(function(input, output, session) {
         #   updateSelectizeInput(session, "select_area_catalog_5", selected = character(0))
         # })
         
+        # ############################# PLOTS GESTION VACANTES
+        
+        
+          output$select_area_gestionVacantes <- renderUI({
+            choices <- setNames(names(base_socioemocionales)[2:6], c("ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                                                                     "AGROPECUARIO, SILVICULTURA, PESCA, ACUICULTURA Y VETERINARIA",
+                                                                     "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
+                                                                     "CONSERVACIÓN, PROTECCIÓN Y SANEAMIENTO AMBIENTAL",
+                                                                     "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
+            )
+            selectizeInput("select_area_gestionVacantes_", "Seleccione Área:",
+                           choices = choices,
+                           selected = names(base_socioemocionales)[2],
+                           multiple = F
+            )
+          })
+        
+        
         # Deploy Medios de búsqueda plots -------------------------------------------------------------
-        output$medios <- renderPlot({
-          selected_column <- input$select_area_catalog_5
-          
-          base_medios %>%
-            dplyr::select(`Medios de busqueda de personal`, !!sym(selected_column)) %>% 
+        output$medios_busqueda_plot <- renderPlot({
+          selected_column <- input$select_area_gestionVacantes_
+          base_mediosBusqueda %>%
+            dplyr::select(`Medios de búsqueda de personal`, !!sym(selected_column)) %>% 
             arrange(desc(!!sym(selected_column))) %>% 
             head(5) %>%
             ggplot() +
             geom_col(
-              aes(x = `Medios de busqueda de personal`,
+              aes(x = `Medios de búsqueda de personal`,
                   y = !!sym(selected_column),
-                  fill = `Medios de busqueda de personal`
+                  fill = `Medios de búsqueda de personal`
               )
             ) +
             geom_text(aes(
-              x = `Medios de busqueda de personal`,
+              x = `Medios de búsqueda de personal`,
               y = !!sym(selected_column),
               label = !!sym(selected_column),
-              color = `Medios de busqueda de personal`),
+              color = `Medios de búsqueda de personal`),
               vjust = -0.5,
               size = 8,
               fontface = "bold") +
             labs(
-              title = "Número de Actividades Económicas por Medios de Búsqueda",
-              y = "Acumulado de medios de búsqueda",
+              # title = "Número de actividades económicas por área de cualificación",
+              y = "",
+              x = ""
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
               limits = c(0, 30)
             ) +
             theme_few() +
-            theme(text = element_text(size = 15),
-                  plot.title = element_text(hjust = 0.5) 
+            theme(text = element_text(size = 15)
             ) +
             scale_x_discrete(labels = NULL)
         })
-        
-        # Piechart medios de búsqueda
-        colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
-          output$pie_medios <- renderPlotly({
-          selected_column <- input$select_area_catalog_5
-          
-          base_medios %>%
-            dplyr::select(`Medios de busqueda de personal`, !!sym(selected_column)) %>% 
-            arrange(desc(!!sym(selected_column))) %>% 
-            head(5) %>%
-            plot_ly(labels = ~`Medios de busqueda de personal`, values = ~selected_column, type="pie")#,
-                    # textposition = 'inside',
-                    # textinfo = 'label+percent',
-                    # insidetextfont = list(color = '#FFFFFF'),
-                    # hoverinfo = 'text',
-                    # text = !!sym(selected_column),
-                    # marker = list(colors = colors,
-                    #               line = list(color = '#FFFFFF', width = 1)),
-                    # #The 'pull' attribute can also be used to create space between the sectors
-                    # showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecucion',
-                    #                                 width = 500,
-                    #                                 height = 500,
-                    #                                 xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                    #                                 yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-          })
-              
-          
-        
-        
+
         # Deploy Motivos No Vacatnte plots -------------------------------------------------------------
-        output$motivosNovacante <- renderPlot({
-          selected_column <- input$select_area_catalog_5
+        output$motivosNovacante_plot <- renderPlot({
+          selected_column <- input$select_area_gestionVacantes_
           base_motivos %>%
             dplyr::select(`Motivos no se cubrió la vacante`, !!sym(selected_column)) %>% 
             arrange(desc(!!sym(selected_column))) %>% 
@@ -651,7 +671,8 @@ shinyServer(function(input, output, session) {
               fontface = "bold") +
             labs(
               # title = "Número de actividades económicas por área de cualificación",
-              y = "Acumulado de medios de motivos",
+              y = "",
+              x = ""
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
@@ -662,6 +683,80 @@ shinyServer(function(input, output, session) {
             ) +
             scale_x_discrete(labels = NULL)
         })
+          
+          # Deploy Acciones Diseño Programa -------------------------------------------------------------
+          output$disenoPrograma_plot <- renderPlot({
+            selected_column <- input$select_area_gestionVacantes_
+            base_DiseñoPrograma %>%
+              dplyr::select(`La empresa se involucra en el diseño y/o actualización de programas de formación`, !!sym(selected_column)) %>% 
+              arrange(desc(!!sym(selected_column))) %>% 
+              head(5) %>%
+              ggplot() +
+              geom_col(
+                aes(x = `La empresa se involucra en el diseño y/o actualización de programas de formación`,
+                    y = !!sym(selected_column),
+                    fill = `La empresa se involucra en el diseño y/o actualización de programas de formación`
+                )
+              ) +
+              geom_text(aes(
+                x = `La empresa se involucra en el diseño y/o actualización de programas de formación`,
+                y = !!sym(selected_column),
+                label = !!sym(selected_column),
+                color = `La empresa se involucra en el diseño y/o actualización de programas de formación`),
+                vjust = -0.5,
+                size = 8,
+                fontface = "bold") +
+              labs(
+                # title = "Número de actividades económicas por área de cualificación",
+                y = "",
+                x = ""
+              ) +
+              # change the y max limit to the highest bar plus 10
+              scale_y_continuous(
+                limits = c(0, 30)
+              ) +
+              theme_few() +
+              theme(text = element_text(size = 15)
+              ) +
+              scale_x_discrete(labels = NULL)
+          })
+          
+          # Deploy Acciones Vacatnte plots -------------------------------------------------------------
+          output$accionesVacante_plot <- renderPlot({
+            selected_column <- input$select_area_gestionVacantes_
+            base_AccionesVacante %>%
+              dplyr::select(`Acciones para cubrir una vacante`, !!sym(selected_column)) %>% 
+              arrange(desc(!!sym(selected_column))) %>% 
+              head(5) %>%
+              ggplot() +
+              geom_col(
+                aes(x = `Acciones para cubrir una vacante`,
+                    y = !!sym(selected_column),
+                    fill = `Acciones para cubrir una vacante`
+                )
+              ) +
+              geom_text(aes(
+                x = `Acciones para cubrir una vacante`,
+                y = !!sym(selected_column),
+                label = !!sym(selected_column),
+                color = `Acciones para cubrir una vacante`),
+                vjust = -0.5,
+                size = 8,
+                fontface = "bold") +
+              labs(
+                # title = "Número de actividades económicas por área de cualificación",
+                y = "",
+                x = ""
+              ) +
+              # change the y max limit to the highest bar plus 10
+              scale_y_continuous(
+                limits = c(0, 30)
+              ) +
+              theme_few() +
+              theme(text = element_text(size = 15)
+              ) +
+              scale_x_discrete(labels = NULL)
+          })
 
 ############################################ PLOTS DESCRIPTIVAS ###########################################
         # Deploy selectizeinput object 3
@@ -703,6 +798,21 @@ shinyServer(function(input, output, session) {
                                                                    "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
           )
           selectizeInput("select_area_catalog_3_2", "Seleccione Área:",
+                         choices = choices,
+                         selected = "AFIR",
+                         multiple = T
+          )
+        })
+        
+        # Deploy selectizeinput object 3_2_1
+        output$select_area_catalog_3_2_1 <- renderUI({
+          choices <- setNames(names(base_socioemocionales)[2:6], c("ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                                                                   "AGROPECUARIO, SILVICULTURA, PESCA, ACUICULTURA Y VETERINARIA",
+                                                                   "ARTES VISUALES, PLÁSTICAS Y DEL PATRIMONIO CULTURAL",
+                                                                   "CONSERVACIÓN, PROTECCIÓN Y SANEAMIENTO AMBIENTAL",
+                                                                   "ELABORACIÓN Y TRANSFORMACIÓN DE ALIMENTOS")
+          )
+          selectizeInput("select_area_catalog_3_2_1", "Seleccione Área:",
                          choices = choices,
                          selected = "AFIR",
                          multiple = T
@@ -754,6 +864,11 @@ shinyServer(function(input, output, session) {
           updateSelectizeInput(session, "select_area_catalog_3_2", selected = character(0))
         })
         
+        # Observe to event clear button 3_2
+        observeEvent(input$clear_areas_3_2_1, {
+          updateSelectizeInput(session, "select_area_catalog_3_2_1", selected = character(0))
+        })
+        
         # Observe to event clear button 3_3
         observeEvent(input$clear_areas_3_3, {
           updateSelectizeInput(session, "select_area_catalog_3_3", selected = character(0))
@@ -788,7 +903,7 @@ shinyServer(function(input, output, session) {
 # -----------------Descriptivas área de desempeño
         output$descriptivas_area <- renderPlot({
           base_descriptivas %>% dplyr::select(`Código_área`, `¿Cuál es su área de desempeño?`) %>%
-            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_1) %>%
             group_by(`¿Cuál es su área de desempeño?`) %>% count(`¿Cuál es su área de desempeño?`) %>%
             ggplot() +
             geom_col(aes(
@@ -805,8 +920,9 @@ shinyServer(function(input, output, session) {
               show.legend = FALSE,
               fontface = "bold") +
             labs(
-              title = "Número de Actividades Económicas por Área de Desempeño",
-              y = "Acumulado de empresas"
+              title = "",
+              y = "",
+              x = ""
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
@@ -822,7 +938,7 @@ shinyServer(function(input, output, session) {
         colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
         output$pie_descriptivas_area <- renderPlotly({
           base_descriptivas %>% dplyr::select(`Código_área`, `¿Cuál es su área de desempeño?`) %>%
-            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_1) %>%
             group_by(`¿Cuál es su área de desempeño?`) %>% count(`¿Cuál es su área de desempeño?`) %>% 
             plot_ly(labels = ~`¿Cuál es su área de desempeño?`, values = ~n, type="pie",
                     textposition = 'inside',
@@ -834,7 +950,7 @@ shinyServer(function(input, output, session) {
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
                     showlegend = FALSE) %>%
-            layout(title = 'Piechart por Área de Desempeño',
+            layout(title = '',
                    font = list(size = 13)) %>% 
             layout(
                 width = 500,
@@ -843,11 +959,70 @@ shinyServer(function(input, output, session) {
                 yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
         })
         
+   # -----------------Descriptivas Sector Económico
+        output$descriptivas_sectorEcon <- renderPlot({
+          base_descriptivas %>% dplyr::select(`Código_área`, `Sector Económico`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_1) %>%
+            group_by(`Sector Económico`) %>% count(`Sector Económico`) %>%
+            ggplot() +
+            geom_col(aes(
+              x = `Sector Económico`,
+              y = `n`,
+              fill = `Sector Económico`)) +
+            geom_text(aes(
+              x = `Sector Económico`,
+              y = `n`,
+              label = `n`,
+              color = `Sector Económico`),
+              vjust = -0.5,
+              size = 8,
+              show.legend = FALSE,
+              fontface = "bold") +
+            labs(
+              title = "",
+              y = "",
+              x = ""
+            ) +
+            # change the y max limit to the highest bar plus 10
+            scale_y_continuous(
+              limits = c(0, 86)
+            ) +
+            theme_few() +
+            theme(text = element_text(size = 15),
+                  plot.title = element_text(hjust = 0.5) 
+            )
+        })
+        
+        # Pie chart descriptivas área de desempeño
+        colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
+        output$pie_descriptivas_sectorEcon <- renderPlotly({
+          base_descriptivas %>% dplyr::select(`Código_área`, `Sector Económico`) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_1) %>%
+            group_by(`Sector Económico`) %>% count(`Sector Económico`) %>% 
+            plot_ly(labels = ~`Sector Económico`, values = ~n, type="pie",
+                    textposition = 'inside',
+                    textinfo = 'label+percent',
+                    insidetextfont = list(color = '#FFFFFF'),
+                    hoverinfo = 'text',
+                    text = ~paste('', n, ''),
+                    marker = list(colors = colors,
+                                  line = list(color = '#FFFFFF', width = 1)),
+                    #The 'pull' attribute can also be used to create space between the sectors
+                    showlegend = FALSE) %>%
+            layout(title = '',
+                   font = list(size = 13)) %>% 
+            layout(
+              width = 500,
+              height = 500,
+              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+        })
+        
 
 # -----------------Descriptivas tamaño empresa
         output$tamano_empresa <- renderPlot({
           base_descriptivas %>% dplyr::select(`Código_área`, `Tamaño empresa`) %>%
-            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_2) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_1) %>%
             group_by(`Tamaño empresa`) %>% count(`Tamaño empresa`) %>%
             ggplot() +
             geom_col(aes(
@@ -863,8 +1038,9 @@ shinyServer(function(input, output, session) {
               size = 8,
               fontface = "bold") +
             labs(
-              title = "Número de Actividades Económicas por Tamaño de la Empresa",
-              y = "Acumulado de empresas"
+              title = "",
+              y = "",
+              x = ""
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
@@ -880,7 +1056,7 @@ shinyServer(function(input, output, session) {
         colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
         output$pie_tamano_empresa <- renderPlotly({
           base_descriptivas %>% dplyr::select(`Código_área`, `Tamaño empresa`) %>%
-            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_2) %>%
+            dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_1) %>%
             group_by(`Tamaño empresa`) %>% count(`Tamaño empresa`) %>% 
             plot_ly(labels = ~`Tamaño empresa`, values = ~n, type="pie",
                     textposition = 'inside',
@@ -892,7 +1068,7 @@ shinyServer(function(input, output, session) {
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
                     showlegend = FALSE) %>% 
-            layout(title = 'Piechart por Tamaño de la Empresa',
+            layout(title = '',
                                                     font = list(size = 13)) %>% 
             layout(
               width = 500,
@@ -903,27 +1079,27 @@ shinyServer(function(input, output, session) {
 
 # -----------------Descriptivas Cargos dificil consecusión
         output$dificil_consecucion <- renderPlot({
-          base_descriptivas %>% dplyr::select(`Código_área`, `Cargos dificil consecusión`) %>%
+          base_cargosDificilConsec %>% dplyr::select(`Código_área`, `CargosCriticosDificilC`) %>%
             dplyr::filter(`Código_área` %in%  input$select_area_catalog_3_3) %>%
-            group_by(`Cargos dificil consecusión`) %>% count(`Cargos dificil consecusión`) %>%
+            group_by(`CargosCriticosDificilC`) %>% count(`CargosCriticosDificilC`) %>%
             ggplot() +
             geom_col(aes(
-              x = `Cargos dificil consecusión`,
+              x = `CargosCriticosDificilC`,
               y = `n`,
-             fill = as.character(`Cargos dificil consecusión`))) +
+              fill = as.character(`CargosCriticosDificilC`))) +
             geom_text(aes(
-              x = `Cargos dificil consecusión`,
+              x = `CargosCriticosDificilC`,
               y = `n`,
               label = `n`,
-              color = `Cargos dificil consecusión`),
+              color = `CargosCriticosDificilC`),
               vjust = -0.5,
               size = 8,
               show.legend = FALSE,
               fontface = "bold") +
             labs(
-              title = "Número de Actividades Económicas por Cargos de Difícil Consecución",
-              y = "Acumulado de empresas",
-              fill = "Cargos de difícil consecución"
+              title = "",
+              y = "",
+              fill = "CargosCriticosDificilC"
             ) +
             # change the y max limit to the highest bar plus 10
             scale_y_continuous(
@@ -934,6 +1110,87 @@ shinyServer(function(input, output, session) {
                   plot.title = element_text(hjust = 0.5) 
             )
         })
+        
+        output$base_estadisticas_DC <- renderReactable(
+          base_estadisticas_DC %>% reactable(
+            filterable = F, minRows = 6
+          )
+        )
+        
+        # UiOutput Cargos Críticos por Área
+        output$select_area_CargosCriticos <- renderUI({
+          choices <- base_cargos_criticos$`Nombreáreacualificación`
+          selectizeInput("select_area_CargosCriticos_", "Seleccione Área:",
+                         choices = choices,
+                         selected = "ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                         multiple = T
+          )
+        })
+        
+        output$base_cargosCriticos <- renderReactable(
+          base_cargos_criticos %>% 
+            filter(`Nombreáreacualificación` %in% input$select_area_CargosCriticos_) %>%
+            reactable(
+            filterable = T, defaultPageSize = 7
+          )
+        )
+        
+        # Clear cargos criticos
+        observeEvent(input$clear_CargosCriticos, {
+          updateSelectizeInput(session, "select_area_CargosCriticos_", selected = character(0))
+        })
+        
+        # Download base_cargoscriticos
+        output$download_tablaCargosCriticos <- downloadHandler(
+          filename = function(){"CargosCriticos.csv"},
+          content = function(file){
+            write.csv2(base_cargos_criticos %>% 
+                         filter(`Nombreáreacualificación` %in% input$select_area_CargosCriticos_),
+            file,
+            row.names = T,
+            fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+        
+        
+        # UiOutput Base demanda
+        output$select_area_baseDemanda <- renderUI({
+          choices <- base_demanda$`Nombreáreacualificación`
+          selectizeInput("select_area_BaseDemanda_", "Seleccione Área:",
+                         choices = choices,
+                         selected = "ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                         multiple = T
+          )
+        })
+        
+        output$base_demanda_ <- renderReactable(
+          base_demanda  %>% 
+            filter(`Nombreáreacualificación` %in% input$select_area_BaseDemanda_) %>%
+            reactable(
+            filterable = T, minRows = 10
+          )
+        )
+        
+        # Clear base demanda
+        observeEvent(input$clear_tablaDemandaS, {
+          updateSelectizeInput(session, "select_area_BaseDemanda_", selected = character(0))
+        })
+        
+        # Download base_demanda
+        output$download_tablaDemandaS <- downloadHandler(
+          filename = function(){"DemandaSatisfechaeInsatisfecha.csv"},
+          content = function(file){
+            write.csv2(base_demanda  %>% 
+                         filter(`Nombreáreacualificación` %in% input$select_area_BaseDemanda_),
+                       file,
+                       row.names = T,
+                       fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+
+        
         
         # Pie chart cargos de dificil consecucion
         colors <- c('rgb(211,94,96)', 'rgb(128,133,133)', 'rgb(144,103,167)', 'rgb(171,104,87)', 'rgb(114,147,203)')
@@ -950,7 +1207,7 @@ shinyServer(function(input, output, session) {
                     marker = list(colors = colors,
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
-                    showlegend = FALSE) %>%  layout(title = 'Piechart por Cargos de Difícil Consecución',
+                    showlegend = FALSE) %>%  layout(title = '',
                                                     font = list(size = 13)) %>% 
             layout(
               width = 500,
@@ -979,8 +1236,9 @@ shinyServer(function(input, output, session) {
               show.legend = FALSE,
               fontface = "bold") +
             labs(
-              title = "Número de Actividades Económicas por Departamento",
-              y = "Acumulado de empresas",
+              title = "",
+              y = "",
+              x = "",
               fill = "Cargos de difícil consecución"
             ) +
             # change the y max limit to the highest bar plus 10
@@ -1008,7 +1266,7 @@ shinyServer(function(input, output, session) {
                     marker = list(colors = colors,
                                   line = list(color = '#FFFFFF', width = 1)),
                     #The 'pull' attribute can also be used to create space between the sectors
-                    showlegend = FALSE) %>%  layout(title = 'Piechart por Departamento',
+                    showlegend = FALSE) %>%  layout(title = '',
                                                     font = list(size = 13)) %>% 
             layout(
               width = 500,
@@ -1016,6 +1274,144 @@ shinyServer(function(input, output, session) {
               xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
               yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
         })
+        
+########################################## BASES BRECHAS EMPRESAS ##########################################
+        ##### Estadísticas generales
+        output$select_area_BrechasEmpEst <- renderUI({
+          choices <- base_brechaEmpresasEstadisticas$`Nombre área cualificación`
+          selectizeInput("select_area_BrechasEmpEst_", "Seleccione Área:",
+                         choices = choices,
+                         selected = "ACTIVIDADES FÍSICAS, DEPORTIVAS Y RECREATIVAS",
+                         multiple = T
+          )
+        })
+        
+        output$BrechasEmpEst <- renderReactable(
+          base_brechaEmpresasEstadisticas %>% 
+            filter(`Nombre área cualificación` %in% input$select_area_BrechasEmpEst_) %>% reactable(
+            filterable = F, minRows = 3
+          )
+        )
+        
+        # Clear Button
+        observeEvent(input$clear_BrechasEmpEst, {
+          updateSelectizeInput(session, "select_area_BrechasEmpEst_", selected = character(0))
+        })
+        
+        ##### Brechas KH a Nivel de Ocupación
+        output$BrechasKHOcupacion <- renderReactable(
+          base_brechaEmpresasOcupacion %>% 
+            dplyr::select(`Código área`,
+                   `Nombre área cualificación`,
+                   input$brechasKHOcupacion_areaCualificacion,
+                   input$brechasKHOcupacion_CaracGenerales,
+                   input$brechasKHOcupacion_DenominacionesBrechas,
+                   input$brechasKHOcupacion_IndicadoresBrechas,
+                   input$brechasKHOcupacion_TotalIndicadores
+                   ) %>%
+            reactable(
+              filterable = T, minRows = 6
+            )
+        )
+        
+        #Download BUtton
+        output$download_KHOcupacion <- downloadHandler(
+          filename = function(){"Brechas Capital Humano a Nivel de Ocupación.csv"},
+          content = function(file){
+            write.csv2(base_brechaEmpresasOcupacion %>% 
+                         dplyr::select(`Código área`,
+                                       `Nombre área cualificación`,
+                                       input$brechasKHOcupacion_areaCualificacion,
+                                       input$brechasKHOcupacion_CaracGenerales,
+                                       input$brechasKHOcupacion_DenominacionesBrechas,
+                                       input$brechasKHOcupacion_IndicadoresBrechas,
+                                       input$brechasKHOcupacion_TotalIndicadores
+                         ),
+            file,
+            row.names = T,
+            fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+        
+        # Clear Button
+        observeEvent(input$clear_KHOcupacion, {
+          updateSelectizeInput(session, "brechasKHOcupacion_areaCualificacion", selected = character(0))
+        })
+        
+        observeEvent(input$clear_KHOcupacion, {
+          updateSelectizeInput(session, "brechasKHOcupacion_CaracGenerales", selected = character(0))
+        })
+        
+        observeEvent(input$clear_KHOcupacion, {
+          updateSelectizeInput(session, "brechasKHOcupacion_DenominacionesBrechas", selected = character(0))
+        })
+        
+        observeEvent(input$clear_KHOcupacion, {
+          updateSelectizeInput(session, "brechasKHOcupacion_IndicadoresBrechas", selected = character(0))
+        })
+        
+        observeEvent(input$clear_KHOcupacion, {
+          updateSelectizeInput(session, "brechasKHOcupacion_TotalIndicadores", selected = character(0))
+        })
+        
+        ##### Brechas KH a Nivel de Denominación
+        output$BrechasKHDenominacion <- renderReactable(
+          base_brechaEmpresasDenominación %>% 
+            dplyr::select(`Código área`,
+                          `Nombre área cualificación`,
+                          input$brechasKHDenominacion_areaCualificacion,
+                          input$brechasKHDenominacion_CaracGenerales,
+                          input$brechasKHDenominacion_EmpresasBrechas,
+                          input$brechasKHDenominacion_IndicadoresBrechas,
+                          input$brechasKHDenominacion_TotalIndicadores
+            ) %>%
+            reactable(
+              filterable = T, minRows = 6
+            )
+        )
+        
+        #Download BUtton
+        output$download_KHOcupacion <- downloadHandler(
+          filename = function(){"Brechas Capital Humano a Nivel de Denominación.csv"},
+          content = function(file){
+            write.csv2(base_brechaEmpresasDenominación %>% 
+                         dplyr::select(`Código área`,
+                                       `Nombre área cualificación`,
+                                       input$brechasKHDenominacion_areaCualificacion,
+                                       input$brechasKHDenominacion_CaracGenerales,
+                                       input$brechasKHDenominacion_EmpresasBrechas,
+                                       input$brechasKHDenominacion_IndicadoresBrechas,
+                                       input$brechasKHDenominacion_TotalIndicadores
+                         ),
+                       file,
+                       row.names = T,
+                       fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+        
+        # Clear Button
+        observeEvent(input$clear_KHDenominacion, {
+          updateSelectizeInput(session, "brechasKHDenominacion_areaCualificacion", selected = character(0))
+        })
+        
+        observeEvent(input$clear_KHDenominacion, {
+          updateSelectizeInput(session, "brechasKHDenominacion_CaracGenerales", selected = character(0))
+        })
+        
+        observeEvent(input$clear_KHDenominacion, {
+          updateSelectizeInput(session, "brechasKHDenominacion_EmpresasBrechas", selected = character(0))
+        })
+        
+        observeEvent(input$clear_KHDenominacion, {
+          updateSelectizeInput(session, "brechasKHDenominacion_IndicadoresBrechas", selected = character(0))
+        })
+        
+        observeEvent(input$clear_KHDenominacion, {
+          updateSelectizeInput(session, "brechasKHDenominacion_TotalIndicadores", selected = character(0))
+        })
+        
 ########################################## BASES CARACTERIZACIÓN ##########################################
         
   ####################### TASA OCUPADOS
@@ -1242,11 +1638,214 @@ shinyServer(function(input, output, session) {
             )
           }
         )
+        
+######################################### BRECHAS ###################################################       
+        # Brechas Cantidad
+        output$base_brechasCantidad <- renderReactable(
+          base_brechasCantidad %>% select(
+            `Código_área`,
+            `Nombreáreacualificación`,
+            input$caract_brechasCalidad_cargo_,
+            input$caract_calidad_razones_,
+            input$indicadores_brechas_,
+            input$brechasCantidad_areaCual_
+          ) %>% 
+            reactable(
+              filterable = TRUE, minRows = 10
+            )
+        )
+        
+        #  Clear Buttons
+        observeEvent(input$clear_brechasCalidad, {
+          updateSelectizeInput(session, "caract_brechasCalidad_cargo_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_brechasCalidad, {
+          updateSelectizeInput(session, "caract_calidad_razones_", selected = character(0))
+        })
+        observeEvent(input$clear_brechasCalidad, {
+          updateSelectizeInput(session, "indicadores_brechas_", selected = character(0))
+        })
+        observeEvent(input$clear_brechasCalidad, {
+          updateSelectizeInput(session, "brechasCantidad_areaCual_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_Ocu_NivelEdu <- downloadHandler(
+          filename = function(){"Ocupados_NivelEducativo.csv"},
+          content = function(file){
+            write.csv2(base_brechasCantidad %>% select(
+              input$caract_brechasCalidad_cargo_,
+              input$caract_calidad_razones_,
+              input$indicadores_brechas_,
+              input$brechasCantidad_areaCual_
+            ),
+            file,
+            row.names = T,
+            fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+        
+        # Brechas Calidad
+        
+        output$base_brechasCalidad_ <- renderReactable(
+          base_brechasCalidad %>% select(
+            `Código_área`,
+            `Nombreáreacualificación`,
+            input$brechasCantidad_areaCual_1,
+            input$caract_brechasCalidad_cargo_1,
+            input$caract_calidad_razones_1,
+            input$indicadores_brechas_1
+          ) %>% 
+            reactable(
+              filterable = TRUE, minRows = 10
+            )
+        )
+        
+        #  Clear Buttons
+        observeEvent(input$clear_brechasCalidad_1, {
+          updateSelectizeInput(session, "brechasCantidad_areaCual_1", selected = character(0))
+        })
+        
+        observeEvent(input$clear_brechasCalidad_1, {
+          updateSelectizeInput(session, "caract_brechasCalidad_cargo_1", selected = character(0))
+        })
+        observeEvent(input$clear_brechasCalidad_1, {
+          updateSelectizeInput(session, "caract_calidad_razones_1", selected = character(0))
+        })
+        observeEvent(input$clear_brechasCalidad_1, {
+          updateSelectizeInput(session, "indicadores_brechas_1", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_brechasCalidad_1 <- downloadHandler(
+          filename = function(){"Ocupados_NivelEducativo.csv"},
+          content = function(file){
+            write.csv2(base_brechasCalidad %>% select(
+              `Código_área`,
+              `Nombre áreacu alificación`,
+              input$brechasCantidad_areaCual_1,
+              input$caract_brechasCalidad_cargo_1,
+              input$caract_calidad_razones_1,
+              input$indicadores_brechas_1
+            ),
+            file,
+            row.names = T,
+            fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+
+        # Brechas Pertinencia
+        output$base_brechasPertinencia <- renderReactable(
+          base_pertinencia %>% select(
+            `Código_área`,
+            `Nombreáreacualificación`,
+            input$brechasPertienencia_area,
+            input$brechasPertienencia_cargo,
+            input$brechasPertienencia_razones,
+            input$brechasPertienencia_Indicadores
+          ) %>% 
+            reactable(
+              filterable = TRUE, minRows = 10
+            )
+        )
+        
+        #  Clear Buttons
+        observeEvent(input$clear_brechasPertinencia, {
+          updateSelectizeInput(session, "brechasPertienencia_area", selected = character(0))
+        })
+        
+        observeEvent(input$clear_brechasPertinencia, {
+          updateSelectizeInput(session, "brechasPertienencia_cargo", selected = character(0))
+        })
+        observeEvent(input$clear_brechasPertinencia, {
+          updateSelectizeInput(session, "brechasPertienencia_razones", selected = character(0))
+        })
+        observeEvent(input$clear_brechasPertinencia, {
+          updateSelectizeInput(session, "brechasPertienencia_Indicadores", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_base_pertinencia <- downloadHandler(
+          filename = function(){"Ocupados_NivelEducativo.csv"},
+          content = function(file){
+            write.csv2(base_pertinencia %>% select(
+              `Código_área`,
+              `Nombreáreacualificación`,
+              input$brechasPertienencia_area,
+              input$brechasPertienencia_cargo,
+              input$brechasPertienencia_razones,
+              input$brechasPertienencia_Indicadores
+            ),
+            file,
+            row.names = T,
+            fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+        
+        
+        ### Base Demanda
+        
+        output$base_demanda__ <- renderReactable(
+          base_demanda__ %>% select(
+            `Código_área`,
+            `Nombreáreacualificación`,
+            input$caract_OtrasFuentes_baseDemanda_caracCargo_,
+            input$caract_OtrasFuentes_baseDemanda_razones_,
+            input$caract_OtrasFuentes_infoEncuesta_infoInstitu_,
+            input$caract_OtrasFuentes_baseDemanda_indicadores_
+          ) %>% 
+            reactable(
+              filterable = TRUE, minRows = 10
+            )
+        )
+        
+        #  Clear Buttons
+        observeEvent(input$clear_baseDemanda__, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_baseDemanda_caracCargo_", selected = character(0))
+        })
+        
+        observeEvent(input$clear_baseDemanda__, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_baseDemanda_razones_", selected = character(0))
+        })
+        observeEvent(input$clear_baseDemanda__, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_infoEncuesta_infoInstitu_", selected = character(0))
+        })
+        observeEvent(input$clear_baseDemanda__, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_baseDemanda_indicadores_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_ofertaDemanda__ <- downloadHandler(
+          filename = function(){"OfertaDemanda.csv"},
+          content = function(file){
+            write.csv2(base_demanda__ %>% select(
+              `Código_área`,
+              `Nombreáreacualificación`,
+              input$caract_OtrasFuentes_baseDemanda_caracCargo_,
+              input$caract_OtrasFuentes_baseDemanda_razones_,
+              input$caract_OtrasFuentes_infoEncuesta_infoInstitu_,
+              input$caract_OtrasFuentes_baseDemanda_indicadores_
+            ),
+            file,
+            row.names = T,
+            fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+        
+        base_demanda
+        
 ######################################### OTRAS FUENTES DE INFORMACIÓN ###################################################
         
   ####################### INFORMACIÓN DEMANDA SPE
         output$base_demandaSPE <- renderReactable(
           DemandaSPE %>% select(
+            `Código área`,
+            `Nombre área cualificación`,
             `Año`,
             `Departamento`,
             input$caract_OtrasFuentes_SPE_otros_,
@@ -1340,6 +1939,56 @@ shinyServer(function(input, output, session) {
               input$caract_OtrasFuentes_snies_Areas_,
               input$caract_OtrasFuentes_snies_programa_,
               input$caract_OtrasFuentes_snies_general_
+            ),
+            file,
+            row.names = T,
+            fileEncoding = "ISO-8859-1"
+            )
+          }
+        )
+        
+  ####################### ENCUESTA OFERTA EDUCATIVA
+        output$base_encuestaOferta <- renderReactable(
+          base_oferta_educativa %>% select(
+            `Código_área`,
+            input$caract_OtrasFuentes_infoEncuesta_area_,
+            input$caract_OtrasFuentes_infoEncuesta_infoPrograma_,
+            input$caract_OtrasFuentes_infoEncuesta_competencias_,
+            input$caract_OtrasFuentes_infoEncuesta_infoInstitu_,
+            input$caract_OtrasFuentes_infoEncuesta_infoEmpleados_
+          ) %>% reactable(
+            filterable = TRUE, minRows = 10
+          )
+        )
+        
+        # Clear Button
+        observeEvent(input$clear_encuestaOferta, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_infoEncuesta_area_", selected = character(0))
+        })
+        observeEvent(input$clear_encuestaOferta, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_infoEncuesta_infoPrograma_", selected = character(0))
+        })
+        observeEvent(input$clear_encuestaOferta, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_infoEncuesta_competencias_", selected = character(0))
+        })
+        observeEvent(input$clear_encuestaOferta, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_infoEncuesta_infoInstitu_", selected = character(0))
+        })
+        observeEvent(input$clear_encuestaOferta, {
+          updateSelectizeInput(session, "caract_OtrasFuentes_infoEncuesta_infoEmpleados_", selected = character(0))
+        })
+        
+        #Download Button
+        output$download_encuestaOferta <- downloadHandler(
+          filename = function(){"Encuesta_OfertaEducativa.csv"},
+          content = function(file){
+            write.csv2(base_oferta_educativa %>% select(
+              `Código_área`,
+              input$caract_OtrasFuentes_infoEncuesta_area_,
+              input$caract_OtrasFuentes_infoEncuesta_infoPrograma_,
+              input$caract_OtrasFuentes_infoEncuesta_competencias_,
+              input$caract_OtrasFuentes_infoEncuesta_infoInstitu_,
+              input$caract_OtrasFuentes_infoEncuesta_infoEmpleados_
             ),
             file,
             row.names = T,
@@ -1482,6 +2131,18 @@ shinyServer(function(input, output, session) {
           updateTabItems(session, "Sidebar", selected = "ocupados_NivelEdu")
         })
         
+        # Switch tabs using Brechas de capital humano --------------------------------
+        observeEvent(input$link_to_cantidad, {
+          updateTabItems(session, "Sidebar", selected = "brechas_Cantidad")
+        })
+        
+        observeEvent(input$link_to_calidad, {
+          updateTabItems(session, "Sidebar", selected = "brechasCalidad")
+        })
+        
+        observeEvent(input$link_to_pertinencia, {
+          updateTabItems(session, "Sidebar", selected = "brechas_pertinencia")
+        })
         
 # Behavior of MAIN DATABASES ---------------------------------------
         

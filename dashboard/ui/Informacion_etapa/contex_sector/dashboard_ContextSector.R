@@ -111,23 +111,23 @@ tab_TasaOcupados <- tabItem(
                  div(
                    style = "height: 30px;"
                  ),
-             fluidRow(
-               column(2, offset = 1,
-                      actionButton("clear_baseTasaOcupados", "Limpiar Filtros", icon = icon("eraser"),
-                                   style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
-                      )
-               )
-             ),
-             div(
-               style = "height: 15px;"
-             ),
-             fluidRow(
-               column(2, offset = 1,
-                      downloadButton("download_tasa_ocupados", "Descargar Tabla",
-                                     style="color: #333333; background-color: #F5F5F5; font-size: 17px;"
-                                     )
-                      )
-               )
+                 fluidRow(
+                   column(2, offset = 1,
+                          actionButton("clear_baseTasaOcupados", "Limpiar Filtros", icon = icon("eraser"),
+                                       style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                          )
+                   )
+                 ),
+                 div(
+                   style = "height: 15px;"
+                 ),
+                 fluidRow(
+                   column(2, offset = 1,
+                          downloadButton("download_tasa_ocupados", "Descargar Tabla",
+                                         style="color: #333333; background-color: #F5F5F5; font-size: 17px;"
+                          )
+                   )
+                 )
              ),
              box(title = "Ayuda", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
                  width = 12,
@@ -269,8 +269,8 @@ tab_OcupadosCIIU <- tabItem(
         ),
         column(10, 
                reactableOutput("base_ocupadosCIIU")
-               )
         )
+    )
   )
 )
 
@@ -311,91 +311,91 @@ tab_Ocupados_EdadSexo <- tabItem(
   ),
   fluidRow(
     div(style = "font-size: 17px;",
-    column(2,
-           box(title = "Bases de datos",
-               width = 12,
-               solidHeader = TRUE,
-               status = "primary",
-               selectizeInput("caract_OcuEdadSexo_areaCual", "Seleccione Base",
-                              choices = c(
-                                "Área de Cualificación",
-                                "Índices"
-                              )
+        column(2,
+               box(title = "Bases de datos",
+                   width = 12,
+                   solidHeader = TRUE,
+                   status = "primary",
+                   selectizeInput("caract_OcuEdadSexo_areaCual", "Seleccione Base",
+                                  choices = c(
+                                    "Área de Cualificación",
+                                    "Índices"
+                                  )
+                   ),
+                   
+                   conditionalPanel(
+                     condition = "input.caract_OcuEdadSexo_areaCual == 'Área de Cualificación'",
+                     checkboxGroupInput("caract_ocuEdadSexo_areaCual_", "Seleccione Atributos", 
+                                        choices = c(
+                                          "Codigo Área" = "Código área",
+                                          "Nombre Área cualificación" = "Nombre área cualificación"
+                                        ),
+                                        selected = c(
+                                          "Código área",
+                                          "Nombre área cualificación"
+                                        )
+                     )
+                   ),
+                   conditionalPanel(
+                     condition = "input.caract_OcuEdadSexo_areaCual == 'Índices'",
+                     checkboxGroupInput("caract_ocuEdadSexo_indices_", "Seleccione Atributos", 
+                                        choices = c(
+                                          "Ocupados Hombres" = "Ocupados Hombres",
+                                          "Ocupados Mujeres" = "Ocupados Mujeres",
+                                          "Proporción Hombres" = "Proporción Hombres",
+                                          "Proporción Mujeres" = "Proporción Mujeres"
+                                        )
+                     )
+                   ),
+                   div(
+                     style = "height: 30px;"
+                   ),
+                   selectizeInput("ocu_edadsexo_año_", "Seleccione Año",  # Seleccione por año
+                                  choices = 2022:2024
+                   ),
+                   div(
+                     style = "height: 30px;"
+                   ),
+                   uiOutput("ocu_niveledu_rangoEdad"),
+                   div(
+                     style = "height: 30px;"
+                   ),
+                   fluidRow(
+                     column(2, offset = 1,
+                            actionButton("clear_ocupadosEdadSexo", "Limpiar Filtros", icon = icon("eraser"),
+                                         style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
+                            )
+                     )
+                   ),
+                   div(
+                     style = "height: 15px;"
+                   ),
+                   fluidRow(
+                     column(2, offset = 1,
+                            downloadButton("download_ocupadosEdadySexo", "Descargar Tabla",
+                                           style="color: #333333; background-color: #F5F5F5; font-size: 17px;"
+                            )
+                     )
+                   )
                ),
-               
-               conditionalPanel(
-                 condition = "input.caract_OcuEdadSexo_areaCual == 'Área de Cualificación'",
-                 checkboxGroupInput("caract_ocuEdadSexo_areaCual_", "Seleccione Atributos", 
-                                    choices = c(
-                                      "Codigo Área" = "Código área",
-                                      "Nombre Área cualificación" = "Nombre área cualificación"
-                                    ),
-                                    selected = c(
-                                      "Código área",
-                                      "Nombre área cualificación"
-                                    )
-                 )
+               box(title = "Ayuda", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
+                   width = 12,
+                   tags$p("En el filtro, se pueden encontrar las bases y sus atributos, los cuales se podrán seleccionar, filtrar y descargar según los diferentes filtros disponibles. Esto permite a los usuarios personalizar y obtener información específica según sus necesidades particulares.",
+                          style = "font-size: 17px;")
                ),
-               conditionalPanel(
-                 condition = "input.caract_OcuEdadSexo_areaCual == 'Índices'",
-                 checkboxGroupInput("caract_ocuEdadSexo_indices_", "Seleccione Atributos", 
-                                    choices = c(
-                                      "Ocupados Hombres" = "Ocupados Hombres",
-                                      "Ocupados Mujeres" = "Ocupados Mujeres",
-                                      "Proporción Hombres" = "Proporción Hombres",
-                                      "Proporción Mujeres" = "Proporción Mujeres"
-                                    )
-                 )
-               ),
-               div(
-                 style = "height: 30px;"
-               ),
-               selectizeInput("ocu_edadsexo_año_", "Seleccione Año",  # Seleccione por año
-                              choices = 2022:2024
-               ),
-               div(
-                 style = "height: 30px;"
-               ),
-               uiOutput("ocu_niveledu_rangoEdad"),
-               div(
-                 style = "height: 30px;"
-               ),
-               fluidRow(
-                 column(2, offset = 1,
-                        actionButton("clear_ocupadosEdadSexo", "Limpiar Filtros", icon = icon("eraser"),
-                                     style="color: #fff; background-color: #333; border-color: #2e6da4; font-size: 17px;"
-                        )
-                 )
-               ),
-               div(
-                 style = "height: 15px;"
-               ),
-               fluidRow(
-                 column(2, offset = 1,
-                        downloadButton("download_ocupadosEdadySexo", "Descargar Tabla",
-                                       style="color: #333333; background-color: #F5F5F5; font-size: 17px;"
-                        )
-                 )
-               )
-           ),
-           box(title = "Ayuda", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
-               width = 12,
-               tags$p("En el filtro, se pueden encontrar las bases y sus atributos, los cuales se podrán seleccionar, filtrar y descargar según los diferentes filtros disponibles. Esto permite a los usuarios personalizar y obtener información específica según sus necesidades particulares.",
-                      style = "font-size: 17px;")
-           ),
-           box(title = "Material de Apoyo", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
-               width = 12,
-               HTML("<a href='https://www.dane.gov.co/index.php/estadisticas-por-tema/mercado-laboral/empleo-y-desempleo/geih-historicos' target='_blank'> 
+               box(title = "Material de Apoyo", solidHeader = T, status = "primary", collapsible = T, collapsed = T,
+                   width = 12,
+                   HTML("<a href='https://www.dane.gov.co/index.php/estadisticas-por-tema/mercado-laboral/empleo-y-desempleo/geih-historicos' target='_blank'> 
                         <p align: center; color: #4682B4;'>
                           DANE - Estadísticas por Tema
                         </p>
                      </a>"
+                   )
                )
-           )
-    ),
-    column(10, 
-           reactableOutput("base_ocupadosEdadSexo")
-           )
+        ),
+        column(10, 
+               reactableOutput("base_ocupadosEdadSexo")
+        )
     )
   )
 )
@@ -513,10 +513,10 @@ tab_Ocupados_NivelEdu <- tabItem(
                      </a>"
                    )
                )
-    ),
-    column(10, 
-           reactableOutput("base_ocupadosNivelEdu")
-           )
+        ),
+        column(10, 
+               reactableOutput("base_ocupadosNivelEdu")
+        )
     )
   )
 )

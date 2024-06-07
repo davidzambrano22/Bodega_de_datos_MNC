@@ -73,7 +73,7 @@ tab_home <- tabItem(
                status = "primary",
                solidHeader = TRUE,
                tags$p(
-                 "A través de esta sección el usuario podrá acceder a información que integra las áreas de cualificación del MNC con las fuentes de la Clasificación Nacional de Ocupaciones (CUOC), la Clasificación Internacional Normalizada de la Educación Adaptada a Colombia (CINE) y la Clasificación Industrial Internacional Uniforme (CIIU) rev. 4.",
+                 "A través de esta sección el usuario podrá acceder a información que integra las áreas de cualificación del MNC con las fuentes de la Clasificación Única de Ocupaciones para Colombia (CUOC), la Clasificación Internacional Normalizada de la Educación Adaptada a Colombia (CINE) y la Clasificación Industrial Internacional Uniforme (CIIU) rev. 4.",
                  style = "font-size: 22px; tex-align: center;"
                )
            )
@@ -178,7 +178,7 @@ tab_home <- tabItem(
                           </p>
                        </a>"
                       ),
-                      style = "tex-align: center;"
+                      style="color: #333333; background-color: #F5F5F5; font-size: 17px; text-align: center;"
                     )
              )
            )

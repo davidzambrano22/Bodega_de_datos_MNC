@@ -29,7 +29,8 @@ source("dashboard/ui/Informacion_etapa/info_etapas.R")
 source("dashboard/ui/Informacion_etapa/contex_sector/dashboard_ContextSector.R")
 # Otras Fuentes de Información
 source("dashboard/ui/otras_fuentes/dashboard_otras_fuentes.R")
-
+# Brechas
+source("dashboard/ui/Brechas/brechas.R")
 
 ui <- fluidPage(
     useShinyjs(),
@@ -75,7 +76,6 @@ ui <- fluidPage(
                 tab_home,
                 tab_BasesOficiales,
                 tab_areasCualificacion,
-                # tab_infogeneral,
                 tab_survey,
                 tab_EstAreaCual,
                 tab_EstEncDemanda,
@@ -89,7 +89,15 @@ ui <- fluidPage(
                 tab_estadisticas_generales,
                 tab_infoEtapas,
                 tab_dificilConsecucion,
-                tab_mediosBusqueda
+                tab_mediosBusqueda,
+                tab_EncuestaOfertaEdu,
+                tab_brechasCantidad,
+                tab_brechasCalidad,
+                tab_brechasPertinencia,
+                tab_BaseDemanda_,
+                tab_brechasKH,
+                tab_brechasKHOcupacion,
+                tab_brechasDenominacion
             )
         )
     )

@@ -25,7 +25,7 @@ tab_BasesOficiales <- tabItem(
                status = "primary",
                collapsible = T,
                collapsed = F,
-               tags$p("A través de esta sección los usuarios podrán acceder a información detallada que integra las diversas áreas de cualificación del Marco Nacional de Cualificaciones (MNC). Esta información se basa en las fuentes de la Clasificación Nacional de Ocupaciones (CUOC), la Clasificación Internacional Normalizada de la Educación Adaptada a Colombia (CINE-F), y la Clasificación Industrial Internacional Uniforme (CIIU) rev. 4. Con esta integración, se proporciona un acceso completo y actualizado a las clasificaciones esenciales para el análisis ocupacional y educativo en Colombia.", style = "font-size: 20px;"),
+               tags$p("A través de esta sección los usuarios podrán acceder a información detallada que integra las diversas áreas de cualificación del Marco Nacional de Cualificaciones (MNC). Esta información se basa en las fuentes de la Clasificación Única de Ocupaciones para Colombia (CUOC), la Clasificación Internacional Normalizada de la Educación Adaptada a Colombia (CINE-F), y la Clasificación Industrial Internacional Uniforme (CIIU) rev. 4. Con esta integración, se proporciona un acceso completo y actualizado a las clasificaciones esenciales para el análisis ocupacional y educativo en Colombia.", style = "font-size: 18px;"),
                div(style = "height: 10px;"),
                div(style="text-align:center;"
                ),

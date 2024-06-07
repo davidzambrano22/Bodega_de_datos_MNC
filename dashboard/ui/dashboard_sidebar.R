@@ -24,7 +24,51 @@ dashboard_sidebar <- dashboardSidebar(
                       menuSubItem("Ocupados Sectores", tabName = "ocupados_ciiu"),
                       menuSubItem("Ocupados Edad y Sexo", tabName = "ocupados_edadSexo"),
                       menuSubItem("Ocupados Nivel Educativo", tabName = "ocupados_NivelEdu")
-                      )
+                      ),
+                 menuItem(
+                   "Brechas de Capital Humano",
+                   menuSubItem("Brechas de Cantidad", tabName = "brechas_Cantidad"),
+                   menuSubItem("Brechas de Calidad", tabName = "brechasCalidad"),
+                   menuSubItem("Brechas de Pertinencia", tabName = "brechas_pertinencia")
+                 )
+        ),
+        menuItem("Estadísticas Áreas MNC",
+                 icon = icon("pencil"), startExpanded = FALSE,
+                 menuItem(
+                   "Estadísticas Áreas MNC",
+                   tabName = "est_area_cual"
+                 ),
+                 menuItem(
+                   "Estadísticas Encuesta Demanda",
+                   tabName = "est_generales"
+                 ),
+                 menuItem(
+                   "Cargos Críticos DC",
+                   tabName = "est_dificilConsecucion"
+                 ),
+                 menuItem(
+                   "Gestión de Vacantes",
+                   tabName = "est_mediosBusqueda"
+                 ),
+                 menuItem(
+                   "Estadísticas Brechas KH",
+                   menuSubItem("Resumen Brechas KH",
+                   tabName = "brechasKH"
+                   ),
+                   menuSubItem("Brechas Denominación",
+                               tabName = "brechasDenominacion"
+                   ),
+                   menuSubItem("Brechas Ocupación",
+                               tabName = "brechasKHOcupacion"
+                   )
+                 ),
+                 menuItem(
+                   "Análisis de Compentencias",
+                   menuSubItem(
+                     "Análisis de Competencias",
+                     tabName = "analisis_competencias"
+                   )
+                 )
         ),
         menuItem("Otras Fuentes de Información",
                  icon = icon("question-circle"), startExpanded = FALSE,
@@ -33,36 +77,13 @@ dashboard_sidebar <- dashboardSidebar(
                           ),
                  menuSubItem("Oferta SNIES",
                              tabName = "info_snies"
-                             )
+                             ),
+                 menuSubItem("Encuesta Oferta Educativa",
+                             tabName = "encuesta_oferta_edu"
                  ),
-        menuItem("Estadísticas Áreas MNC",
-                 icon = icon("pencil"), startExpanded = FALSE,
-                 menuItem(
-                   "Información General",
-                   menuSubItem(
-                     "Áreas de Cualificación",
-                     tabName = "est_area_cual"
-                   ),
-                   menuSubItem(
-                     "Información General",
-                     tabName = "est_generales"
-                   ),
-                   menuSubItem(
-                     "Cargos de Difícil Consecución",
-                     tabName = "est_dificilConsecucion"
-                   ),
-                   menuSubItem(
-                     "Medios de Búsqueda",
-                     tabName = "est_mediosBusqueda"
-                   )
-                 ),
-                 menuItem(
-                   "Análisis de Compentencias",
-                   menuSubItem(
-                     "Análisis de Competencias",
-                     tabName = "analisis_competencias"
-                     )
-                   )
+                 menuSubItem("Encuesta Demanda y Brechas KH",
+                             tabName = "encuesta_baseDemanda"
+                 )
                  )
         )
 )
