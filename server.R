@@ -1671,10 +1671,12 @@ shinyServer(function(input, output, session) {
         })
         
         #Download Button
-        output$download_Ocu_NivelEdu <- downloadHandler(
-          filename = function(){"Ocupados_NivelEducativo.csv"},
+        output$download_brechasCantidad <- downloadHandler(
+          filename = function(){"Brechas_cantidad.csv"},
           content = function(file){
             write.csv2(base_brechasCantidad %>% select(
+              `Código_área`,
+              `Nombreáreacualificación`,
               input$caract_brechasCalidad_cargo_,
               input$caract_calidad_razones_,
               input$indicadores_brechas_,
@@ -1693,7 +1695,7 @@ shinyServer(function(input, output, session) {
           base_brechasCalidad %>% select(
             `Código_área`,
             `Nombreáreacualificación`,
-            input$brechasCantidad_areaCual_1,
+            input$brechasCalidad_areaCual_1,
             input$caract_brechasCalidad_cargo_1,
             input$caract_calidad_razones_1,
             input$indicadores_brechas_1
@@ -1719,13 +1721,13 @@ shinyServer(function(input, output, session) {
         })
         
         #Download Button
-        output$download_brechasCalidad_1 <- downloadHandler(
-          filename = function(){"Ocupados_NivelEducativo.csv"},
+        output$download_brechasCalidad <- downloadHandler(
+          filename = function(){"Brechas_Calidad.csv"},
           content = function(file){
             write.csv2(base_brechasCalidad %>% select(
               `Código_área`,
-              `Nombre áreacu alificación`,
-              input$brechasCantidad_areaCual_1,
+              `Nombreáreacualificación`,
+              input$brechasCalidad_areaCual_1,
               input$caract_brechasCalidad_cargo_1,
               input$caract_calidad_razones_1,
               input$indicadores_brechas_1
@@ -1769,7 +1771,7 @@ shinyServer(function(input, output, session) {
         
         #Download Button
         output$download_base_pertinencia <- downloadHandler(
-          filename = function(){"Ocupados_NivelEducativo.csv"},
+          filename = function(){"Brechas_Pertinencia.csv"},
           content = function(file){
             write.csv2(base_pertinencia %>% select(
               `Código_área`,

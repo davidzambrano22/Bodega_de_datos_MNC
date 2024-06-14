@@ -133,7 +133,7 @@ tab_brechasCantidad <- tabItem(
                     ),
                     fluidRow(
                       column(2, offset = 1,
-                             downloadButton("download_brechasCalidad", "Descargar Tabla",
+                             downloadButton("download_brechasCantidad", "Descargar Tabla",
                                             style="color: #333333; background-color: #F5F5F5; font-size: 17px;"
                              )
                       )
@@ -163,7 +163,7 @@ tab_brechasCantidad <- tabItem(
   )
 )
 
-############################################### Brechas Cantidad ###############################################
+############################################### Brechas Calidad ###############################################
 tab_brechasCalidad <- tabItem(
   tabName = "brechasCalidad",
   class = "brechasCalidad",
@@ -217,7 +217,7 @@ tab_brechasCalidad <- tabItem(
                     
                     conditionalPanel(
                       condition = "input.brechas_calidad_1_input == 'Área de Cualificación'",
-                      checkboxGroupInput("brechasCantidad_areaCual_1", "Seleccione Atributos", 
+                      checkboxGroupInput("brechasCalidad_areaCual_1", "Seleccione Atributos", 
                                          choices = c(
                                            "Codigo Área" = "Código_área",
                                            "Nombre Área cualificación" = "Nombreáreacualificación"
@@ -298,7 +298,7 @@ tab_brechasCalidad <- tabItem(
                     ),
                     fluidRow(
                       column(2, offset = 1,
-                             downloadButton("download_brechasCalidad_1", "Descargar Tabla",
+                             downloadButton("download_brechasCalidad", "Descargar Tabla",
                                             style="color: #333333; background-color: #F5F5F5; font-size: 17px;"
                              )
                       )
